@@ -48,10 +48,10 @@ public class StoryTask {
     @Column(name = "finished_at", nullable = false)
     private LocalDateTime finishedAt;
 
-    @OneToMany(mappedBy="storyTask", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "storyTask", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<StoryComment> storyComments;
 
-    @OneToMany(mappedBy="commentAttachment", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "commentAttachment", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<Attachment> commentAttachments;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)

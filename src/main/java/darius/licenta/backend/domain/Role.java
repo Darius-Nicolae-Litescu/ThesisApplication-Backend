@@ -24,5 +24,6 @@ public class Role {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = true)
     private User user;
+
 }
 

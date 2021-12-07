@@ -23,7 +23,8 @@ public class SoftwareApplication {
     @Column(name = "description", nullable = false, length = 512)
     private String description;
 
-    @OneToMany(mappedBy="softwareApplication", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "softwareApplication", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<Story> stories;
+
 }
 

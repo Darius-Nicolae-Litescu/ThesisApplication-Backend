@@ -20,17 +20,18 @@ public class Story {
     @Column(name = "description", nullable = false, length = 512)
     private String description;
 
-    @OneToMany(mappedBy="story", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "story", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<StoryTask> storySubtasks;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "priority", nullable = false)
     private Priority priority;
 
-    @OneToMany(mappedBy="story", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "story", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<Attachment> storyAttachments;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     private SoftwareApplication softwareApplication;
+
 }
 

@@ -24,4 +24,5 @@ public class Position {
 
     @OneToOne(mappedBy = "position")
     private Employee employee;
+
 }

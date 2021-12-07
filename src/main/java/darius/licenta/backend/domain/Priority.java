@@ -30,5 +30,4 @@ public class Priority {
 
     @OneToOne(mappedBy = "priority")
     private Story story;
-
 }

@@ -24,9 +24,10 @@ public class StoryComment {
     @Column(name = "posted_at", nullable = false)
     private LocalDateTime postedAt;
 
-    @OneToMany(mappedBy="storyComment", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "storyComment", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<CommentAttachment> commentAttachments;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     private StoryTask storyTask;
+
 }
