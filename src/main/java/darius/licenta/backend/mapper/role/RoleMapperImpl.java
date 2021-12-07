@@ -1,8 +1,7 @@
-package darius.licenta.backend.mapper;
+package darius.licenta.backend.mapper.role;
 
 import darius.licenta.backend.domain.Role;
-import darius.licenta.backend.dto.RoleInsertDto;
-import org.mapstruct.Mapper;
+import darius.licenta.backend.dto.role.RoleInsertDto;
 import org.springframework.stereotype.Component;
 
 @Component

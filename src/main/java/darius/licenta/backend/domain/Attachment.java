@@ -27,19 +27,19 @@ public class Attachment {
     @Column(name = "uploaded_at", nullable = false)
     private LocalDateTime postedAt;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.LAZY, optional = true)
     private User user;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.LAZY, optional = true)
     private CommentAttachment commentAttachment;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.LAZY, optional = true)
     private StoryTask storyTask;
 
-    @OneToOne(fetch = FetchType.LAZY, optional = false)
+    @OneToOne(fetch = FetchType.LAZY, optional = true)
     private Priority priorityIcon;
 
-    @OneToOne(fetch = FetchType.LAZY, optional = false)
+    @OneToOne(fetch = FetchType.LAZY, optional = true)
     private Story story;
 
     public Attachment(long id, String contentType, Blob content, LocalDateTime postedAt, User user, CommentAttachment commentAttachment, StoryTask storyTask, Priority priorityIcon, Story story) {

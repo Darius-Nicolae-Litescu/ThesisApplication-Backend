@@ -18,6 +18,18 @@ public class Category {
     @OneToOne(mappedBy = "category")
     private Story story;
 
+    @OneToOne(orphanRemoval = true)
+    @JoinColumn(name = "attachment_id")
+    private Attachment attachment;
+
+    public Attachment getAttachment() {
+        return attachment;
+    }
+
+    public void setAttachment(Attachment attachment) {
+        this.attachment = attachment;
+    }
+
     public Category(long id, String categoryName, Story story) {
         this.id = id;
         this.categoryName = categoryName;
