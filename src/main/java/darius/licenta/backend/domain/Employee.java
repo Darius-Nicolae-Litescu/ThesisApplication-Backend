@@ -23,6 +23,13 @@ public class Employee {
     @OneToOne(mappedBy = "employee")
     private User user;
 
+    public Employee(long id, Person person, Position position, User user) {
+        this.id = id;
+        this.person = person;
+        this.position = position;
+        this.user = user;
+    }
+
     public Employee() {
     }
 
@@ -62,7 +69,7 @@ public class Employee {
         if (o == this) return true;
         if (!(o instanceof Employee)) return false;
         final Employee other = (Employee) o;
-        if (!other.canEqual(this)) return false;
+        if (!other.canEqual((Object) this)) return false;
         if (this.getId() != other.getId()) return false;
         final Object this$person = this.getPerson();
         final Object other$person = other.getPerson();
@@ -72,7 +79,8 @@ public class Employee {
         if (!Objects.equals(this$position, other$position)) return false;
         final Object this$user = this.getUser();
         final Object other$user = other.getUser();
-        return Objects.equals(this$user, other$user);
+        if (!Objects.equals(this$user, other$user)) return false;
+        return true;
     }
 
     protected boolean canEqual(final Object other) {

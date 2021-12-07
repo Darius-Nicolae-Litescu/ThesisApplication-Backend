@@ -1,14 +1,9 @@
 package darius.licenta.backend.domain;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Set;
 
-@Data
-@NoArgsConstructor
 @Entity
 @Table(name = StoryComment.TABLE_NAME)
 public class StoryComment {
@@ -24,10 +19,106 @@ public class StoryComment {
     @Column(name = "posted_at", nullable = false)
     private LocalDateTime postedAt;
 
-    @OneToMany(mappedBy = "storyComment", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy="storyComment", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<CommentAttachment> commentAttachments;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     private StoryTask storyTask;
 
+    public StoryComment(long id, String content, LocalDateTime postedAt, Set<CommentAttachment> commentAttachments, StoryTask storyTask) {
+        this.id = id;
+        this.content = content;
+        this.postedAt = postedAt;
+        this.commentAttachments = commentAttachments;
+        this.storyTask = storyTask;
+    }
+
+    public StoryComment() {
+    }
+
+    public long getId() {
+        return this.id;
+    }
+
+    public String getContent() {
+        return this.content;
+    }
+
+    public LocalDateTime getPostedAt() {
+        return this.postedAt;
+    }
+
+    public Set<CommentAttachment> getCommentAttachments() {
+        return this.commentAttachments;
+    }
+
+    public StoryTask getStoryTask() {
+        return this.storyTask;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public void setPostedAt(LocalDateTime postedAt) {
+        this.postedAt = postedAt;
+    }
+
+    public void setCommentAttachments(Set<CommentAttachment> commentAttachments) {
+        this.commentAttachments = commentAttachments;
+    }
+
+    public void setStoryTask(StoryTask storyTask) {
+        this.storyTask = storyTask;
+    }
+
+    public boolean equals(final Object o) {
+        if (o == this) return true;
+        if (!(o instanceof StoryComment)) return false;
+        final StoryComment other = (StoryComment) o;
+        if (!other.canEqual((Object) this)) return false;
+        if (this.getId() != other.getId()) return false;
+        final Object this$content = this.getContent();
+        final Object other$content = other.getContent();
+        if (this$content == null ? other$content != null : !this$content.equals(other$content)) return false;
+        final Object this$postedAt = this.getPostedAt();
+        final Object other$postedAt = other.getPostedAt();
+        if (this$postedAt == null ? other$postedAt != null : !this$postedAt.equals(other$postedAt)) return false;
+        final Object this$commentAttachments = this.getCommentAttachments();
+        final Object other$commentAttachments = other.getCommentAttachments();
+        if (this$commentAttachments == null ? other$commentAttachments != null : !this$commentAttachments.equals(other$commentAttachments))
+            return false;
+        final Object this$storyTask = this.getStoryTask();
+        final Object other$storyTask = other.getStoryTask();
+        if (this$storyTask == null ? other$storyTask != null : !this$storyTask.equals(other$storyTask)) return false;
+        return true;
+    }
+
+    protected boolean canEqual(final Object other) {
+        return other instanceof StoryComment;
+    }
+
+    public int hashCode() {
+        final int PRIME = 59;
+        int result = 1;
+        final long $id = this.getId();
+        result = result * PRIME + (int) ($id >>> 32 ^ $id);
+        final Object $content = this.getContent();
+        result = result * PRIME + ($content == null ? 43 : $content.hashCode());
+        final Object $postedAt = this.getPostedAt();
+        result = result * PRIME + ($postedAt == null ? 43 : $postedAt.hashCode());
+        final Object $commentAttachments = this.getCommentAttachments();
+        result = result * PRIME + ($commentAttachments == null ? 43 : $commentAttachments.hashCode());
+        final Object $storyTask = this.getStoryTask();
+        result = result * PRIME + ($storyTask == null ? 43 : $storyTask.hashCode());
+        return result;
+    }
+
+    public String toString() {
+        return "StoryComment(id=" + this.getId() + ", content=" + this.getContent() + ", postedAt=" + this.getPostedAt() + ", commentAttachments=" + this.getCommentAttachments() + ", storyTask=" + this.getStoryTask() + ")";
+    }
 }
