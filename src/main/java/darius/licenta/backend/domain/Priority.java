@@ -1,6 +1,7 @@
 package darius.licenta.backend.domain;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @Entity
 @Table(name = Priority.TABLE_NAME)
@@ -94,19 +95,19 @@ public class Priority {
         if (this.getId() != other.getId()) return false;
         final Object this$title = this.getTitle();
         final Object other$title = other.getTitle();
-        if (this$title == null ? other$title != null : !this$title.equals(other$title)) return false;
+        if (!Objects.equals(this$title, other$title)) return false;
         final Object this$description = this.getDescription();
         final Object other$description = other.getDescription();
-        if (this$description == null ? other$description != null : !this$description.equals(other$description))
+        if (!Objects.equals(this$description, other$description))
             return false;
         if (this.getLevel() != other.getLevel()) return false;
         final Object this$priorityIcon = this.getPriorityIcon();
         final Object other$priorityIcon = other.getPriorityIcon();
-        if (this$priorityIcon == null ? other$priorityIcon != null : !this$priorityIcon.equals(other$priorityIcon))
+        if (!Objects.equals(this$priorityIcon, other$priorityIcon))
             return false;
         final Object this$story = this.getStory();
         final Object other$story = other.getStory();
-        if (this$story == null ? other$story != null : !this$story.equals(other$story)) return false;
+        if (!Objects.equals(this$story, other$story)) return false;
         return true;
     }
 
