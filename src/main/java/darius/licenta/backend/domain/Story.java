@@ -15,6 +15,10 @@ public class Story {
     @Column(name = "description", nullable = false, length = 512)
     private String description;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "category", nullable = false)
+    private Category category;
+
     @OneToMany(mappedBy="story", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<StoryTask> storySubtasks;
 
