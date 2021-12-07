@@ -4,6 +4,7 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -159,40 +160,40 @@ public class StoryTask {
         if (this.getId() != other.getId()) return false;
         final Object this$title = this.getTitle();
         final Object other$title = other.getTitle();
-        if (this$title == null ? other$title != null : !this$title.equals(other$title)) return false;
+        if (!Objects.equals(this$title, other$title)) return false;
         final Object this$description = this.getDescription();
         final Object other$description = other.getDescription();
-        if (this$description == null ? other$description != null : !this$description.equals(other$description))
+        if (!Objects.equals(this$description, other$description))
             return false;
         if (this.getStoryPoints() != other.getStoryPoints()) return false;
         final Object this$createdBy = this.getCreatedBy();
         final Object other$createdBy = other.getCreatedBy();
-        if (this$createdBy == null ? other$createdBy != null : !this$createdBy.equals(other$createdBy)) return false;
+        if (!Objects.equals(this$createdBy, other$createdBy)) return false;
         final Object this$createdAt = this.getCreatedAt();
         final Object other$createdAt = other.getCreatedAt();
-        if (this$createdAt == null ? other$createdAt != null : !this$createdAt.equals(other$createdAt)) return false;
+        if (!Objects.equals(this$createdAt, other$createdAt)) return false;
         final Object this$assignedTo = this.getAssignedTo();
         final Object other$assignedTo = other.getAssignedTo();
-        if (this$assignedTo == null ? other$assignedTo != null : !this$assignedTo.equals(other$assignedTo))
+        if (!Objects.equals(this$assignedTo, other$assignedTo))
             return false;
         final Object this$status = this.getStatus();
         final Object other$status = other.getStatus();
-        if (this$status == null ? other$status != null : !this$status.equals(other$status)) return false;
+        if (!Objects.equals(this$status, other$status)) return false;
         final Object this$finishedAt = this.getFinishedAt();
         final Object other$finishedAt = other.getFinishedAt();
-        if (this$finishedAt == null ? other$finishedAt != null : !this$finishedAt.equals(other$finishedAt))
+        if (!Objects.equals(this$finishedAt, other$finishedAt))
             return false;
         final Object this$storyComments = this.getStoryComments();
         final Object other$storyComments = other.getStoryComments();
-        if (this$storyComments == null ? other$storyComments != null : !this$storyComments.equals(other$storyComments))
+        if (!Objects.equals(this$storyComments, other$storyComments))
             return false;
         final Object this$commentAttachments = this.getCommentAttachments();
         final Object other$commentAttachments = other.getCommentAttachments();
-        if (this$commentAttachments == null ? other$commentAttachments != null : !this$commentAttachments.equals(other$commentAttachments))
+        if (!Objects.equals(this$commentAttachments, other$commentAttachments))
             return false;
         final Object this$story = this.getStory();
         final Object other$story = other.getStory();
-        if (this$story == null ? other$story != null : !this$story.equals(other$story)) return false;
+        if (!Objects.equals(this$story, other$story)) return false;
         return true;
     }
 

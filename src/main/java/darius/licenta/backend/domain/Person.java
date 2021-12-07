@@ -2,6 +2,7 @@ package darius.licenta.backend.domain;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.Objects;
 
 @Entity
 @Table(name = Person.TABLE_NAME)
@@ -83,16 +84,16 @@ public class Person {
         if (this.getId() != other.getId()) return false;
         final Object this$firstName = this.getFirstName();
         final Object other$firstName = other.getFirstName();
-        if (this$firstName == null ? other$firstName != null : !this$firstName.equals(other$firstName)) return false;
+        if (!Objects.equals(this$firstName, other$firstName)) return false;
         final Object this$lastName = this.getLastName();
         final Object other$lastName = other.getLastName();
-        if (this$lastName == null ? other$lastName != null : !this$lastName.equals(other$lastName)) return false;
+        if (!Objects.equals(this$lastName, other$lastName)) return false;
         final Object this$birthDate = this.getBirthDate();
         final Object other$birthDate = other.getBirthDate();
-        if (this$birthDate == null ? other$birthDate != null : !this$birthDate.equals(other$birthDate)) return false;
+        if (!Objects.equals(this$birthDate, other$birthDate)) return false;
         final Object this$employee = this.getEmployee();
         final Object other$employee = other.getEmployee();
-        if (this$employee == null ? other$employee != null : !this$employee.equals(other$employee)) return false;
+        if (!Objects.equals(this$employee, other$employee)) return false;
         return true;
     }
 

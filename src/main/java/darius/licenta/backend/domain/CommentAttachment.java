@@ -67,9 +67,7 @@ public class CommentAttachment {
         if (!Objects.equals(this$postedAt, other$postedAt)) return false;
         final Object this$storyComment = this.getStoryComment();
         final Object other$storyComment = other.getStoryComment();
-        if (!Objects.equals(this$storyComment, other$storyComment))
-            return false;
-        return true;
+        return Objects.equals(this$storyComment, other$storyComment);
     }
 
     protected boolean canEqual(final Object other) {

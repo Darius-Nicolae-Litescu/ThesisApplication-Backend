@@ -1,6 +1,7 @@
 package darius.licenta.backend.domain;
 
 import javax.persistence.*;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -71,14 +72,14 @@ public class SoftwareApplication {
         if (this.getId() != other.getId()) return false;
         final Object this$name = this.getName();
         final Object other$name = other.getName();
-        if (this$name == null ? other$name != null : !this$name.equals(other$name)) return false;
+        if (!Objects.equals(this$name, other$name)) return false;
         final Object this$description = this.getDescription();
         final Object other$description = other.getDescription();
-        if (this$description == null ? other$description != null : !this$description.equals(other$description))
+        if (!Objects.equals(this$description, other$description))
             return false;
         final Object this$stories = this.getStories();
         final Object other$stories = other.getStories();
-        if (this$stories == null ? other$stories != null : !this$stories.equals(other$stories)) return false;
+        if (!Objects.equals(this$stories, other$stories)) return false;
         return true;
     }
 

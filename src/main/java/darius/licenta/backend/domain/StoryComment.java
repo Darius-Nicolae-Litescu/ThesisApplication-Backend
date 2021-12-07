@@ -2,6 +2,7 @@ package darius.licenta.backend.domain;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -84,17 +85,17 @@ public class StoryComment {
         if (this.getId() != other.getId()) return false;
         final Object this$content = this.getContent();
         final Object other$content = other.getContent();
-        if (this$content == null ? other$content != null : !this$content.equals(other$content)) return false;
+        if (!Objects.equals(this$content, other$content)) return false;
         final Object this$postedAt = this.getPostedAt();
         final Object other$postedAt = other.getPostedAt();
-        if (this$postedAt == null ? other$postedAt != null : !this$postedAt.equals(other$postedAt)) return false;
+        if (!Objects.equals(this$postedAt, other$postedAt)) return false;
         final Object this$commentAttachments = this.getCommentAttachments();
         final Object other$commentAttachments = other.getCommentAttachments();
-        if (this$commentAttachments == null ? other$commentAttachments != null : !this$commentAttachments.equals(other$commentAttachments))
+        if (!Objects.equals(this$commentAttachments, other$commentAttachments))
             return false;
         final Object this$storyTask = this.getStoryTask();
         final Object other$storyTask = other.getStoryTask();
-        if (this$storyTask == null ? other$storyTask != null : !this$storyTask.equals(other$storyTask)) return false;
+        if (!Objects.equals(this$storyTask, other$storyTask)) return false;
         return true;
     }
 

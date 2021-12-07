@@ -1,6 +1,7 @@
 package darius.licenta.backend.domain;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @Entity
 @Table(name = Role.TABLE_NAME)
@@ -70,14 +71,14 @@ public class Role {
         if (this.getId() != other.getId()) return false;
         final Object this$roleName = this.getRoleName();
         final Object other$roleName = other.getRoleName();
-        if (this$roleName == null ? other$roleName != null : !this$roleName.equals(other$roleName)) return false;
+        if (!Objects.equals(this$roleName, other$roleName)) return false;
         final Object this$roleDescription = this.getRoleDescription();
         final Object other$roleDescription = other.getRoleDescription();
-        if (this$roleDescription == null ? other$roleDescription != null : !this$roleDescription.equals(other$roleDescription))
+        if (!Objects.equals(this$roleDescription, other$roleDescription))
             return false;
         final Object this$user = this.getUser();
         final Object other$user = other.getUser();
-        if (this$user == null ? other$user != null : !this$user.equals(other$user)) return false;
+        if (!Objects.equals(this$user, other$user)) return false;
         return true;
     }
 

@@ -107,8 +107,7 @@ public class Priority {
             return false;
         final Object this$story = this.getStory();
         final Object other$story = other.getStory();
-        if (!Objects.equals(this$story, other$story)) return false;
-        return true;
+        return Objects.equals(this$story, other$story);
     }
 
     protected boolean canEqual(final Object other) {

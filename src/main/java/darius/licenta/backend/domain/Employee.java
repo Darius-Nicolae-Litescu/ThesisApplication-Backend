@@ -79,8 +79,7 @@ public class Employee {
         if (!Objects.equals(this$position, other$position)) return false;
         final Object this$user = this.getUser();
         final Object other$user = other.getUser();
-        if (!Objects.equals(this$user, other$user)) return false;
-        return true;
+        return Objects.equals(this$user, other$user);
     }
 
     protected boolean canEqual(final Object other) {

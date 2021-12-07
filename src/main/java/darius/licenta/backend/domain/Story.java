@@ -1,6 +1,7 @@
 package darius.licenta.backend.domain;
 
 import javax.persistence.*;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -100,22 +101,22 @@ public class Story {
         if (this.getId() != other.getId()) return false;
         final Object this$description = this.getDescription();
         final Object other$description = other.getDescription();
-        if (this$description == null ? other$description != null : !this$description.equals(other$description))
+        if (!Objects.equals(this$description, other$description))
             return false;
         final Object this$storySubtasks = this.getStorySubtasks();
         final Object other$storySubtasks = other.getStorySubtasks();
-        if (this$storySubtasks == null ? other$storySubtasks != null : !this$storySubtasks.equals(other$storySubtasks))
+        if (!Objects.equals(this$storySubtasks, other$storySubtasks))
             return false;
         final Object this$priority = this.getPriority();
         final Object other$priority = other.getPriority();
-        if (this$priority == null ? other$priority != null : !this$priority.equals(other$priority)) return false;
+        if (!Objects.equals(this$priority, other$priority)) return false;
         final Object this$storyAttachments = this.getStoryAttachments();
         final Object other$storyAttachments = other.getStoryAttachments();
-        if (this$storyAttachments == null ? other$storyAttachments != null : !this$storyAttachments.equals(other$storyAttachments))
+        if (!Objects.equals(this$storyAttachments, other$storyAttachments))
             return false;
         final Object this$softwareApplication = this.getSoftwareApplication();
         final Object other$softwareApplication = other.getSoftwareApplication();
-        if (this$softwareApplication == null ? other$softwareApplication != null : !this$softwareApplication.equals(other$softwareApplication))
+        if (!Objects.equals(this$softwareApplication, other$softwareApplication))
             return false;
         return true;
     }
