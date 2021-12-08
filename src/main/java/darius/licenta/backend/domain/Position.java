@@ -28,6 +28,11 @@ public class Position {
         this.employee = employee;
     }
 
+    public Position(String name, String seniorityLevel) {
+        this.name = name;
+        this.seniorityLevel = seniorityLevel;
+    }
+
     public Position() {
     }
 

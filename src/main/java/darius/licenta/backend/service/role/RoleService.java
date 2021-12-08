@@ -1,7 +1,6 @@
-package darius.licenta.backend.service.Role;
+package darius.licenta.backend.service.role;
 
 import darius.licenta.backend.domain.Role;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 

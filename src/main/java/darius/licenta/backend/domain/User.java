@@ -50,6 +50,15 @@ public class User {
         this.attachment = attachment;
     }
 
+    public User(Employee employee, String username, String password, String email, Boolean isActive, Boolean isDeleted) {
+        this.employee = employee;
+        this.username = username;
+        this.password = password;
+        this.email = email;
+        this.isActive = isActive;
+        this.isDeleted = isDeleted;
+    }
+
     public User() {
     }
 

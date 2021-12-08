@@ -12,6 +12,12 @@ import org.springframework.web.servlet.NoHandlerFoundException;
 @RestControllerAdvice
 public class RestGlobalExceptionHandler {
 
+    @ExceptionHandler(value = {UserNotFoundException.class})
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ApiResponse userNotFoundException(UserNotFoundException ex) {
+        return new ApiResponse(ex.getMessage(), "User not found exception", HttpStatus.NOT_FOUND);
+    }
+
     @ExceptionHandler(value = {ResourceNotFoundException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ApiResponse resourceNotFoundException(ResourceNotFoundException ex) {

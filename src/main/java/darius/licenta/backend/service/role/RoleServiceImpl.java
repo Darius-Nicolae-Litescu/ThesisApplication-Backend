@@ -1,7 +1,7 @@
-package darius.licenta.backend.service.Role;
+package darius.licenta.backend.service.role;
 
-import darius.licenta.backend.persistence.RoleRepository;
 import darius.licenta.backend.domain.Role;
+import darius.licenta.backend.persistence.RoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

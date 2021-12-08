@@ -3,7 +3,7 @@ package darius.licenta.backend.controllers;
 import darius.licenta.backend.domain.Role;
 import darius.licenta.backend.dto.role.RoleInsertDto;
 import darius.licenta.backend.mapper.role.RoleMapper;
-import darius.licenta.backend.service.Role.RoleService;
+import darius.licenta.backend.service.role.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestBody;

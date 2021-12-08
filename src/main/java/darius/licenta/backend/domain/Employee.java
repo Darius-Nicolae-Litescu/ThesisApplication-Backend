@@ -30,6 +30,11 @@ public class Employee {
         this.user = user;
     }
 
+    public Employee(Person person, Position position) {
+        this.person = person;
+        this.position = position;
+    }
+
     public Employee() {
     }
 

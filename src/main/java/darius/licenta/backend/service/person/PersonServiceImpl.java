@@ -1,7 +1,7 @@
-package darius.licenta.backend.service.Person;
+package darius.licenta.backend.service.person;
 
 import darius.licenta.backend.domain.Person;
-import darius.licenta.backend.dto.person.PersonDto;
+import darius.licenta.backend.dto.person.EmployeeDto;
 import darius.licenta.backend.mapper.person.PersonMapper;
 import darius.licenta.backend.payload.response.ApiResponse;
 import darius.licenta.backend.payload.response.PaginatedResponse;
@@ -34,23 +34,28 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
-    public PaginatedResponse<PersonDto> getAllPersons(int page, int size) {
+    public PaginatedResponse<EmployeeDto> getAllPersons(int page, int size) {
         Pageable pageable = PageRequest.of(page, size, Sort.Direction.ASC, BIRTH_DATE);
         Page<Person> allPersons = personRepository.findAll(pageable);
         if (allPersons.getNumberOfElements() == 0) {
             return new PaginatedResponse<>(allPersons.getNumber(), allPersons.getSize(), allPersons.getNumberOfElements(),
                     new ArrayList<>(), allPersons.getTotalElements(), allPersons.getTotalPages());
         }
-        List<PersonDto> allPersonDto = new ArrayList<>();
-        allPersons.getContent().forEach(person -> allPersonDto.add(personMapper.personToPersonDto(person)));
+        List<EmployeeDto> allEmployeeDto = new ArrayList<>();
+        allPersons.getContent().forEach(person -> allEmployeeDto.add(personMapper.personToPersonDto(person)));
         return new PaginatedResponse<>(allPersons.getNumber(), allPersons.getSize(), allPersons.getNumberOfElements(),
-                allPersonDto, allPersons.getTotalElements(), allPersons.getTotalPages());
+                allEmployeeDto, allPersons.getTotalElements(), allPersons.getTotalPages());
     }
 
     @Override
-    public ApiResponse<PersonDto> getPersonById(Long id) {
+    public ApiResponse<EmployeeDto> getPersonById(Long id) {
         Person person = personRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
-        PersonDto personDto = personMapper.personToPersonDto(person);
-        return new ApiResponse<>(personDto, HttpStatus.OK);
+        EmployeeDto employeeDto = personMapper.personToPersonDto(person);
+        return new ApiResponse<>(employeeDto, HttpStatus.OK);
+    }
+
+    @Override
+    public void insertPerson(Person person) {
+        personRepository.save(person);
     }
 }

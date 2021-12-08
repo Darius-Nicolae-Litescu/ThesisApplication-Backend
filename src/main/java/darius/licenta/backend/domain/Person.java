@@ -33,6 +33,12 @@ public class Person {
         this.employee = employee;
     }
 
+    public Person(String firstName, String lastName, Date birthDate) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.birthDate = birthDate;
+    }
+
     public Person() {
     }
 
