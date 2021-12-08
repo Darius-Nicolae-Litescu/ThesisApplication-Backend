@@ -4,20 +4,20 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.Objects;
 
-public class EmployeeDto implements Serializable {
+public class PersonDto implements Serializable {
     private long id;
     private String firstName;
     private String lastName;
     private Date birthDate;
 
-    public EmployeeDto(long id, String firstName, String lastName, Date birthDate) {
+    public PersonDto(long id, String firstName, String lastName, Date birthDate) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.birthDate = birthDate;
     }
 
-    public EmployeeDto() {
+    public PersonDto() {
     }
 
     public long getId() {
@@ -54,8 +54,8 @@ public class EmployeeDto implements Serializable {
 
     public boolean equals(final Object o) {
         if (o == this) return true;
-        if (!(o instanceof EmployeeDto)) return false;
-        final EmployeeDto other = (EmployeeDto) o;
+        if (!(o instanceof PersonDto)) return false;
+        final PersonDto other = (PersonDto) o;
         if (!other.canEqual((Object) this)) return false;
         if (this.getId() != other.getId()) return false;
         final Object this$firstName = this.getFirstName();
@@ -71,7 +71,7 @@ public class EmployeeDto implements Serializable {
     }
 
     protected boolean canEqual(final Object other) {
-        return other instanceof EmployeeDto;
+        return other instanceof PersonDto;
     }
 
     public int hashCode() {

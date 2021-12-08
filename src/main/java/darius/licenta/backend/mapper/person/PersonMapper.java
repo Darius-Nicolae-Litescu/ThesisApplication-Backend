@@ -1,15 +1,15 @@
 package darius.licenta.backend.mapper.person;
 
 import darius.licenta.backend.domain.Person;
-import darius.licenta.backend.dto.person.EmployeeDto;
+import darius.licenta.backend.dto.person.PersonDto;
 import org.mapstruct.*;
 
 @Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, componentModel = "spring")
 public interface PersonMapper {
-    Person personDtoToPerson(EmployeeDto employeeDto);
+    Person personDtoToPerson(PersonDto personDto);
 
-    EmployeeDto personToPersonDto(Person person);
+    PersonDto personToPersonDto(Person person);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    void updatePersonFromPersonDto(EmployeeDto employeeDto, @MappingTarget Person person);
+    void updatePersonFromPersonDto(PersonDto employeeDto, @MappingTarget Person person);
 }
