@@ -1,6 +1,7 @@
 package darius.licenta.backend.mapper.position;
 
 import darius.licenta.backend.domain.Position;
+import darius.licenta.backend.dto.position.CreatePositionDto;
 import darius.licenta.backend.dto.position.PositionDto;
 import org.mapstruct.*;
 
@@ -12,4 +13,11 @@ public interface PositionMapper {
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void updatePositionFromPositionDto(PositionDto positionDto, @MappingTarget Position position);
+
+    Position createPositionDtoToPosition(CreatePositionDto createPositionDto);
+
+    CreatePositionDto positionToCreatePositionDto(Position position);
+
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    void updatePositionFromCreatePositionDto(CreatePositionDto createPositionDto, @MappingTarget Position position);
 }

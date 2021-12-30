@@ -1,12 +1,15 @@
 package darius.licenta.backend.mapper.role;
 
 import darius.licenta.backend.domain.Role;
-import darius.licenta.backend.dto.role.RoleInsertDto;
-import org.mapstruct.Mapper;
+import darius.licenta.backend.dto.role.RoleDto;
+import org.mapstruct.*;
 
-@Mapper
+@Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, componentModel = "spring")
 public interface RoleMapper {
-    Role roleInsertDtoToRole(RoleInsertDto source);
-    RoleInsertDto roleToRoleInsertDto(Role destination);
+    Role roleDtoToRole(RoleDto roleDto);
 
+    RoleDto roleToRoleDto(Role role);
+
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    void updateRoleFromRoleDto(RoleDto roleDto, @MappingTarget Role role);
 }

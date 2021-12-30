@@ -1,7 +1,7 @@
 package darius.licenta.backend.service.user;
 
 import darius.licenta.backend.domain.User;
-import darius.licenta.backend.dto.user.UserDto;
+import darius.licenta.backend.dto.user.*;
 import darius.licenta.backend.exception.UserNotFoundException;
 import darius.licenta.backend.mapper.user.UserMapper;
 import darius.licenta.backend.payload.response.ApiResponse;
@@ -16,7 +16,6 @@ import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -35,60 +34,99 @@ class UserServiceImpl implements UserService {
         this.userMapper = userMapper;
     }
 
-    @Transactional
     @Override
-    public void saveOrUpdateUserPublicDetails(UserDto userDto) {
-        User user = userMapper.userDtoToUser(userDto);
-        userRepository.save(user);
+    public ApiResponse<ResponseUserDto> getUserById(Long id) {
+        User user = userRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
+        ResponseUserDto userDto = userMapper.userToResponseUserDto(user);
+        return new ApiResponse<>(userDto, HttpStatus.OK);
     }
 
     @Override
-    public boolean deleteUserByUsername(String username) {
+    public ApiResponse getAllUsers(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.Direction.ASC, USERNAME);
+        Page<User> allUsers = userRepository.findAll(pageable);
+        if (allUsers.getNumberOfElements() == 0) {
+            PaginatedResponse<ResponseUserDto> paginatedResponse = new PaginatedResponse<>(allUsers.getNumber(), allUsers.getSize(), allUsers.getNumberOfElements(),
+                    new ArrayList<>(), allUsers.getTotalElements(), allUsers.getTotalPages());
+            return new ApiResponse<>(paginatedResponse, HttpStatus.NOT_FOUND);
+        }
+        List<ResponseUserDto> allUsersDto = new ArrayList<>();
+
+        allUsers.getContent().forEach(user -> allUsersDto.add(userMapper.userToResponseUserDto(user)));
+
+        PaginatedResponse<ResponseUserDto> paginatedResponse = new PaginatedResponse<>(allUsers.getNumber(), allUsers.getSize(), allUsers.getNumberOfElements(),
+                allUsersDto, allUsers.getTotalElements(), allUsers.getTotalPages());
+        return new ApiResponse<>(paginatedResponse, HttpStatus.OK);
+    }
+
+    @Override
+    public ApiResponse<ResponseUserDto> insert(CreateUserDto createUserDto) {
+        User user = userMapper.createUserDtoToUser(createUserDto);
+
+        userRepository.save(user);
+
+        ResponseUserDto responseUserDto = userMapper.userToResponseUserDto(user);
+        return new ApiResponse<>(responseUserDto, HttpStatus.OK);
+    }
+
+    @Override
+    public ApiResponse<ResponseUserDto> changePassword(UpdateUserPasswordDto updateUserPasswordDto) {
+        Optional<User> user = userRepository.findByUsername(updateUserPasswordDto.getUsername());
+        if (user.isPresent()) {
+            user.get().setPassword(updateUserPasswordDto.getPassword());
+            userRepository.save(user.get());
+            ResponseUserDto responseUserDto = userMapper.userToResponseUserDto(user.get());
+            return new ApiResponse<>(responseUserDto, HttpStatus.OK);
+        }
+        return new ApiResponse<>(null, HttpStatus.NOT_FOUND);
+    }
+
+    @Override
+    public ApiResponse<ResponseUserDto> changeEmail(UpdateUserEmailDto updateUserEmailDto) {
+        Optional<User> user = userRepository.findByUsername(updateUserEmailDto.getUsername());
+        if (user.isPresent()) {
+            user.get().setEmail(updateUserEmailDto.getEmail());
+            userRepository.save(user.get());
+            ResponseUserDto responseUserDto = userMapper.userToResponseUserDto(user.get());
+            return new ApiResponse<>(responseUserDto, HttpStatus.OK);
+        }
+        return new ApiResponse<>(null, HttpStatus.NOT_FOUND);
+    }
+
+    @Override
+    public ApiResponse<ResponseUserDto> changeProfilePicture(UpdateUserProfilePictureDto updateUserProfilePictureDto) {
+        Optional<User> user = userRepository.findByUsername(updateUserProfilePictureDto.getUsername());
+        if (user.isPresent()) {
+            user.get().setProfilePicture(updateUserProfilePictureDto.getProfilePicture());
+            userRepository.save(user.get());
+            ResponseUserDto responseUserDto = userMapper.userToResponseUserDto(user.get());
+            return new ApiResponse<>(responseUserDto, HttpStatus.OK);
+        }
+        return new ApiResponse<>(null, HttpStatus.NOT_FOUND);
+    }
+
+    @Override
+    public ApiResponse<ResponseUserDto> deleteUserByUsername(String username) {
         Optional<User> user = userRepository.findByUsername(username);
-        if(user.isPresent()) {
+        if (user.isPresent()) {
             userRepository.delete(user.get());
-            return true;
-        } else
-        {
+            ResponseUserDto responseUserDto = userMapper.userToResponseUserDto(user.get());
+            return new ApiResponse<>(responseUserDto, HttpStatus.ACCEPTED);
+        } else {
             throw new UserNotFoundException("Username " + username + " cannot be found in database");
         }
     }
 
     @Override
-    public boolean deleteUserById(Long id) {
+    public ApiResponse<ResponseUserDto> deleteUserById(Long id) {
         Optional<User> user = userRepository.findById(id);
-        if(user.isPresent()) {
+        if (user.isPresent()) {
             userRepository.delete(user.get());
-            return true;
-        } else
-        {
+            ResponseUserDto responseUserDto = userMapper.userToResponseUserDto(user.get());
+            return new ApiResponse<>(responseUserDto, HttpStatus.ACCEPTED);
+        } else {
             throw new UserNotFoundException("Id " + id + " cannot be found in database");
         }
     }
 
-    @Override
-    public PaginatedResponse<UserDto> getAllUsers(int page, int size) {
-        Pageable pageable = PageRequest.of(page, size, Sort.Direction.ASC, USERNAME);
-        Page<User> allUsers = userRepository.findAll(pageable);
-        if (allUsers.getNumberOfElements() == 0) {
-            return new PaginatedResponse<>(allUsers.getNumber(), allUsers.getSize(), allUsers.getNumberOfElements(),
-                    new ArrayList<>(), allUsers.getTotalElements(), allUsers.getTotalPages());
-        }
-        List<UserDto> allUsersDto = new ArrayList<>();
-        allUsers.getContent().forEach(user -> allUsersDto.add(userMapper.userToUserDto(user)));
-        return new PaginatedResponse<>(allUsers.getNumber(), allUsers.getSize(), allUsers.getNumberOfElements(),
-                allUsersDto, allUsers.getTotalElements(), allUsers.getTotalPages());
-    }
-
-    @Override
-    public ApiResponse<UserDto> getUserById(Long id) {
-        User user = userRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
-        UserDto userDto = userMapper.userToUserDto(user);
-        return new ApiResponse<>(userDto, HttpStatus.OK);
-    }
-
-    @Override
-    public void insertUser(User user) {
-        userRepository.save(user);
-    }
 }

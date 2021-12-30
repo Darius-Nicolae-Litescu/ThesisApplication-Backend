@@ -1,13 +1,22 @@
 package darius.licenta.backend.service.position;
 
-import darius.licenta.backend.domain.Position;
-import darius.licenta.backend.domain.Role;
+import darius.licenta.backend.dto.position.CreatePositionDto;
+import darius.licenta.backend.dto.position.PositionDto;
+import darius.licenta.backend.dto.position.UpdatePositionDto;
+import darius.licenta.backend.payload.response.ApiResponse;
 
 import java.util.List;
 
 public interface PositionService {
-    void saveOrUpdatePosition(Position position);
-    boolean deletePosition(String positionName);
-    List<Position> findPositionByUserId(long userId);
-    List<Position> findAllPositions();
+
+    ApiResponse<PositionDto> findPositionByUserId(String username);
+
+    ApiResponse<List<PositionDto>> findAllPositions();
+
+    ApiResponse<PositionDto> insert(CreatePositionDto createPositionDto);
+
+    ApiResponse<PositionDto> updatePositionSeniorityLevel(UpdatePositionDto updatePositionDto);
+
+    ApiResponse<PositionDto> deletePosition(String positionName);
+
 }

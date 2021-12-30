@@ -20,14 +20,14 @@ public class Story {
     @JoinColumn(name = "category", nullable = false)
     private Category category;
 
-    @OneToMany(mappedBy="story", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "story", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<StoryTask> storySubtasks;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "priority", nullable = false)
     private Priority priority;
 
-    @OneToMany(mappedBy="story", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "story", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<Attachment> storyAttachments;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = true)
@@ -43,6 +43,10 @@ public class Story {
     }
 
     public Story() {
+    }
+
+    public Category getCategory() {
+        return category;
     }
 
     public long getId() {
@@ -91,6 +95,10 @@ public class Story {
 
     public void setSoftwareApplication(SoftwareApplication softwareApplication) {
         this.softwareApplication = softwareApplication;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
     }
 
     public boolean equals(final Object o) {

@@ -12,11 +12,11 @@ public class Employee {
     @GeneratedValue()
     private long id;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "person_id")
     private Person person;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "position_id")
     private Position position;
 

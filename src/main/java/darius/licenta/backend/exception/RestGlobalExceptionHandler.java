@@ -18,6 +18,12 @@ public class RestGlobalExceptionHandler {
         return new ApiResponse(ex.getMessage(), "User not found exception", HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(value = {RoleNotFoundException.class})
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ApiResponse roleNotFoundException(RoleNotFoundException ex) {
+        return new ApiResponse(ex.getMessage(), "Role not found exception", HttpStatus.NOT_FOUND);
+    }
+
     @ExceptionHandler(value = {ResourceNotFoundException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ApiResponse resourceNotFoundException(ResourceNotFoundException ex) {

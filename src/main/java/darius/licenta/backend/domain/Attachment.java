@@ -28,29 +28,21 @@ public class Attachment {
     private LocalDateTime postedAt;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = true)
-    private User user;
-
-    @ManyToOne(fetch = FetchType.LAZY, optional = true)
     private CommentAttachment commentAttachment;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = true)
     private StoryTask storyTask;
 
     @OneToOne(fetch = FetchType.LAZY, optional = true)
-    private Priority priorityIcon;
-
-    @OneToOne(fetch = FetchType.LAZY, optional = true)
     private Story story;
 
-    public Attachment(long id, String contentType, Blob content, LocalDateTime postedAt, User user, CommentAttachment commentAttachment, StoryTask storyTask, Priority priorityIcon, Story story) {
+    public Attachment(long id, String contentType, Blob content, LocalDateTime postedAt, CommentAttachment commentAttachment, StoryTask storyTask, Story story) {
         this.id = id;
         this.contentType = contentType;
         this.content = content;
         this.postedAt = postedAt;
-        this.user = user;
         this.commentAttachment = commentAttachment;
         this.storyTask = storyTask;
-        this.priorityIcon = priorityIcon;
         this.story = story;
     }
 
@@ -73,20 +65,12 @@ public class Attachment {
         return this.postedAt;
     }
 
-    public User getUser() {
-        return this.user;
-    }
-
     public CommentAttachment getCommentAttachment() {
         return this.commentAttachment;
     }
 
     public StoryTask getStoryTask() {
         return this.storyTask;
-    }
-
-    public Priority getPriorityIcon() {
-        return this.priorityIcon;
     }
 
     public Story getStory() {
@@ -109,20 +93,12 @@ public class Attachment {
         this.postedAt = postedAt;
     }
 
-    public void setUser(User user) {
-        this.user = user;
-    }
-
     public void setCommentAttachment(CommentAttachment commentAttachment) {
         this.commentAttachment = commentAttachment;
     }
 
     public void setStoryTask(StoryTask storyTask) {
         this.storyTask = storyTask;
-    }
-
-    public void setPriorityIcon(Priority priorityIcon) {
-        this.priorityIcon = priorityIcon;
     }
 
     public void setStory(Story story) {
@@ -145,9 +121,6 @@ public class Attachment {
         final Object this$postedAt = this.getPostedAt();
         final Object other$postedAt = other.getPostedAt();
         if (!Objects.equals(this$postedAt, other$postedAt)) return false;
-        final Object this$user = this.getUser();
-        final Object other$user = other.getUser();
-        if (!Objects.equals(this$user, other$user)) return false;
         final Object this$commentAttachment = this.getCommentAttachment();
         final Object other$commentAttachment = other.getCommentAttachment();
         if (!Objects.equals(this$commentAttachment, other$commentAttachment))
@@ -155,10 +128,6 @@ public class Attachment {
         final Object this$storyTask = this.getStoryTask();
         final Object other$storyTask = other.getStoryTask();
         if (!Objects.equals(this$storyTask, other$storyTask)) return false;
-        final Object this$priorityIcon = this.getPriorityIcon();
-        final Object other$priorityIcon = other.getPriorityIcon();
-        if (!Objects.equals(this$priorityIcon, other$priorityIcon))
-            return false;
         final Object this$story = this.getStory();
         final Object other$story = other.getStory();
         return Objects.equals(this$story, other$story);
@@ -179,20 +148,16 @@ public class Attachment {
         result = result * PRIME + ($content == null ? 43 : $content.hashCode());
         final Object $postedAt = this.getPostedAt();
         result = result * PRIME + ($postedAt == null ? 43 : $postedAt.hashCode());
-        final Object $user = this.getUser();
-        result = result * PRIME + ($user == null ? 43 : $user.hashCode());
         final Object $commentAttachment = this.getCommentAttachment();
         result = result * PRIME + ($commentAttachment == null ? 43 : $commentAttachment.hashCode());
         final Object $storyTask = this.getStoryTask();
         result = result * PRIME + ($storyTask == null ? 43 : $storyTask.hashCode());
-        final Object $priorityIcon = this.getPriorityIcon();
-        result = result * PRIME + ($priorityIcon == null ? 43 : $priorityIcon.hashCode());
         final Object $story = this.getStory();
         result = result * PRIME + ($story == null ? 43 : $story.hashCode());
         return result;
     }
 
     public String toString() {
-        return "Attachment(id=" + this.getId() + ", contentType=" + this.getContentType() + ", content=" + this.getContent() + ", postedAt=" + this.getPostedAt() + ", user=" + this.getUser() + ", commentAttachment=" + this.getCommentAttachment() + ", storyTask=" + this.getStoryTask() + ", priorityIcon=" + this.getPriorityIcon() + ", story=" + this.getStory() + ")";
+        return "Attachment(id=" + this.getId() + ", contentType=" + this.getContentType() + ", content=" + this.getContent() + ", postedAt=" + this.getPostedAt() + ", commentAttachment=" + this.getCommentAttachment() + ", storyTask=" + this.getStoryTask() + ", story=" + this.getStory() + ")";
     }
 }

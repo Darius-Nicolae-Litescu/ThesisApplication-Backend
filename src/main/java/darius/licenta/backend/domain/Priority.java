@@ -1,6 +1,7 @@
 package darius.licenta.backend.domain;
 
 import javax.persistence.*;
+import java.sql.Blob;
 import java.util.Objects;
 
 @Entity
@@ -21,13 +22,14 @@ public class Priority {
     @Column(name = "level", nullable = false, length = 256)
     private int level;
 
-    @OneToOne(mappedBy = "priorityIcon")
-    private Attachment priorityIcon;
+    @Column(name = "priority_icon", nullable = false)
+    @Lob
+    private Blob priorityIcon;
 
     @OneToOne(mappedBy = "priority")
     private Story story;
 
-    public Priority(long id, String title, String description, int level, Attachment priorityIcon, Story story) {
+    public Priority(long id, String title, String description, int level, Blob priorityIcon, Story story) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -55,7 +57,7 @@ public class Priority {
         return this.level;
     }
 
-    public Attachment getPriorityIcon() {
+    public Blob getPriorityIcon() {
         return this.priorityIcon;
     }
 
@@ -79,7 +81,7 @@ public class Priority {
         this.level = level;
     }
 
-    public void setPriorityIcon(Attachment priorityIcon) {
+    public void setPriorityIcon(Blob priorityIcon) {
         this.priorityIcon = priorityIcon;
     }
 

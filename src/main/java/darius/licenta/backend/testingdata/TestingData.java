@@ -36,12 +36,7 @@ public class TestingData implements ApplicationRunner {
     }
 
     public void run(ApplicationArguments args) {
-        Person person = new Person("Darius", "Nicolae",new Date());
-        personService.insertPerson(person);
-        Position position = new Position("DEVELOPER", "Junior");
-        positionService.saveOrUpdatePosition(position);
-        Employee employee = new Employee(person,position);
-        employeeService.insertEmployee(employee);
+        InsertEmployees.InsertEmployess(employeeService);
     }
 
     void insertPersonData()

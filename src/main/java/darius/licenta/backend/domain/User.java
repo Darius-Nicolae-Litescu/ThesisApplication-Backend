@@ -1,6 +1,7 @@
 package darius.licenta.backend.domain;
 
 import javax.persistence.*;
+import java.sql.Blob;
 import java.util.Objects;
 import java.util.Set;
 
@@ -13,7 +14,7 @@ public class User {
     @GeneratedValue()
     private long id;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "employee_id")
     private Employee employee;
 
@@ -22,6 +23,10 @@ public class User {
 
     @Column(name = "password", nullable = false, length = 256)
     private String password;
+
+    @Column(name = "profile_picture", nullable = true)
+    @Lob
+    private Blob profilePicture;
 
     @Column(name = "email", nullable = false, length = 256)
     private String email;
@@ -32,23 +37,8 @@ public class User {
     @Column(name = "is_deleted", nullable = false, length = 256)
     private Boolean isDeleted;
 
-    @OneToMany(mappedBy="user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<Role> roles;
-
-    @OneToMany(mappedBy="user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private Set<Attachment> attachment;
-
-    public User(long id, Employee employee, String username, String password, String email, Boolean isActive, Boolean isDeleted, Set<Role> roles, Set<Attachment> attachment) {
-        this.id = id;
-        this.employee = employee;
-        this.username = username;
-        this.password = password;
-        this.email = email;
-        this.isActive = isActive;
-        this.isDeleted = isDeleted;
-        this.roles = roles;
-        this.attachment = attachment;
-    }
 
     public User(Employee employee, String username, String password, String email, Boolean isActive, Boolean isDeleted) {
         this.employee = employee;
@@ -59,7 +49,30 @@ public class User {
         this.isDeleted = isDeleted;
     }
 
+    public User(Employee employee, String username, String password, Blob profilePicture, String email, Boolean isActive, Boolean isDeleted) {
+        this.employee = employee;
+        this.username = username;
+        this.password = password;
+        this.profilePicture = profilePicture;
+        this.email = email;
+        this.isActive = isActive;
+        this.isDeleted = isDeleted;
+    }
+
+    public User(Employee employee, String username, String password, String email) {
+        this.employee = employee;
+        this.username = username;
+        this.password = password;
+        this.email = email;
+        this.isActive = true;
+        this.isDeleted = false;
+    }
+
     public User() {
+    }
+
+    public Blob getProfilePicture() {
+        return profilePicture;
     }
 
     public long getId() {
@@ -94,10 +107,6 @@ public class User {
         return this.roles;
     }
 
-    public Set<Attachment> getAttachment() {
-        return this.attachment;
-    }
-
     public void setId(long id) {
         this.id = id;
     }
@@ -130,40 +139,16 @@ public class User {
         this.roles = roles;
     }
 
-    public void setAttachment(Set<Attachment> attachment) {
-        this.attachment = attachment;
+    public void setProfilePicture(Blob profilePicture) {
+        this.profilePicture = profilePicture;
     }
 
-    public boolean equals(final Object o) {
-        if (o == this) return true;
-        if (!(o instanceof User)) return false;
-        final User other = (User) o;
-        if (!other.canEqual(this)) return false;
-        if (this.getId() != other.getId()) return false;
-        final Object this$employee = this.getEmployee();
-        final Object other$employee = other.getEmployee();
-        if (!Objects.equals(this$employee, other$employee)) return false;
-        final Object this$username = this.getUsername();
-        final Object other$username = other.getUsername();
-        if (!Objects.equals(this$username, other$username)) return false;
-        final Object this$password = this.getPassword();
-        final Object other$password = other.getPassword();
-        if (!Objects.equals(this$password, other$password)) return false;
-        final Object this$email = this.getEmail();
-        final Object other$email = other.getEmail();
-        if (!Objects.equals(this$email, other$email)) return false;
-        final Object this$isActive = this.getIsActive();
-        final Object other$isActive = other.getIsActive();
-        if (!Objects.equals(this$isActive, other$isActive)) return false;
-        final Object this$isDeleted = this.getIsDeleted();
-        final Object other$isDeleted = other.getIsDeleted();
-        if (!Objects.equals(this$isDeleted, other$isDeleted)) return false;
-        final Object this$roles = this.getRoles();
-        final Object other$roles = other.getRoles();
-        if (!Objects.equals(this$roles, other$roles)) return false;
-        final Object this$attachment = this.getAttachment();
-        final Object other$attachment = other.getAttachment();
-        return Objects.equals(this$attachment, other$attachment);
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return id == user.id && Objects.equals(employee, user.employee) && Objects.equals(username, user.username) && Objects.equals(password, user.password) && Objects.equals(profilePicture, user.profilePicture) && Objects.equals(email, user.email) && Objects.equals(isActive, user.isActive) && Objects.equals(isDeleted, user.isDeleted) && Objects.equals(roles, user.roles);
     }
 
     protected boolean canEqual(final Object other) {
@@ -189,12 +174,10 @@ public class User {
         result = result * PRIME + ($isDeleted == null ? 43 : $isDeleted.hashCode());
         final Object $roles = this.getRoles();
         result = result * PRIME + ($roles == null ? 43 : $roles.hashCode());
-        final Object $attachment = this.getAttachment();
-        result = result * PRIME + ($attachment == null ? 43 : $attachment.hashCode());
         return result;
     }
 
     public String toString() {
-        return "User(id=" + this.getId() + ", employee=" + this.getEmployee() + ", username=" + this.getUsername() + ", password=" + this.getPassword() + ", email=" + this.getEmail() + ", isActive=" + this.getIsActive() + ", isDeleted=" + this.getIsDeleted() + ", roles=" + this.getRoles() + ", attachment=" + this.getAttachment() + ")";
+        return "User(id=" + this.getId() + ", employee=" + this.getEmployee() + ", username=" + this.getUsername() + ", password=" + this.getPassword() + ", email=" + this.getEmail() + ", isActive=" + this.getIsActive() + ", isDeleted=" + this.getIsDeleted() + ", roles=" + this.getRoles() + ")";
     }
 }
