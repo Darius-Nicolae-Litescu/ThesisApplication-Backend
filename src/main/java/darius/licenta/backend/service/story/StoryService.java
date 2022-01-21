@@ -15,6 +15,8 @@ public interface StoryService {
 
     ApiResponse<StoryDto> findById(Long id);
 
+    ApiResponse<StoryDto> deleteById(Long id);
+
     ApiResponse<PaginatedResponse<StoryDto>> findByPriority(Long priorityId, int page, int size);
 
     ApiResponse<PaginatedResponse<StoryDto>> findByCategory(Long categoryId, int page, int size);
@@ -23,7 +25,7 @@ public interface StoryService {
 
     ApiResponse<PaginatedResponse<StoryDto>> findBySoftwareApplicationId(Long softwareApplicationId, int page, int size);
 
-    ApiResponse<Integer> countAll();
+    ApiResponse<Long> countAll();
 
-    ApiResponse<PaginatedResponse<StoryDto>> findAll();
+    ApiResponse<PaginatedResponse<StoryDto>> findAll(int page, int size);
 }

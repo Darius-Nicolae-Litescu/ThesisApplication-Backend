@@ -11,9 +11,9 @@ import java.util.Optional;
 public interface SoftwareApplicationService {
     ApiResponse<SoftwareApplicationDto> insert(InsertSoftwareApplicationDto insertSoftwareApplicationDto);
     ApiResponse<SoftwareApplicationDto> update (SoftwareApplicationDto softwareApplicationDto);
-    ApiResponse<SoftwareApplicationDto> findByName(String name);
-    ApiResponse<SoftwareApplicationDto> findByDescription(String description);
+    ApiResponse<List<SoftwareApplicationDto>> findByName(String name);
+    ApiResponse<List<SoftwareApplicationDto>> findByDescription(String description);
     ApiResponse<SoftwareApplicationDto> findById(Long id);
     ApiResponse<List<SoftwareApplicationDto>> findAll();
-
+    ApiResponse<SoftwareApplicationDto> deleteById(Long id);
 }

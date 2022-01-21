@@ -40,6 +40,9 @@ public class User {
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<Role> roles;
 
+    @OneToMany(mappedBy = "uploadedBy", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Set<Attachment> userAttachments;
+
     public User(Employee employee, String username, String password, String email, Boolean isActive, Boolean isDeleted) {
         this.employee = employee;
         this.username = username;
@@ -69,6 +72,10 @@ public class User {
     }
 
     public User() {
+    }
+
+    public Set<Attachment> getUserAttachments() {
+        return userAttachments;
     }
 
     public Blob getProfilePicture() {
@@ -141,6 +148,10 @@ public class User {
 
     public void setProfilePicture(Blob profilePicture) {
         this.profilePicture = profilePicture;
+    }
+
+    public void setUserAttachments(Set<Attachment> userAttachments) {
+        this.userAttachments = userAttachments;
     }
 
     @Override

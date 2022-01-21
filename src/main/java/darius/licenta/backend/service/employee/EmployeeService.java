@@ -7,13 +7,14 @@ import darius.licenta.backend.payload.response.ApiResponse;
 import darius.licenta.backend.payload.response.PaginatedResponse;
 
 public interface EmployeeService {
-    ApiResponse<PaginatedResponse<EmployeeDto>> getAllEmployees(int page, int size);
-
-    ApiResponse<EmployeeDto> getEmployeeById(Long id);
 
     ApiResponse<EmployeeDto> insert(EmployeeDto employeeDto);
 
     ApiResponse<EmployeeDto> update(EmployeeDto employeeDto);
 
     ApiResponse<EmployeeDto> delete(Long id);
+
+    ApiResponse<PaginatedResponse<EmployeeDto>> getAllEmployees(int page, int size);
+
+    ApiResponse<EmployeeDto> getEmployeeById(Long id);
 }

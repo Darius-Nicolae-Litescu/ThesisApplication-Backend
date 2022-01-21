@@ -27,6 +27,9 @@ public class Attachment {
     @Column(name = "uploaded_at", nullable = false)
     private LocalDateTime postedAt;
 
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    private User uploadedBy;
+
     @ManyToOne(fetch = FetchType.LAZY, optional = true)
     private CommentAttachment commentAttachment;
 

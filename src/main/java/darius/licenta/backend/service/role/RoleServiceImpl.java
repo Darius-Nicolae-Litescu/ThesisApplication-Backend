@@ -9,6 +9,7 @@ import darius.licenta.backend.persistence.RoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,7 +54,7 @@ class RoleServiceImpl implements RoleService {
     @Override
     public ApiResponse<List<RoleDto>> findRolesByUserId(long userId) {
         List<Role> roles = roleRepository.findByUser_Id(userId);
-        if (Objects.isNull(roles)) {
+        if (CollectionUtils.isEmpty(roles)) {
             return new ApiResponse<>(new ArrayList<>(), HttpStatus.NOT_FOUND);
         }
         List<RoleDto> roleDtos = new ArrayList<>();
@@ -65,7 +66,7 @@ class RoleServiceImpl implements RoleService {
     @Override
     public ApiResponse<List<RoleDto>> findRolesByUserUsername(String username) {
         List<Role> roles = roleRepository.findByUser_Username(username);
-        if (Objects.isNull(roles)) {
+        if (CollectionUtils.isEmpty(roles)) {
             return new ApiResponse<>(new ArrayList<>(), HttpStatus.NOT_FOUND);
         }
         List<RoleDto> roleDtos = new ArrayList<>();

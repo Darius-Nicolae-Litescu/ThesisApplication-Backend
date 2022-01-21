@@ -5,19 +5,18 @@ import java.sql.Blob;
 import java.time.LocalDateTime;
 
 public class AttachmentDto implements Serializable {
-    private long id;
-    private String contentType;
-    private Blob content;
-    private LocalDateTime postedAt;
+    private final long id;
+    private final String contentType;
+    private final Blob content;
+    private final LocalDateTime postedAt;
+    private final String uploadedByUsername;
 
-    public AttachmentDto(long id, String contentType, Blob content, LocalDateTime postedAt) {
+    public AttachmentDto(long id, String contentType, Blob content, LocalDateTime postedAt, String uploadedByUsername) {
         this.id = id;
         this.contentType = contentType;
         this.content = content;
         this.postedAt = postedAt;
-    }
-
-    public AttachmentDto() {
+        this.uploadedByUsername = uploadedByUsername;
     }
 
     public long getId() {
@@ -36,20 +35,8 @@ public class AttachmentDto implements Serializable {
         return this.postedAt;
     }
 
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public void setContentType(String contentType) {
-        this.contentType = contentType;
-    }
-
-    public void setContent(Blob content) {
-        this.content = content;
-    }
-
-    public void setPostedAt(LocalDateTime postedAt) {
-        this.postedAt = postedAt;
+    public String getUploadedByUsername() {
+        return this.uploadedByUsername;
     }
 
     public boolean equals(final Object o) {
@@ -68,6 +55,10 @@ public class AttachmentDto implements Serializable {
         final Object this$postedAt = this.getPostedAt();
         final Object other$postedAt = other.getPostedAt();
         if (this$postedAt == null ? other$postedAt != null : !this$postedAt.equals(other$postedAt)) return false;
+        final Object this$uploadedByUsername = this.getUploadedByUsername();
+        final Object other$uploadedByUsername = other.getUploadedByUsername();
+        if (this$uploadedByUsername == null ? other$uploadedByUsername != null : !this$uploadedByUsername.equals(other$uploadedByUsername))
+            return false;
         return true;
     }
 
@@ -86,10 +77,12 @@ public class AttachmentDto implements Serializable {
         result = result * PRIME + ($content == null ? 43 : $content.hashCode());
         final Object $postedAt = this.getPostedAt();
         result = result * PRIME + ($postedAt == null ? 43 : $postedAt.hashCode());
+        final Object $uploadedByUsername = this.getUploadedByUsername();
+        result = result * PRIME + ($uploadedByUsername == null ? 43 : $uploadedByUsername.hashCode());
         return result;
     }
 
     public String toString() {
-        return "AttachmentDto(id=" + this.getId() + ", contentType=" + this.getContentType() + ", content=" + this.getContent() + ", postedAt=" + this.getPostedAt() + ")";
+        return "AttachmentDto(id=" + this.getId() + ", contentType=" + this.getContentType() + ", content=" + this.getContent() + ", postedAt=" + this.getPostedAt() + ", uploadedByUsername=" + this.getUploadedByUsername() + ")";
     }
 }
