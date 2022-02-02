@@ -2,6 +2,8 @@ package darius.licenta.backend.domain;
 
 import javax.persistence.*;
 import java.sql.Blob;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
@@ -31,14 +33,9 @@ public class User {
     @Column(name = "email", nullable = false, length = 256)
     private String email;
 
-    @Column(name = "is_active", nullable = false, length = 256)
-    private Boolean isActive;
-
-    @Column(name = "is_deleted", nullable = false, length = 256)
-    private Boolean isDeleted;
-
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private Set<Role> roles;
+    @CollectionTable(name="user_roles")
+    @ElementCollection(fetch = FetchType.EAGER)
+    List<UserRole> userRoles;
 
     @OneToMany(mappedBy = "uploadedBy", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<Attachment> userAttachments;
@@ -48,8 +45,6 @@ public class User {
         this.username = username;
         this.password = password;
         this.email = email;
-        this.isActive = isActive;
-        this.isDeleted = isDeleted;
     }
 
     public User(Employee employee, String username, String password, Blob profilePicture, String email, Boolean isActive, Boolean isDeleted) {
@@ -58,8 +53,6 @@ public class User {
         this.password = password;
         this.profilePicture = profilePicture;
         this.email = email;
-        this.isActive = isActive;
-        this.isDeleted = isDeleted;
     }
 
     public User(Employee employee, String username, String password, String email) {
@@ -67,11 +60,18 @@ public class User {
         this.username = username;
         this.password = password;
         this.email = email;
-        this.isActive = true;
-        this.isDeleted = false;
     }
 
     public User() {
+        UserRole defaultUserRole = UserRole.USER;
+        UserRole adminUserRole = UserRole.ADMIN;
+        UserRole moderatorUserRole = UserRole.MODERATOR;
+
+        userRoles = new ArrayList<>();
+        userRoles.add(defaultUserRole);
+        userRoles.add(adminUserRole);
+        userRoles.add(moderatorUserRole);
+
     }
 
     public Set<Attachment> getUserAttachments() {
@@ -102,16 +102,8 @@ public class User {
         return this.email;
     }
 
-    public Boolean getIsActive() {
-        return this.isActive;
-    }
-
-    public Boolean getIsDeleted() {
-        return this.isDeleted;
-    }
-
-    public Set<Role> getRoles() {
-        return this.roles;
+    public List<UserRole> getUserRoles() {
+        return userRoles;
     }
 
     public void setId(long id) {
@@ -134,17 +126,6 @@ public class User {
         this.email = email;
     }
 
-    public void setIsActive(Boolean isActive) {
-        this.isActive = isActive;
-    }
-
-    public void setIsDeleted(Boolean isDeleted) {
-        this.isDeleted = isDeleted;
-    }
-
-    public void setRoles(Set<Role> roles) {
-        this.roles = roles;
-    }
 
     public void setProfilePicture(Blob profilePicture) {
         this.profilePicture = profilePicture;
@@ -154,41 +135,36 @@ public class User {
         this.userAttachments = userAttachments;
     }
 
+    public void setUserRoles(List<UserRole> userRoles) {
+        this.userRoles = userRoles;
+    }
+
+    public void removeUserRole(UserRole userRole) {
+        this.userRoles.remove(userRole);
+    }
+
+    public void addUserRole(UserRole userRole) {
+        this.userRoles.add(userRole);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
+
         User user = (User) o;
-        return id == user.id && Objects.equals(employee, user.employee) && Objects.equals(username, user.username) && Objects.equals(password, user.password) && Objects.equals(profilePicture, user.profilePicture) && Objects.equals(email, user.email) && Objects.equals(isActive, user.isActive) && Objects.equals(isDeleted, user.isDeleted) && Objects.equals(roles, user.roles);
+
+        if (id != user.id) return false;
+        if (!username.equals(user.username)) return false;
+        return email.equals(user.email);
     }
 
     protected boolean canEqual(final Object other) {
         return other instanceof User;
     }
 
+    @Override
     public int hashCode() {
-        final int PRIME = 59;
-        int result = 1;
-        final long $id = this.getId();
-        result = result * PRIME + (int) ($id >>> 32 ^ $id);
-        final Object $employee = this.getEmployee();
-        result = result * PRIME + ($employee == null ? 43 : $employee.hashCode());
-        final Object $username = this.getUsername();
-        result = result * PRIME + ($username == null ? 43 : $username.hashCode());
-        final Object $password = this.getPassword();
-        result = result * PRIME + ($password == null ? 43 : $password.hashCode());
-        final Object $email = this.getEmail();
-        result = result * PRIME + ($email == null ? 43 : $email.hashCode());
-        final Object $isActive = this.getIsActive();
-        result = result * PRIME + ($isActive == null ? 43 : $isActive.hashCode());
-        final Object $isDeleted = this.getIsDeleted();
-        result = result * PRIME + ($isDeleted == null ? 43 : $isDeleted.hashCode());
-        final Object $roles = this.getRoles();
-        result = result * PRIME + ($roles == null ? 43 : $roles.hashCode());
-        return result;
-    }
-
-    public String toString() {
-        return "User(id=" + this.getId() + ", employee=" + this.getEmployee() + ", username=" + this.getUsername() + ", password=" + this.getPassword() + ", email=" + this.getEmail() + ", isActive=" + this.getIsActive() + ", isDeleted=" + this.getIsDeleted() + ", roles=" + this.getRoles() + ")";
+        return Objects.hash(id, employee, username, password, email, userRoles);
     }
 }

@@ -10,15 +10,11 @@ import darius.licenta.backend.payload.response.PaginatedResponse;
 public interface UserService {
     ApiResponse<ResponseUserDto> getUserById(Long id);
 
-    ApiResponse<ResponseUserDto> insert(CreateUserDto createUserDto);
-
     ApiResponse<ResponseUserDto> changePassword (UpdateUserPasswordDto updateUserPasswordDto);
 
     ApiResponse<ResponseUserDto> changeEmail (UpdateUserEmailDto updateUserEmailDto);
 
     ApiResponse<ResponseUserDto> changeProfilePicture (UpdateUserProfilePictureDto updateUserProfilePictureDto);
-
-    ApiResponse<ResponseUserDto> deleteUserByUsername(String username);
 
     ApiResponse<ResponseUserDto> deleteUserById(Long id);
 

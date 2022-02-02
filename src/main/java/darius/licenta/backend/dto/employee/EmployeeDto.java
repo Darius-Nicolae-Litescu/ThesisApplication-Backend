@@ -15,6 +15,11 @@ public class EmployeeDto implements Serializable {
         this.user = user;
     }
 
+    public EmployeeDto(PersonDto person, PositionDto position) {
+        this.person = person;
+        this.position = position;
+    }
+
     public EmployeeDto() {
     }
 

@@ -14,37 +14,49 @@ public class RestGlobalExceptionHandler {
 
     @ExceptionHandler(value = {UserNotFoundException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ApiResponse userNotFoundException(UserNotFoundException ex) {
-        return new ApiResponse(ex.getMessage(), "User not found exception", HttpStatus.NOT_FOUND);
+    public ApiResponse<String> userNotFoundException(UserNotFoundException ex) {
+        return new ApiResponse<>(ex.getMessage(), "User not found exception", HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(value = {RoleNotFoundException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ApiResponse roleNotFoundException(RoleNotFoundException ex) {
-        return new ApiResponse(ex.getMessage(), "Role not found exception", HttpStatus.NOT_FOUND);
+    public ApiResponse<String> roleNotFoundException(RoleNotFoundException ex) {
+        return new ApiResponse<>(ex.getMessage(), "Role not found exception", HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(value = {ResourceNotFoundException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ApiResponse resourceNotFoundException(ResourceNotFoundException ex) {
-        return new ApiResponse(ex.getMessage(), "Resource not found exception", HttpStatus.NOT_FOUND);
+    public ApiResponse<String> resourceNotFoundException(ResourceNotFoundException ex) {
+        return new ApiResponse<>(ex.getMessage(), "Resource not found exception", HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(value = {ConstraintViolationException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ApiResponse constraintViolationException(ConstraintViolationException ex) {
-        return new ApiResponse(ex.getMessage(), "Constraint violation exception", HttpStatus.INTERNAL_SERVER_ERROR);
+    public ApiResponse<String> constraintViolationException(ConstraintViolationException ex) {
+        return new ApiResponse<>(ex.getMessage(), "Constraint violation exception", HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @ExceptionHandler(value = {InvalidUsernameAndPasswordException.class})
+    @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
+    public ApiResponse<String> invalidUsernameAndPasswordException(InvalidUsernameAndPasswordException ex) {
+        return new ApiResponse<>(ex.getMessage(), "Invalid username/password", HttpStatus.UNPROCESSABLE_ENTITY);
+    }
+
+    @ExceptionHandler(value = {InvalidJwtException.class})
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ApiResponse<String> invalidJwtExeption(InvalidJwtException ex) {
+        return new ApiResponse<>(ex.getMessage(), "Expired/invalid JWT", HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @ExceptionHandler(value = {NoHandlerFoundException.class})
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ApiResponse noHandlerFoundException(Exception ex) {
-        return new ApiResponse(ex.getMessage(), "No handler found exception", HttpStatus.NOT_FOUND);
+    public ApiResponse<String> noHandlerFoundException(NoHandlerFoundException ex) {
+        return new ApiResponse<>(ex.getMessage(), "No handler found exception", HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(value = {Exception.class})
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public ApiResponse unknownException(Exception ex) {
-        return new ApiResponse(ex.getMessage(), "Unknown exception", HttpStatus.INTERNAL_SERVER_ERROR);
+    public ApiResponse<String> unknownException(Exception ex) {
+        return new ApiResponse<>(ex.getMessage(), "Unknown exception", HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

@@ -17,6 +17,12 @@ public class PersonDto implements Serializable {
         this.birthDate = birthDate;
     }
 
+    public PersonDto(String firstName, String lastName, Date birthDate) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.birthDate = birthDate;
+    }
+
     public PersonDto() {
     }
 

@@ -3,7 +3,6 @@ package darius.licenta.backend.service.softwareapplication;
 import darius.licenta.backend.domain.Priority;
 import darius.licenta.backend.domain.SoftwareApplication;
 import darius.licenta.backend.dto.priority.PriorityDto;
-import darius.licenta.backend.dto.role.RoleDto;
 import darius.licenta.backend.dto.softwareapplication.InsertSoftwareApplicationDto;
 import darius.licenta.backend.dto.softwareapplication.SoftwareApplicationDto;
 import darius.licenta.backend.mapper.softwareapplication.SoftwareApplicationMapper;

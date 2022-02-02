@@ -13,6 +13,11 @@ public class PositionDto implements Serializable {
         this.seniorityLevel = seniorityLevel;
     }
 
+    public PositionDto(String name, String seniorityLevel) {
+        this.name = name;
+        this.seniorityLevel = seniorityLevel;
+    }
+
     public PositionDto() {
     }
 

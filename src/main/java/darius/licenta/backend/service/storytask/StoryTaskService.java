@@ -1,6 +1,5 @@
 package darius.licenta.backend.service.storytask;
 
-import darius.licenta.backend.dto.role.RoleDto;
 import darius.licenta.backend.dto.storytask.InsertStoryTaskDto;
 import darius.licenta.backend.dto.storytask.ResponseStoryTaskDto;
 import darius.licenta.backend.dto.storytask.UpdateStoryTaskDto;

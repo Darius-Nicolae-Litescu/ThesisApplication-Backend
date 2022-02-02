@@ -1,6 +1,7 @@
 package darius.licenta.backend.payload.response;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import org.springframework.http.HttpStatus;
@@ -17,6 +18,7 @@ public class ApiResponse<T> implements Serializable {
     @JsonIgnore
     private static final long serialVersionUID = 4L;
 
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     @JsonProperty("message")
     private String message;
 

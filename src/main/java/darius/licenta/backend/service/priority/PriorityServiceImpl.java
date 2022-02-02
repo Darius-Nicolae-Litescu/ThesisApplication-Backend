@@ -5,7 +5,6 @@ import darius.licenta.backend.domain.Priority;
 import darius.licenta.backend.domain.SoftwareApplication;
 import darius.licenta.backend.dto.position.PositionDto;
 import darius.licenta.backend.dto.priority.PriorityDto;
-import darius.licenta.backend.dto.role.RoleDto;
 import darius.licenta.backend.dto.softwareapplication.SoftwareApplicationDto;
 import darius.licenta.backend.mapper.priority.PriorityMapper;
 import darius.licenta.backend.payload.response.ApiResponse;

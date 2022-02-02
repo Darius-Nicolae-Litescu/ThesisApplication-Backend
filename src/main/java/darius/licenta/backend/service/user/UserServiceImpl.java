@@ -1,7 +1,10 @@
 package darius.licenta.backend.service.user;
 
+import darius.licenta.backend.configuration.security.JwtTokenProvider;
 import darius.licenta.backend.domain.User;
+import darius.licenta.backend.domain.UserRole;
 import darius.licenta.backend.dto.user.*;
+import darius.licenta.backend.exception.InvalidUsernameAndPasswordException;
 import darius.licenta.backend.exception.UserNotFoundException;
 import darius.licenta.backend.mapper.user.UserMapper;
 import darius.licenta.backend.payload.response.ApiResponse;
@@ -14,24 +17,34 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 @Service
-class UserServiceImpl implements UserService {
+class UserServiceImpl implements UserService, UserAccountOperationsService {
     private final String USERNAME = "username";
 
     private final UserRepository userRepository;
-
     private final UserMapper userMapper;
+    private final PasswordEncoder passwordEncoder;
+    private final JwtTokenProvider jwtTokenProvider;
+    private final AuthenticationManager authenticationManager;
 
     @Autowired
-    public UserServiceImpl(UserRepository roleRepository, UserMapper userMapper) {
-        this.userRepository = roleRepository;
+    public UserServiceImpl(UserRepository userRepository, UserMapper userMapper, PasswordEncoder passwordEncoder, JwtTokenProvider jwtTokenProvider, AuthenticationManager authenticationManager) {
+        this.userRepository = userRepository;
         this.userMapper = userMapper;
+        this.passwordEncoder = passwordEncoder;
+        this.jwtTokenProvider = jwtTokenProvider;
+        this.authenticationManager = authenticationManager;
     }
 
     @Override
@@ -60,13 +73,19 @@ class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ApiResponse<ResponseUserDto> insert(CreateUserDto createUserDto) {
+    public ApiResponse<ResponseUserWithJwtDto> insert(CreateUserDto createUserDto) {
         User user = userMapper.createUserDtoToUser(createUserDto);
-
-        userRepository.save(user);
-
-        ResponseUserDto responseUserDto = userMapper.userToResponseUserDto(user);
-        return new ApiResponse<>(responseUserDto, HttpStatus.OK);
+        if (!userRepository.existsByUsername(user.getUsername())) {
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+            userRepository.save(user);
+            ResponseUserDto responseUserDtoWithoutJwt = userMapper.userToResponseUserDto(user);
+            List<UserRole> userRoles = user.getUserRoles();
+            String jwtToken = jwtTokenProvider.createToken(user.getUsername(), userRoles);
+            ResponseUserWithJwtDto responseUserWithJwtDto = new ResponseUserWithJwtDto(responseUserDtoWithoutJwt,jwtToken, userRoles);
+            return new ApiResponse<>(responseUserWithJwtDto, HttpStatus.OK);
+        } else {
+            throw new InvalidUsernameAndPasswordException("Username is already in use");
+        }
     }
 
     @Override
@@ -127,6 +146,53 @@ class UserServiceImpl implements UserService {
         } else {
             throw new UserNotFoundException("Id " + id + " cannot be found in database");
         }
+    }
+
+    @Override
+    public ApiResponse<ResponseUserWithJwtDto> signin(String username, String password) {
+        try {
+            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
+            Optional<User> user = userRepository.findByUsername(username);
+            if (user.isPresent()) {
+                List<UserRole> userRoles = user.get().getUserRoles();
+                String jwtToken = jwtTokenProvider.createToken(username,userRoles);
+                ResponseUserDto responseUserDtoWithoutJwt = userMapper.userToResponseUserDto(user.get());
+                ResponseUserWithJwtDto responseUserWithJwtDto = new ResponseUserWithJwtDto(responseUserDtoWithoutJwt, jwtToken, userRoles);
+                return new ApiResponse<>(responseUserWithJwtDto, HttpStatus.OK);
+            }else
+            {
+                throw new UserNotFoundException("Cannot find username");
+            }
+        } catch (AuthenticationException e) {
+            throw new InvalidUsernameAndPasswordException("Invalid username/password supplied");
+        }
+    }
+
+
+    @Override
+    public ApiResponse<ResponseUserDto> search(String username) {
+        Optional<User> user = userRepository.findByUsername(username);
+        if (user.isPresent()) {
+            ResponseUserDto userDto = userMapper.userToResponseUserDto(user.get());
+            return new ApiResponse<>(userDto, HttpStatus.OK);
+        } else {
+            throw new InvalidUsernameAndPasswordException("Username not found");
+        }
+
+    }
+
+    @Override
+    public ApiResponse<ResponseUserDto> whoami(HttpServletRequest req) {
+        String username = jwtTokenProvider.getUsername(jwtTokenProvider.resolveToken(req));
+        User user = userRepository.findByUsername(username).orElseThrow(ResourceNotFoundException::new);
+        ResponseUserDto userDto = userMapper.userToResponseUserDto(user);
+        return new ApiResponse<>(userDto, HttpStatus.OK);
+    }
+
+    @Override
+    public String refreshJwtToken(String username) {
+        User user = userRepository.findByUsername(username).orElseThrow(ResourceNotFoundException::new);
+        return jwtTokenProvider.createToken(username, user.getUserRoles());
     }
 
 }
