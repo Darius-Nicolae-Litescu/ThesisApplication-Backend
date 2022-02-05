@@ -9,8 +9,8 @@ public class Position {
     public static final String TABLE_NAME = "position";
 
     @Id
-    @GeneratedValue()
-    private long id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
 
     @Column(name = "name", nullable = false, length = 256)
     private String name;
@@ -21,7 +21,7 @@ public class Position {
     @OneToOne(mappedBy = "position")
     private Employee employee;
 
-    public Position(long id, String name, String seniorityLevel, Employee employee) {
+    public Position(Long id, String name, String seniorityLevel, Employee employee) {
         this.id = id;
         this.name = name;
         this.seniorityLevel = seniorityLevel;
@@ -52,7 +52,7 @@ public class Position {
         return this.employee;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

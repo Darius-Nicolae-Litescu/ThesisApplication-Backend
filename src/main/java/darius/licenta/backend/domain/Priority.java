@@ -3,6 +3,7 @@ package darius.licenta.backend.domain;
 import javax.persistence.*;
 import java.sql.Blob;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name = Priority.TABLE_NAME)
@@ -10,8 +11,8 @@ public class Priority {
     public static final String TABLE_NAME = "priority";
 
     @Id
-    @GeneratedValue()
-    private long id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
 
     @Column(name = "title", nullable = false, length = 256)
     private String title;
@@ -22,118 +23,105 @@ public class Priority {
     @Column(name = "level", nullable = false, length = 256)
     private int level;
 
-    @Column(name = "priority_icon", nullable = false)
+    @Column(name = "priority_icon", nullable = true)
     @Lob
     private Blob priorityIcon;
 
-    @OneToOne(mappedBy = "priority")
+    @OneToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    @JoinColumn(name="story_id", nullable=true, insertable=false, updatable=false)
     private Story story;
 
-    public Priority(long id, String title, String description, int level, Blob priorityIcon, Story story) {
+    public Priority() {
+    }
+
+    public Priority(Long id, String title, String description, int level) {
+        this.id = id;
+        this.title = title;
+        this.description = description;
+        this.level = level;
+    }
+
+    public Priority(long id, String title, String description, int level, Blob priorityIcon) {
         this.id = id;
         this.title = title;
         this.description = description;
         this.level = level;
         this.priorityIcon = priorityIcon;
-        this.story = story;
-    }
-
-    public Priority() {
     }
 
     public long getId() {
-        return this.id;
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getTitle() {
-        return this.title;
-    }
-
-    public String getDescription() {
-        return this.description;
-    }
-
-    public int getLevel() {
-        return this.level;
-    }
-
-    public Blob getPriorityIcon() {
-        return this.priorityIcon;
-    }
-
-    public Story getStory() {
-        return this.story;
-    }
-
-    public void setId(long id) {
-        this.id = id;
+        return title;
     }
 
     public void setTitle(String title) {
         this.title = title;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public int getLevel() {
+        return level;
     }
 
     public void setLevel(int level) {
         this.level = level;
     }
 
+    public Blob getPriorityIcon() {
+        return priorityIcon;
+    }
+
     public void setPriorityIcon(Blob priorityIcon) {
         this.priorityIcon = priorityIcon;
+    }
+
+    public Story getStory() {
+        return story;
     }
 
     public void setStory(Story story) {
         this.story = story;
     }
 
-    public boolean equals(final Object o) {
-        if (o == this) return true;
-        if (!(o instanceof Priority)) return false;
-        final Priority other = (Priority) o;
-        if (!other.canEqual((Object) this)) return false;
-        if (this.getId() != other.getId()) return false;
-        final Object this$title = this.getTitle();
-        final Object other$title = other.getTitle();
-        if (!Objects.equals(this$title, other$title)) return false;
-        final Object this$description = this.getDescription();
-        final Object other$description = other.getDescription();
-        if (!Objects.equals(this$description, other$description))
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Priority priority = (Priority) o;
+
+        if (id != priority.id) return false;
+        if (level != priority.level) return false;
+        if (!Objects.equals(title, priority.title)) return false;
+        if (!Objects.equals(description, priority.description))
             return false;
-        if (this.getLevel() != other.getLevel()) return false;
-        final Object this$priorityIcon = this.getPriorityIcon();
-        final Object other$priorityIcon = other.getPriorityIcon();
-        if (!Objects.equals(this$priorityIcon, other$priorityIcon))
+        if (!Objects.equals(priorityIcon, priority.priorityIcon))
             return false;
-        final Object this$story = this.getStory();
-        final Object other$story = other.getStory();
-        return Objects.equals(this$story, other$story);
+        return Objects.equals(story, priority.story);
     }
 
-    protected boolean canEqual(final Object other) {
-        return other instanceof Priority;
-    }
-
+    @Override
     public int hashCode() {
-        final int PRIME = 59;
-        int result = 1;
-        final long $id = this.getId();
-        result = result * PRIME + (int) ($id >>> 32 ^ $id);
-        final Object $title = this.getTitle();
-        result = result * PRIME + ($title == null ? 43 : $title.hashCode());
-        final Object $description = this.getDescription();
-        result = result * PRIME + ($description == null ? 43 : $description.hashCode());
-        result = result * PRIME + this.getLevel();
-        final Object $priorityIcon = this.getPriorityIcon();
-        result = result * PRIME + ($priorityIcon == null ? 43 : $priorityIcon.hashCode());
-        final Object $story = this.getStory();
-        result = result * PRIME + ($story == null ? 43 : $story.hashCode());
+        int result = (int) (id ^ (id >>> 32));
+        result = 31 * result + (title != null ? title.hashCode() : 0);
+        result = 31 * result + (description != null ? description.hashCode() : 0);
+        result = 31 * result + level;
+        result = 31 * result + (priorityIcon != null ? priorityIcon.hashCode() : 0);
+        result = 31 * result + (story != null ? story.hashCode() : 0);
         return result;
-    }
-
-    public String toString() {
-        return "Priority(id=" + this.getId() + ", title=" + this.getTitle() + ", description=" + this.getDescription() + ", level=" + this.getLevel() + ", priorityIcon=" + this.getPriorityIcon() + ", story=" + this.getStory() + ")";
     }
 }

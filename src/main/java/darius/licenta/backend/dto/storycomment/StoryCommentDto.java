@@ -4,11 +4,11 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 public class StoryCommentDto implements Serializable {
-    private long id;
+    private Long id;
     private String content;
     private LocalDateTime postedAt;
 
-    public StoryCommentDto(long id, String content, LocalDateTime postedAt) {
+    public StoryCommentDto(Long id, String content, LocalDateTime postedAt) {
         this.id = id;
         this.content = content;
         this.postedAt = postedAt;
@@ -17,7 +17,7 @@ public class StoryCommentDto implements Serializable {
     public StoryCommentDto() {
     }
 
-    public long getId() {
+    public Long getId() {
         return this.id;
     }
 
@@ -29,7 +29,7 @@ public class StoryCommentDto implements Serializable {
         return this.postedAt;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

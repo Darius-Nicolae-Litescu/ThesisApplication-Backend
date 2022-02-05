@@ -3,10 +3,10 @@ package darius.licenta.backend.dto.category;
 import java.io.Serializable;
 
 public class CategoryDto implements Serializable {
-    private long id;
+    private Long id;
     private String categoryName;
 
-    public CategoryDto(long id, String categoryName) {
+    public CategoryDto(Long id, String categoryName) {
         this.id = id;
         this.categoryName = categoryName;
     }
@@ -14,7 +14,7 @@ public class CategoryDto implements Serializable {
     public CategoryDto() {
     }
 
-    public long getId() {
+    public Long getId() {
         return this.id;
     }
 

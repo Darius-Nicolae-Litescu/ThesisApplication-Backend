@@ -11,20 +11,20 @@ public class Story {
 
     @Id
     @GeneratedValue()
-    private long id;
+    private Long id;
 
     @Column(name = "description", nullable = false, length = 512)
     private String description;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "category", nullable = false)
-    private Category category;
+    @OneToMany(cascade = CascadeType.MERGE)
+    @JoinColumn(name = "categories", nullable = false, updatable=false, insertable=false)
+    private Set<Category> categories;
 
     @OneToMany(mappedBy = "story", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<StoryTask> storySubtasks;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "priority", nullable = false)
+    @OneToOne(cascade = CascadeType.MERGE)
+    @JoinColumn(name = "priority_id", nullable = false, updatable=false, insertable=false)
     private Priority priority;
 
     @OneToMany(mappedBy = "story", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
@@ -33,23 +33,23 @@ public class Story {
     @ManyToOne(fetch = FetchType.LAZY, optional = true)
     private SoftwareApplication softwareApplication;
 
-    public Story(long id, String description, Set<StoryTask> storySubtasks, Priority priority, Set<Attachment> storyAttachments, SoftwareApplication softwareApplication) {
+    public Story(Long id, String description, Set<Category> categories, Set<StoryTask> storySubtasks, Priority priority, SoftwareApplication softwareApplication) {
         this.id = id;
         this.description = description;
+        this.categories = categories;
         this.storySubtasks = storySubtasks;
         this.priority = priority;
-        this.storyAttachments = storyAttachments;
         this.softwareApplication = softwareApplication;
     }
 
     public Story() {
     }
 
-    public Category getCategory() {
-        return category;
+    public Set<Category> getCategories() {
+        return categories;
     }
 
-    public long getId() {
+    public Long getId() {
         return this.id;
     }
 
@@ -62,7 +62,7 @@ public class Story {
     }
 
     public Priority getPriority() {
-        return this.priority;
+        return priority;
     }
 
     public Set<Attachment> getStoryAttachments() {
@@ -73,7 +73,7 @@ public class Story {
         return this.softwareApplication;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -97,62 +97,51 @@ public class Story {
         this.softwareApplication = softwareApplication;
     }
 
-    public void setCategory(Category category) {
-        this.category = category;
+    public void setCategories(Set<Category> categories) {
+        this.categories = categories;
     }
 
-    public boolean equals(final Object o) {
-        if (o == this) return true;
-        if (!(o instanceof Story)) return false;
-        final Story other = (Story) o;
-        if (!other.canEqual((Object) this)) return false;
-        if (this.getId() != other.getId()) return false;
-        final Object this$description = this.getDescription();
-        final Object other$description = other.getDescription();
-        if (!Objects.equals(this$description, other$description))
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Story story = (Story) o;
+
+        if (id != story.id) return false;
+        if (description != null ? !description.equals(story.description) : story.description != null) return false;
+        if (categories != null ? !categories.equals(story.categories) : story.categories != null) return false;
+        if (storySubtasks != null ? !storySubtasks.equals(story.storySubtasks) : story.storySubtasks != null)
             return false;
-        final Object this$storySubtasks = this.getStorySubtasks();
-        final Object other$storySubtasks = other.getStorySubtasks();
-        if (!Objects.equals(this$storySubtasks, other$storySubtasks))
+        if (priority != null ? !priority.equals(story.priority) : story.priority != null) return false;
+        if (storyAttachments != null ? !storyAttachments.equals(story.storyAttachments) : story.storyAttachments != null)
             return false;
-        final Object this$priority = this.getPriority();
-        final Object other$priority = other.getPriority();
-        if (!Objects.equals(this$priority, other$priority)) return false;
-        final Object this$storyAttachments = this.getStoryAttachments();
-        final Object other$storyAttachments = other.getStoryAttachments();
-        if (!Objects.equals(this$storyAttachments, other$storyAttachments))
-            return false;
-        final Object this$softwareApplication = this.getSoftwareApplication();
-        final Object other$softwareApplication = other.getSoftwareApplication();
-        if (!Objects.equals(this$softwareApplication, other$softwareApplication))
-            return false;
-        return true;
+        return softwareApplication != null ? softwareApplication.equals(story.softwareApplication) : story.softwareApplication == null;
     }
 
-    protected boolean canEqual(final Object other) {
-        return other instanceof Story;
-    }
-
+    @Override
     public int hashCode() {
-        final int PRIME = 59;
-        int result = 1;
-        final long $id = this.getId();
-        result = result * PRIME + (int) ($id >>> 32 ^ $id);
-        final Object $description = this.getDescription();
-        result = result * PRIME + ($description == null ? 43 : $description.hashCode());
-        final Object $storySubtasks = this.getStorySubtasks();
-        result = result * PRIME + ($storySubtasks == null ? 43 : $storySubtasks.hashCode());
-        final Object $priority = this.getPriority();
-        result = result * PRIME + ($priority == null ? 43 : $priority.hashCode());
-        final Object $storyAttachments = this.getStoryAttachments();
-        result = result * PRIME + ($storyAttachments == null ? 43 : $storyAttachments.hashCode());
-        final Object $softwareApplication = this.getSoftwareApplication();
-        result = result * PRIME + ($softwareApplication == null ? 43 : $softwareApplication.hashCode());
+        int result = (int) (id ^ (id >>> 32));
+        result = 31 * result + (description != null ? description.hashCode() : 0);
+        result = 31 * result + (categories != null ? categories.hashCode() : 0);
+        result = 31 * result + (storySubtasks != null ? storySubtasks.hashCode() : 0);
+        result = 31 * result + (priority != null ? priority.hashCode() : 0);
+        result = 31 * result + (storyAttachments != null ? storyAttachments.hashCode() : 0);
+        result = 31 * result + (softwareApplication != null ? softwareApplication.hashCode() : 0);
         return result;
     }
 
+    @Override
     public String toString() {
-        return "Story(id=" + this.getId() + ", description=" + this.getDescription() + ", storySubtasks=" + this.getStorySubtasks() + ", priority=" + this.getPriority() + ", storyAttachments=" + this.getStoryAttachments() + ", softwareApplication=" + this.getSoftwareApplication() + ")";
+        return "Story{" +
+                "id=" + id +
+                ", description='" + description + '\'' +
+                ", categories=" + categories +
+                ", storySubtasks=" + storySubtasks +
+                ", priority=" + priority +
+                ", storyAttachments=" + storyAttachments +
+                ", softwareApplication=" + softwareApplication +
+                '}';
     }
 }
 

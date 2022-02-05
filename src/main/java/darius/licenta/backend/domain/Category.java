@@ -2,6 +2,7 @@ package darius.licenta.backend.domain;
 
 import javax.persistence.*;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name = Category.TABLE_NAME)
@@ -9,13 +10,14 @@ public class Category {
     public static final String TABLE_NAME = "category";
 
     @Id
-    @GeneratedValue()
-    private long id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
 
     @Column(name = "category_name", nullable = false)
     private String categoryName;
 
-    @OneToOne(mappedBy = "category")
+    @ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    @JoinColumn(name="story_id", nullable=true, insertable=false, updatable=false)
     private Story story;
 
     @OneToOne(orphanRemoval = true)
@@ -30,71 +32,48 @@ public class Category {
         this.attachment = attachment;
     }
 
-    public Category(long id, String categoryName, Story story) {
+    public Category(Long id, String categoryName) {
         this.id = id;
         this.categoryName = categoryName;
-        this.story = story;
     }
 
     public Category() {
     }
 
     public long getId() {
-        return this.id;
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getCategoryName() {
-        return this.categoryName;
-    }
-
-    public Story getStory() {
-        return this.story;
-    }
-
-    public void setId(long id) {
-        this.id = id;
+        return categoryName;
     }
 
     public void setCategoryName(String categoryName) {
         this.categoryName = categoryName;
     }
 
+    public Story getStory() {
+        return story;
+    }
+
     public void setStory(Story story) {
         this.story = story;
     }
 
-    public boolean equals(final Object o) {
-        if (o == this) return true;
-        if (!(o instanceof Category)) return false;
-        final Category other = (Category) o;
-        if (!other.canEqual((Object) this)) return false;
-        if (this.getId() != other.getId()) return false;
-        final Object this$categoryName = this.getCategoryName();
-        final Object other$categoryName = other.getCategoryName();
-        if (!Objects.equals(this$categoryName, other$categoryName))
-            return false;
-        final Object this$story = this.getStory();
-        final Object other$story = other.getStory();
-        return Objects.equals(this$story, other$story);
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Category category = (Category) o;
+        return id == category.id && Objects.equals(categoryName, category.categoryName) && Objects.equals(story, category.story) && Objects.equals(attachment, category.attachment);
     }
 
-    protected boolean canEqual(final Object other) {
-        return other instanceof Category;
-    }
-
+    @Override
     public int hashCode() {
-        final int PRIME = 59;
-        int result = 1;
-        final long $id = this.getId();
-        result = result * PRIME + (int) ($id >>> 32 ^ $id);
-        final Object $categoryName = this.getCategoryName();
-        result = result * PRIME + ($categoryName == null ? 43 : $categoryName.hashCode());
-        final Object $story = this.getStory();
-        result = result * PRIME + ($story == null ? 43 : $story.hashCode());
-        return result;
-    }
-
-    public String toString() {
-        return "Category(id=" + this.getId() + ", categoryName=" + this.getCategoryName() + ", story=" + this.getStory() + ")";
+        return Objects.hash(id, categoryName, story, attachment);
     }
 }

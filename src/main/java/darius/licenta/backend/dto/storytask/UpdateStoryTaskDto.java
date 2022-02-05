@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 public class UpdateStoryTaskDto implements Serializable {
-    private final long id;
+    private final Long id;
     private final String title;
     private final String description;
     private final int storyPoints;
@@ -16,7 +16,7 @@ public class UpdateStoryTaskDto implements Serializable {
     private final String status;
     private final LocalDateTime finishedAt;
 
-    public UpdateStoryTaskDto(long id, String title, String description, int storyPoints, long createdById, String createdByUsername, LocalDateTime createdAt, long assignedToId, String assignedToUsername, String status, LocalDateTime finishedAt) {
+    public UpdateStoryTaskDto(Long id, String title, String description, int storyPoints, long createdById, String createdByUsername, LocalDateTime createdAt, long assignedToId, String assignedToUsername, String status, LocalDateTime finishedAt) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -30,7 +30,7 @@ public class UpdateStoryTaskDto implements Serializable {
         this.finishedAt = finishedAt;
     }
 
-    public long getId() {
+    public Long getId() {
         return this.id;
     }
 
@@ -46,7 +46,7 @@ public class UpdateStoryTaskDto implements Serializable {
         return this.storyPoints;
     }
 
-    public long getCreatedById() {
+    public Long getCreatedById() {
         return this.createdById;
     }
 
@@ -58,7 +58,7 @@ public class UpdateStoryTaskDto implements Serializable {
         return this.createdAt;
     }
 
-    public long getAssignedToId() {
+    public Long getAssignedToId() {
         return this.assignedToId;
     }
 

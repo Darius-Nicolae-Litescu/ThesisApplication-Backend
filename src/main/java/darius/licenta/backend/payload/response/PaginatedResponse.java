@@ -71,35 +71,6 @@ public class PaginatedResponse<T> {
         return this.totalPages;
     }
 
-    @JsonProperty("page")
-    public void setPage(int page) {
-        this.page = page;
-    }
-
-    @JsonProperty("pageSize")
-    public void setPageSize(int pageSize) {
-        this.pageSize = pageSize;
-    }
-
-    @JsonProperty("currentRowCount")
-    public void setNumberOfElements(int numberOfElements) {
-        this.numberOfElements = numberOfElements;
-    }
-
-    @JsonProperty("rows")
-    public void setRows(List<T> rows) {
-        this.rows = rows;
-    }
-
-    @JsonProperty("totalElements")
-    public void setTotalElements(long totalElements) {
-        this.totalElements = totalElements;
-    }
-
-    @JsonProperty("totalPages")
-    public void setTotalPages(int totalPages) {
-        this.totalPages = totalPages;
-    }
 
     @Override
     public boolean equals(Object o) {

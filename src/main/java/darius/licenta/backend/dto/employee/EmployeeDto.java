@@ -3,12 +3,12 @@ package darius.licenta.backend.dto.employee;
 import java.io.Serializable;
 
 public class EmployeeDto implements Serializable {
-    private long id;
+    private Long id;
     private PersonDto person;
     private PositionDto position;
     private UserDto user;
 
-    public EmployeeDto(long id, PersonDto person, PositionDto position, UserDto user) {
+    public EmployeeDto(Long id, PersonDto person, PositionDto position, UserDto user) {
         this.id = id;
         this.person = person;
         this.position = position;
@@ -23,7 +23,7 @@ public class EmployeeDto implements Serializable {
     public EmployeeDto() {
     }
 
-    public long getId() {
+    public Long getId() {
         return this.id;
     }
 
@@ -39,7 +39,7 @@ public class EmployeeDto implements Serializable {
         return this.user;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

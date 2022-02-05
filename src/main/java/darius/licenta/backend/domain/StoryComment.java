@@ -11,8 +11,8 @@ public class StoryComment {
     public static final String TABLE_NAME = "story_comment";
 
     @Id
-    @GeneratedValue()
-    private long id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
 
     @Column(name = "content", nullable = false, length = 512)
     private String content;
@@ -26,7 +26,7 @@ public class StoryComment {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     private StoryTask storyTask;
 
-    public StoryComment(long id, String content, LocalDateTime postedAt, Set<CommentAttachment> commentAttachments, StoryTask storyTask) {
+    public StoryComment(Long id, String content, LocalDateTime postedAt, Set<CommentAttachment> commentAttachments, StoryTask storyTask) {
         this.id = id;
         this.content = content;
         this.postedAt = postedAt;
@@ -57,7 +57,7 @@ public class StoryComment {
         return this.storyTask;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

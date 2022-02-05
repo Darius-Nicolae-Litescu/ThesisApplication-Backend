@@ -8,7 +8,7 @@ public class PriorityDto implements Serializable {
     private String description;
     private int level;
 
-    public PriorityDto(long id, String title, String description, int level) {
+    public PriorityDto(Long id, String title, String description, int level) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -34,7 +34,7 @@ public class PriorityDto implements Serializable {
         return this.level;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

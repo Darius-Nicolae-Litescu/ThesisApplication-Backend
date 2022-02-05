@@ -5,12 +5,12 @@ import java.util.Date;
 import java.util.Objects;
 
 public class PersonDto implements Serializable {
-    private long id;
+    private Long id;
     private String firstName;
     private String lastName;
     private Date birthDate;
 
-    public PersonDto(long id, String firstName, String lastName, Date birthDate) {
+    public PersonDto(Long id, String firstName, String lastName, Date birthDate) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -26,7 +26,7 @@ public class PersonDto implements Serializable {
     public PersonDto() {
     }
 
-    public long getId() {
+    public Long getId() {
         return this.id;
     }
 
@@ -42,7 +42,7 @@ public class PersonDto implements Serializable {
         return this.birthDate;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

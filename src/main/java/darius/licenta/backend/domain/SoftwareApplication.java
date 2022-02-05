@@ -10,8 +10,8 @@ public class SoftwareApplication {
     public static final String TABLE_NAME = "software_application";
 
     @Id
-    @GeneratedValue()
-    private long id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
 
     @Column(name = "name", nullable = false, length = 256)
     private String name;
@@ -22,7 +22,7 @@ public class SoftwareApplication {
     @OneToMany(mappedBy="softwareApplication", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<Story> stories;
 
-    public SoftwareApplication(long id, String name, String description, Set<Story> stories) {
+    public SoftwareApplication(Long id, String name, String description, Set<Story> stories) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -48,7 +48,7 @@ public class SoftwareApplication {
         return this.stories;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

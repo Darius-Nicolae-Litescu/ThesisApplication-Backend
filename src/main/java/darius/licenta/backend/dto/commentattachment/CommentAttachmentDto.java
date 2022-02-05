@@ -4,10 +4,10 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 public class CommentAttachmentDto implements Serializable {
-    private long id;
+    private Long id;
     private LocalDateTime postedAt;
 
-    public CommentAttachmentDto(long id, LocalDateTime postedAt) {
+    public CommentAttachmentDto(Long id, LocalDateTime postedAt) {
         this.id = id;
         this.postedAt = postedAt;
     }
@@ -15,7 +15,7 @@ public class CommentAttachmentDto implements Serializable {
     public CommentAttachmentDto() {
     }
 
-    public long getId() {
+    public Long getId() {
         return this.id;
     }
 
@@ -23,7 +23,7 @@ public class CommentAttachmentDto implements Serializable {
         return this.postedAt;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

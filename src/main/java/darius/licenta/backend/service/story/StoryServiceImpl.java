@@ -20,9 +20,7 @@ import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class StoryServiceImpl implements StoryService {
@@ -58,11 +56,63 @@ public class StoryServiceImpl implements StoryService {
 
     @Override
     public ApiResponse<StoryDto> updateCategory(UpdateStoryCategory updateStoryCategory) {
-        Optional<Story> story = storyRepository.findById(updateStoryCategory.getStoryId());
+        return null;
+    }
+
+    @Override
+    public ApiResponse<StoryDto> updatePriority(UpdateStoryPriority updateStoryPriority) {
+        return null;
+    }
+
+    @Override
+    public ApiResponse<StoryDto> updateSoftwareApplication(UpdateStorySoftwareApplication updateStorySoftwareApplication) {
+        return null;
+    }
+
+    @Override
+    public ApiResponse<StoryDto> findById(Long id) {
+        return null;
+    }
+
+    @Override
+    public ApiResponse<StoryDto> deleteById(Long id) {
+        return null;
+    }
+
+    @Override
+    public ApiResponse<PaginatedResponse<StoryDto>> findByPriority(Long priorityId, int page, int size) {
+        return null;
+    }
+
+    @Override
+    public ApiResponse<PaginatedResponse<StoryDto>> findByCategory(Long categoryId, int page, int size) {
+        return null;
+    }
+
+    @Override
+    public ApiResponse<PaginatedResponse<StoryDto>> findByDescription(String description, int page, int size) {
+        return null;
+    }
+
+    @Override
+    public ApiResponse<PaginatedResponse<StoryDto>> findBySoftwareApplicationId(Long softwareApplicationId, int page, int size) {
+        return null;
+    }
+
+    /*
+    @Override
+    public ApiResponse<StoryDto> updateCategory(UpdateStoryCategory updateStoryCategory) {
+        Optional<Story> story = storyRepository.findById(updateStoryCategory.getCategories());
         if (story.isPresent()) {
-            Optional<Category> category = categoryRepository.findById(updateStoryCategory.getCategoryId());
+            Optional<Category> category = categoryRepository
+                    .findAllById(updateStoryCategory.getCategories().stream().collect(category => category.get().getId()));
             if (category.isPresent()) {
-                story.get().setCategory(category.get());
+                story.get().setCategories(new HashSet<Category>() {
+
+                    {
+                        add(category.get());
+                    }
+                });
                 storyRepository.save(story.get());
                 StoryDto storyDto = storyMapper.storyToStoryDto(story.get());
                 return new ApiResponse<>(storyDto, HttpStatus.OK);
@@ -80,7 +130,12 @@ public class StoryServiceImpl implements StoryService {
         if (story.isPresent()) {
             Optional<Priority> priority = priorityRepository.findById(updateStoryPriority.getPriorityId());
             if (priority.isPresent()) {
-                story.get().setPriority(priority.get());
+                story.get().setPriority(new HashSet<Priority>() {
+
+                    {
+                        add(priority.get());
+                    }
+                });
                 storyRepository.save(story.get());
                 StoryDto storyDto = storyMapper.storyToStoryDto(story.get());
                 return new ApiResponse<>(storyDto, HttpStatus.OK);
@@ -201,7 +256,7 @@ public class StoryServiceImpl implements StoryService {
                 filteredStoriesDto, filteredStories.getTotalElements(), filteredStories.getTotalPages());
         return new ApiResponse<>(paginatedResponse, HttpStatus.OK);
     }
-
+    */
     @Override
     public ApiResponse<PaginatedResponse<StoryDto>> findAll(int page, int size) {
         Pageable pageable = PageRequest.of(page, size);

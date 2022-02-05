@@ -13,8 +13,8 @@ public class StoryTask {
     public static final String TABLE_NAME = "story_task";
 
     @Id
-    @GeneratedValue()
-    private long id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
 
     @Column(name = "title", length = 512)
     private String title;
@@ -104,7 +104,7 @@ public class StoryTask {
         return this.story;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

@@ -13,8 +13,8 @@ public class User {
     public static final String TABLE_NAME = "user";
 
     @Id
-    @GeneratedValue()
-    private long id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
 
     @OneToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "employee_id")
@@ -82,7 +82,7 @@ public class User {
         return profilePicture;
     }
 
-    public long getId() {
+    public Long getId() {
         return this.id;
     }
 
@@ -106,7 +106,7 @@ public class User {
         return userRoles;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

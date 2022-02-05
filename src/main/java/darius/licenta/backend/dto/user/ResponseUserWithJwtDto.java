@@ -6,7 +6,7 @@ import java.io.Serializable;
 import java.util.List;
 
 public class ResponseUserWithJwtDto implements Serializable {
-    private final long id;
+    private final Long id;
     private final String username;
     private final String email;
     private final String jwtToken;
@@ -21,7 +21,7 @@ public class ResponseUserWithJwtDto implements Serializable {
         this.roles = roles;
     }
 
-    public long getId() {
+    public Long getId() {
         return this.id;
     }
 

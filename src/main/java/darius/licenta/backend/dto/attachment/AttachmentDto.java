@@ -5,13 +5,13 @@ import java.sql.Blob;
 import java.time.LocalDateTime;
 
 public class AttachmentDto implements Serializable {
-    private final long id;
+    private final Long id;
     private final String contentType;
     private final Blob content;
     private final LocalDateTime postedAt;
     private final String uploadedByUsername;
 
-    public AttachmentDto(long id, String contentType, Blob content, LocalDateTime postedAt, String uploadedByUsername) {
+    public AttachmentDto(Long id, String contentType, Blob content, LocalDateTime postedAt, String uploadedByUsername) {
         this.id = id;
         this.contentType = contentType;
         this.content = content;
@@ -19,7 +19,7 @@ public class AttachmentDto implements Serializable {
         this.uploadedByUsername = uploadedByUsername;
     }
 
-    public long getId() {
+    public Long getId() {
         return this.id;
     }
 

@@ -10,8 +10,8 @@ public class Person {
     public static final String TABLE_NAME = "person";
 
     @Id
-    @GeneratedValue()
-    private long id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
 
     @Column(name = "first_name", nullable = false, length = 256)
     private String firstName;
@@ -25,7 +25,7 @@ public class Person {
     @OneToOne(mappedBy = "person")
     private Employee employee;
 
-    public Person(long id, String firstName, String lastName, Date birthDate, Employee employee) {
+    public Person(Long id, String firstName, String lastName, Date birthDate, Employee employee) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -62,7 +62,7 @@ public class Person {
         return this.employee;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

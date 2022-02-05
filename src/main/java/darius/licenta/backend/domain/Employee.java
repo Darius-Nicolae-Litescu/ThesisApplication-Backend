@@ -9,8 +9,8 @@ public class Employee {
     public static final String TABLE_NAME = "employee";
 
     @Id
-    @GeneratedValue()
-    private long id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
 
     @OneToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "person_id")
@@ -23,7 +23,7 @@ public class Employee {
     @OneToOne(mappedBy = "employee")
     private User user;
 
-    public Employee(long id, Person person, Position position, User user) {
+    public Employee(Long id, Person person, Position position, User user) {
         this.id = id;
         this.person = person;
         this.position = position;
@@ -54,7 +54,7 @@ public class Employee {
         return this.user;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

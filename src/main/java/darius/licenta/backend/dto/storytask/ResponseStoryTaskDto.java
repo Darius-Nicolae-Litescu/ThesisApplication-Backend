@@ -3,13 +3,13 @@ package darius.licenta.backend.dto.storytask;
 import java.io.Serializable;
 
 public class ResponseStoryTaskDto implements Serializable {
-    private final long id;
+    private final Long id;
     private final String title;
     private final String description;
     private final int storyPoints;
     private final String status;
 
-    public ResponseStoryTaskDto(long id, String title, String description, int storyPoints, String status) {
+    public ResponseStoryTaskDto(Long id, String title, String description, int storyPoints, String status) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -17,7 +17,7 @@ public class ResponseStoryTaskDto implements Serializable {
         this.status = status;
     }
 
-    public long getId() {
+    public Long getId() {
         return this.id;
     }
 

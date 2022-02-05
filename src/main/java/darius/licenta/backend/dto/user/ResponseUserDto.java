@@ -3,11 +3,11 @@ package darius.licenta.backend.dto.user;
 import java.io.Serializable;
 
 public class ResponseUserDto implements Serializable {
-    private long id;
+    private Long id;
     private String username;
     private String email;
 
-    public ResponseUserDto(long id, String username, String email) {
+    public ResponseUserDto(Long id, String username, String email) {
         this.id = id;
         this.username = username;
         this.email = email;
@@ -16,7 +16,7 @@ public class ResponseUserDto implements Serializable {
     public ResponseUserDto() {
     }
 
-    public long getId() {
+    public Long getId() {
         return this.id;
     }
 

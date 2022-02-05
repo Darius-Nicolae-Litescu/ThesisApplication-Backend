@@ -12,8 +12,8 @@ public class CommentAttachment {
     public static final String TABLE_NAME = "comment_attachment";
 
     @Id
-    @GeneratedValue()
-    private long id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
 
     @CreationTimestamp
     @Column(name = "posted_at", nullable = false)
@@ -23,7 +23,7 @@ public class CommentAttachment {
     @JoinColumn(name = "story_comment_id", nullable = false)
     private StoryComment storyComment;
 
-    public CommentAttachment(long id, LocalDateTime postedAt, StoryComment storyComment) {
+    public CommentAttachment(Long id, LocalDateTime postedAt, StoryComment storyComment) {
         this.id = id;
         this.postedAt = postedAt;
         this.storyComment = storyComment;
@@ -44,7 +44,7 @@ public class CommentAttachment {
         return this.storyComment;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

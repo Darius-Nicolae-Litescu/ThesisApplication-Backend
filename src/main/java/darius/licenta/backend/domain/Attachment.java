@@ -13,8 +13,8 @@ public class Attachment {
     public static final String TABLE_NAME = "attachment";
 
     @Id
-    @GeneratedValue()
-    private long id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
 
     @Column(name = "content_type", nullable = false, length = 256)
     private String contentType;
@@ -39,7 +39,7 @@ public class Attachment {
     @OneToOne(fetch = FetchType.LAZY, optional = true)
     private Story story;
 
-    public Attachment(long id, String contentType, Blob content, LocalDateTime postedAt, CommentAttachment commentAttachment, StoryTask storyTask, Story story) {
+    public Attachment(Long id, String contentType, Blob content, LocalDateTime postedAt, CommentAttachment commentAttachment, StoryTask storyTask, Story story) {
         this.id = id;
         this.contentType = contentType;
         this.content = content;
@@ -52,7 +52,7 @@ public class Attachment {
     public Attachment() {
     }
 
-    public long getId() {
+    public Long getId() {
         return this.id;
     }
 
@@ -80,7 +80,7 @@ public class Attachment {
         return this.story;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

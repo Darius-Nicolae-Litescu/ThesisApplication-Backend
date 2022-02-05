@@ -11,7 +11,7 @@ public interface StoryRepository extends JpaRepository<Story, Long> {
 
     Page<Story> findByPriority_Id(long id, Pageable pageable);
 
-    Page<Story> findByCategory_Id(long id, Pageable pageable);
+    Page<Story> findByCategories_Id(long id, Pageable pageable);
 
     Page<Story> findByDescriptionLike(String description, Pageable pageable);
 

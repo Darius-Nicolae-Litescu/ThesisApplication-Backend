@@ -3,11 +3,11 @@ package darius.licenta.backend.dto.position;
 import java.io.Serializable;
 
 public class PositionDto implements Serializable {
-    private long id;
+    private Long id;
     private String name;
     private String seniorityLevel;
 
-    public PositionDto(long id, String name, String seniorityLevel) {
+    public PositionDto(Long id, String name, String seniorityLevel) {
         this.id = id;
         this.name = name;
         this.seniorityLevel = seniorityLevel;
@@ -21,7 +21,7 @@ public class PositionDto implements Serializable {
     public PositionDto() {
     }
 
-    public long getId() {
+    public Long getId() {
         return this.id;
     }
 
@@ -33,7 +33,7 @@ public class PositionDto implements Serializable {
         return this.seniorityLevel;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
