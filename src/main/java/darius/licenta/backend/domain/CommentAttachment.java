@@ -1,5 +1,7 @@
 package darius.licenta.backend.domain;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
@@ -12,7 +14,7 @@ public class CommentAttachment {
     public static final String TABLE_NAME = "comment_attachment";
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @CreationTimestamp
@@ -56,37 +58,29 @@ public class CommentAttachment {
         this.storyComment = storyComment;
     }
 
-    public boolean equals(final Object o) {
-        if (o == this) return true;
-        if (!(o instanceof CommentAttachment)) return false;
-        final CommentAttachment other = (CommentAttachment) o;
-        if (!other.canEqual((Object) this)) return false;
-        if (this.getId() != other.getId()) return false;
-        final Object this$postedAt = this.getPostedAt();
-        final Object other$postedAt = other.getPostedAt();
-        if (!Objects.equals(this$postedAt, other$postedAt)) return false;
-        final Object this$storyComment = this.getStoryComment();
-        final Object other$storyComment = other.getStoryComment();
-        return Objects.equals(this$storyComment, other$storyComment);
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        CommentAttachment that = (CommentAttachment) o;
+
+        if (!Objects.equals(id, that.id)) return false;
+        return Objects.equals(postedAt, that.postedAt);
     }
 
-    protected boolean canEqual(final Object other) {
-        return other instanceof CommentAttachment;
-    }
-
+    @Override
     public int hashCode() {
-        final int PRIME = 59;
-        int result = 1;
-        final long $id = this.getId();
-        result = result * PRIME + (int) ($id >>> 32 ^ $id);
-        final Object $postedAt = this.getPostedAt();
-        result = result * PRIME + ($postedAt == null ? 43 : $postedAt.hashCode());
-        final Object $storyComment = this.getStoryComment();
-        result = result * PRIME + ($storyComment == null ? 43 : $storyComment.hashCode());
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (postedAt != null ? postedAt.hashCode() : 0);
         return result;
     }
 
+    @Override
     public String toString() {
-        return "CommentAttachment(id=" + this.getId() + ", postedAt=" + this.getPostedAt() + ", storyComment=" + this.getStoryComment() + ")";
+        return "CommentAttachment{" +
+                "id=" + id +
+                ", postedAt=" + postedAt +
+                '}';
     }
 }

@@ -1,5 +1,8 @@
 package darius.licenta.backend.domain;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import javax.persistence.*;
 import java.util.Objects;
 
@@ -9,7 +12,7 @@ public class Position {
     public static final String TABLE_NAME = "position";
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "name", nullable = false, length = 256)
@@ -68,44 +71,32 @@ public class Position {
         this.employee = employee;
     }
 
-    public boolean equals(final Object o) {
-        if (o == this) return true;
-        if (!(o instanceof Position)) return false;
-        final Position other = (Position) o;
-        if (!other.canEqual((Object) this)) return false;
-        if (this.getId() != other.getId()) return false;
-        final Object this$name = this.getName();
-        final Object other$name = other.getName();
-        if (!Objects.equals(this$name, other$name)) return false;
-        final Object this$seniorityLevel = this.getSeniorityLevel();
-        final Object other$seniorityLevel = other.getSeniorityLevel();
-        if (!Objects.equals(this$seniorityLevel, other$seniorityLevel))
-            return false;
-        final Object this$employee = this.getEmployee();
-        final Object other$employee = other.getEmployee();
-        if (!Objects.equals(this$employee, other$employee)) return false;
-        return true;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Position position = (Position) o;
+
+        if (!Objects.equals(id, position.id)) return false;
+        if (!Objects.equals(name, position.name)) return false;
+        return Objects.equals(seniorityLevel, position.seniorityLevel);
     }
 
-    protected boolean canEqual(final Object other) {
-        return other instanceof Position;
-    }
-
+    @Override
     public int hashCode() {
-        final int PRIME = 59;
-        int result = 1;
-        final long $id = this.getId();
-        result = result * PRIME + (int) ($id >>> 32 ^ $id);
-        final Object $name = this.getName();
-        result = result * PRIME + ($name == null ? 43 : $name.hashCode());
-        final Object $seniorityLevel = this.getSeniorityLevel();
-        result = result * PRIME + ($seniorityLevel == null ? 43 : $seniorityLevel.hashCode());
-        final Object $employee = this.getEmployee();
-        result = result * PRIME + ($employee == null ? 43 : $employee.hashCode());
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (name != null ? name.hashCode() : 0);
+        result = 31 * result + (seniorityLevel != null ? seniorityLevel.hashCode() : 0);
         return result;
     }
 
+    @Override
     public String toString() {
-        return "Position(id=" + this.getId() + ", name=" + this.getName() + ", seniorityLevel=" + this.getSeniorityLevel() + ", employee=" + this.getEmployee() + ")";
+        return "Position{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", seniorityLevel='" + seniorityLevel + '\'' +
+                '}';
     }
 }

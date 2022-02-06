@@ -13,7 +13,7 @@ public class User {
     public static final String TABLE_NAME = "user";
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @OneToOne(cascade = CascadeType.MERGE)
@@ -154,17 +154,25 @@ public class User {
 
         User user = (User) o;
 
-        if (id != user.id) return false;
-        if (!username.equals(user.username)) return false;
-        return email.equals(user.email);
-    }
-
-    protected boolean canEqual(final Object other) {
-        return other instanceof User;
+        if (id != null ? !id.equals(user.id) : user.id != null) return false;
+        if (username != null ? !username.equals(user.username) : user.username != null) return false;
+        return email != null ? email.equals(user.email) : user.email == null;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, employee, username, password, email, userRoles);
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (username != null ? username.hashCode() : 0);
+        result = 31 * result + (email != null ? email.hashCode() : 0);
+        return result;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", email='" + email + '\'' +
+                '}';
     }
 }

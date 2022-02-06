@@ -1,5 +1,7 @@
 package darius.licenta.backend.domain;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
@@ -13,7 +15,7 @@ public class StoryTask {
     public static final String TABLE_NAME = "story_task";
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "title", length = 512)
@@ -152,85 +154,44 @@ public class StoryTask {
         this.story = story;
     }
 
-    public boolean equals(final Object o) {
-        if (o == this) return true;
-        if (!(o instanceof StoryTask)) return false;
-        final StoryTask other = (StoryTask) o;
-        if (!other.canEqual((Object) this)) return false;
-        if (this.getId() != other.getId()) return false;
-        final Object this$title = this.getTitle();
-        final Object other$title = other.getTitle();
-        if (!Objects.equals(this$title, other$title)) return false;
-        final Object this$description = this.getDescription();
-        final Object other$description = other.getDescription();
-        if (!Objects.equals(this$description, other$description))
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        StoryTask storyTask = (StoryTask) o;
+
+        if (storyPoints != storyTask.storyPoints) return false;
+        if (!Objects.equals(id, storyTask.id)) return false;
+        if (!Objects.equals(title, storyTask.title)) return false;
+        if (!Objects.equals(description, storyTask.description))
             return false;
-        if (this.getStoryPoints() != other.getStoryPoints()) return false;
-        final Object this$createdBy = this.getCreatedBy();
-        final Object other$createdBy = other.getCreatedBy();
-        if (!Objects.equals(this$createdBy, other$createdBy)) return false;
-        final Object this$createdAt = this.getCreatedAt();
-        final Object other$createdAt = other.getCreatedAt();
-        if (!Objects.equals(this$createdAt, other$createdAt)) return false;
-        final Object this$assignedTo = this.getAssignedTo();
-        final Object other$assignedTo = other.getAssignedTo();
-        if (!Objects.equals(this$assignedTo, other$assignedTo))
-            return false;
-        final Object this$status = this.getStatus();
-        final Object other$status = other.getStatus();
-        if (!Objects.equals(this$status, other$status)) return false;
-        final Object this$finishedAt = this.getFinishedAt();
-        final Object other$finishedAt = other.getFinishedAt();
-        if (!Objects.equals(this$finishedAt, other$finishedAt))
-            return false;
-        final Object this$storyComments = this.getStoryComments();
-        final Object other$storyComments = other.getStoryComments();
-        if (!Objects.equals(this$storyComments, other$storyComments))
-            return false;
-        final Object this$commentAttachments = this.getCommentAttachments();
-        final Object other$commentAttachments = other.getCommentAttachments();
-        if (!Objects.equals(this$commentAttachments, other$commentAttachments))
-            return false;
-        final Object this$story = this.getStory();
-        final Object other$story = other.getStory();
-        if (!Objects.equals(this$story, other$story)) return false;
-        return true;
+        if (!Objects.equals(createdAt, storyTask.createdAt)) return false;
+        if (!Objects.equals(status, storyTask.status)) return false;
+        return Objects.equals(finishedAt, storyTask.finishedAt);
     }
 
-    protected boolean canEqual(final Object other) {
-        return other instanceof StoryTask;
-    }
-
+    @Override
     public int hashCode() {
-        final int PRIME = 59;
-        int result = 1;
-        final long $id = this.getId();
-        result = result * PRIME + (int) ($id >>> 32 ^ $id);
-        final Object $title = this.getTitle();
-        result = result * PRIME + ($title == null ? 43 : $title.hashCode());
-        final Object $description = this.getDescription();
-        result = result * PRIME + ($description == null ? 43 : $description.hashCode());
-        result = result * PRIME + this.getStoryPoints();
-        final Object $createdBy = this.getCreatedBy();
-        result = result * PRIME + ($createdBy == null ? 43 : $createdBy.hashCode());
-        final Object $createdAt = this.getCreatedAt();
-        result = result * PRIME + ($createdAt == null ? 43 : $createdAt.hashCode());
-        final Object $assignedTo = this.getAssignedTo();
-        result = result * PRIME + ($assignedTo == null ? 43 : $assignedTo.hashCode());
-        final Object $status = this.getStatus();
-        result = result * PRIME + ($status == null ? 43 : $status.hashCode());
-        final Object $finishedAt = this.getFinishedAt();
-        result = result * PRIME + ($finishedAt == null ? 43 : $finishedAt.hashCode());
-        final Object $storyComments = this.getStoryComments();
-        result = result * PRIME + ($storyComments == null ? 43 : $storyComments.hashCode());
-        final Object $commentAttachments = this.getCommentAttachments();
-        result = result * PRIME + ($commentAttachments == null ? 43 : $commentAttachments.hashCode());
-        final Object $story = this.getStory();
-        result = result * PRIME + ($story == null ? 43 : $story.hashCode());
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (title != null ? title.hashCode() : 0);
+        result = 31 * result + (description != null ? description.hashCode() : 0);
+        result = 31 * result + storyPoints;
+        result = 31 * result + (createdAt != null ? createdAt.hashCode() : 0);
+        result = 31 * result + (status != null ? status.hashCode() : 0);
+        result = 31 * result + (finishedAt != null ? finishedAt.hashCode() : 0);
         return result;
     }
 
+    @Override
     public String toString() {
-        return "StoryTask(id=" + this.getId() + ", title=" + this.getTitle() + ", description=" + this.getDescription() + ", storyPoints=" + this.getStoryPoints() + ", createdBy=" + this.getCreatedBy() + ", createdAt=" + this.getCreatedAt() + ", assignedTo=" + this.getAssignedTo() + ", status=" + this.getStatus() + ", finishedAt=" + this.getFinishedAt() + ", storyComments=" + this.getStoryComments() + ", commentAttachments=" + this.getCommentAttachments() + ", story=" + this.getStory() + ")";
+        return "StoryTask{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", description='" + description + '\'' +
+                ", storyPoints=" + storyPoints +
+                ", createdAt=" + createdAt +
+                ", finishedAt=" + finishedAt +
+                '}';
     }
 }

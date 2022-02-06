@@ -1,6 +1,7 @@
 package darius.licenta.backend.service.story;
 
 import darius.licenta.backend.dto.story.*;
+import darius.licenta.backend.dto.story.response.StoryDto;
 import darius.licenta.backend.payload.response.ApiResponse;
 import darius.licenta.backend.payload.response.PaginatedResponse;
 

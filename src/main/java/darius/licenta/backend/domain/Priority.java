@@ -1,5 +1,8 @@
 package darius.licenta.backend.domain;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import javax.persistence.*;
 import java.sql.Blob;
 import java.util.Objects;
@@ -11,7 +14,7 @@ public class Priority {
     public static final String TABLE_NAME = "priority";
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "title", nullable = false, length = 256)
@@ -41,7 +44,7 @@ public class Priority {
         this.level = level;
     }
 
-    public Priority(long id, String title, String description, int level, Blob priorityIcon) {
+    public Priority(Long id, String title, String description, int level, Blob priorityIcon) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -49,7 +52,7 @@ public class Priority {
         this.priorityIcon = priorityIcon;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
@@ -104,24 +107,28 @@ public class Priority {
 
         Priority priority = (Priority) o;
 
-        if (id != priority.id) return false;
         if (level != priority.level) return false;
+        if (!Objects.equals(id, priority.id)) return false;
         if (!Objects.equals(title, priority.title)) return false;
-        if (!Objects.equals(description, priority.description))
-            return false;
-        if (!Objects.equals(priorityIcon, priority.priorityIcon))
-            return false;
-        return Objects.equals(story, priority.story);
+        return Objects.equals(description, priority.description);
     }
 
     @Override
     public int hashCode() {
-        int result = (int) (id ^ (id >>> 32));
+        int result = id != null ? id.hashCode() : 0;
         result = 31 * result + (title != null ? title.hashCode() : 0);
         result = 31 * result + (description != null ? description.hashCode() : 0);
         result = 31 * result + level;
-        result = 31 * result + (priorityIcon != null ? priorityIcon.hashCode() : 0);
-        result = 31 * result + (story != null ? story.hashCode() : 0);
         return result;
+    }
+
+    @Override
+    public String toString() {
+        return "Priority{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", description='" + description + '\'' +
+                ", level=" + level +
+                '}';
     }
 }

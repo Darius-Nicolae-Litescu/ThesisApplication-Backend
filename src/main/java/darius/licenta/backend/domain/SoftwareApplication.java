@@ -1,5 +1,8 @@
 package darius.licenta.backend.domain;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import javax.persistence.*;
 import java.util.Objects;
 import java.util.Set;
@@ -10,7 +13,7 @@ public class SoftwareApplication {
     public static final String TABLE_NAME = "software_application";
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "name", nullable = false, length = 256)
@@ -64,45 +67,33 @@ public class SoftwareApplication {
         this.stories = stories;
     }
 
-    public boolean equals(final Object o) {
-        if (o == this) return true;
-        if (!(o instanceof SoftwareApplication)) return false;
-        final SoftwareApplication other = (SoftwareApplication) o;
-        if (!other.canEqual((Object) this)) return false;
-        if (this.getId() != other.getId()) return false;
-        final Object this$name = this.getName();
-        final Object other$name = other.getName();
-        if (!Objects.equals(this$name, other$name)) return false;
-        final Object this$description = this.getDescription();
-        final Object other$description = other.getDescription();
-        if (!Objects.equals(this$description, other$description))
-            return false;
-        final Object this$stories = this.getStories();
-        final Object other$stories = other.getStories();
-        if (!Objects.equals(this$stories, other$stories)) return false;
-        return true;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        SoftwareApplication that = (SoftwareApplication) o;
+
+        if (!Objects.equals(id, that.id)) return false;
+        if (!Objects.equals(name, that.name)) return false;
+        return Objects.equals(description, that.description);
     }
 
-    protected boolean canEqual(final Object other) {
-        return other instanceof SoftwareApplication;
-    }
-
+    @Override
     public int hashCode() {
-        final int PRIME = 59;
-        int result = 1;
-        final long $id = this.getId();
-        result = result * PRIME + (int) ($id >>> 32 ^ $id);
-        final Object $name = this.getName();
-        result = result * PRIME + ($name == null ? 43 : $name.hashCode());
-        final Object $description = this.getDescription();
-        result = result * PRIME + ($description == null ? 43 : $description.hashCode());
-        final Object $stories = this.getStories();
-        result = result * PRIME + ($stories == null ? 43 : $stories.hashCode());
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (name != null ? name.hashCode() : 0);
+        result = 31 * result + (description != null ? description.hashCode() : 0);
         return result;
     }
 
+    @Override
     public String toString() {
-        return "SoftwareApplication(id=" + this.getId() + ", name=" + this.getName() + ", description=" + this.getDescription() + ", stories=" + this.getStories() + ")";
+        return "SoftwareApplication{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                '}';
     }
 }
 

@@ -4,6 +4,7 @@ import darius.licenta.backend.domain.Position;
 import darius.licenta.backend.domain.Priority;
 import darius.licenta.backend.domain.SoftwareApplication;
 import darius.licenta.backend.dto.position.PositionDto;
+import darius.licenta.backend.dto.priority.InsertPriorityDto;
 import darius.licenta.backend.dto.priority.PriorityDto;
 import darius.licenta.backend.dto.softwareapplication.SoftwareApplicationDto;
 import darius.licenta.backend.mapper.priority.PriorityMapper;
@@ -32,8 +33,8 @@ public class PriorityServiceImpl implements PriorityService {
     }
 
     @Override
-    public ApiResponse<PriorityDto> insert(PriorityDto priorityDto) {
-        Priority priority = priorityMapper.priorityDtoToPriority(priorityDto);
+    public ApiResponse<PriorityDto> insert(InsertPriorityDto insertPriorityDto) {
+        Priority priority = priorityMapper.insertPriorityDtoToPriority(insertPriorityDto);
 
         priorityRepository.save(priority);
 

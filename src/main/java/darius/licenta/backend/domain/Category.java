@@ -1,8 +1,10 @@
 package darius.licenta.backend.domain;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import javax.persistence.*;
 import java.util.Objects;
-import java.util.Set;
 
 @Entity
 @Table(name = Category.TABLE_NAME)
@@ -10,14 +12,14 @@ public class Category {
     public static final String TABLE_NAME = "category";
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "category_name", nullable = false)
     private String categoryName;
 
-    @ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
-    @JoinColumn(name="story_id", nullable=true, insertable=false, updatable=false)
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = true)
+    @JoinColumn(name = "story_id", nullable = true, insertable = false, updatable = false)
     private Story story;
 
     @OneToOne(orphanRemoval = true)
@@ -40,7 +42,7 @@ public class Category {
     public Category() {
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
@@ -69,11 +71,19 @@ public class Category {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Category category = (Category) o;
-        return id == category.id && Objects.equals(categoryName, category.categoryName) && Objects.equals(story, category.story) && Objects.equals(attachment, category.attachment);
+        return Objects.equals(id, category.id) && Objects.equals(categoryName, category.categoryName) && Objects.equals(story, category.story) && Objects.equals(attachment, category.attachment);
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(id, categoryName, story, attachment);
+    }
+
+    @Override
+    public String toString() {
+        return "Category{" +
+                "id=" + id +
+                ", categoryName='" + categoryName + '\'' +
+                '}';
     }
 }

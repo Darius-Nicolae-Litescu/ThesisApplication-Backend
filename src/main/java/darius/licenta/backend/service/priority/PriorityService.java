@@ -1,6 +1,7 @@
 package darius.licenta.backend.service.priority;
 
 import darius.licenta.backend.dto.category.CategoryDto;
+import darius.licenta.backend.dto.priority.InsertPriorityDto;
 import darius.licenta.backend.dto.priority.PriorityDto;
 import darius.licenta.backend.payload.response.ApiResponse;
 
@@ -8,7 +9,7 @@ import java.sql.Blob;
 import java.util.List;
 
 public interface PriorityService {
-    ApiResponse<PriorityDto> insert(PriorityDto priorityDto);
+    ApiResponse<PriorityDto> insert(InsertPriorityDto priorityDto);
 
     ApiResponse<PriorityDto> updateGeneralInformation(PriorityDto priorityDto);
 

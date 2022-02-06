@@ -1,5 +1,8 @@
 package darius.licenta.backend.domain;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -11,7 +14,7 @@ public class StoryComment {
     public static final String TABLE_NAME = "story_comment";
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "content", nullable = false, length = 512)
@@ -77,49 +80,32 @@ public class StoryComment {
         this.storyTask = storyTask;
     }
 
-    public boolean equals(final Object o) {
-        if (o == this) return true;
-        if (!(o instanceof StoryComment)) return false;
-        final StoryComment other = (StoryComment) o;
-        if (!other.canEqual((Object) this)) return false;
-        if (this.getId() != other.getId()) return false;
-        final Object this$content = this.getContent();
-        final Object other$content = other.getContent();
-        if (!Objects.equals(this$content, other$content)) return false;
-        final Object this$postedAt = this.getPostedAt();
-        final Object other$postedAt = other.getPostedAt();
-        if (!Objects.equals(this$postedAt, other$postedAt)) return false;
-        final Object this$commentAttachments = this.getCommentAttachments();
-        final Object other$commentAttachments = other.getCommentAttachments();
-        if (!Objects.equals(this$commentAttachments, other$commentAttachments))
-            return false;
-        final Object this$storyTask = this.getStoryTask();
-        final Object other$storyTask = other.getStoryTask();
-        if (!Objects.equals(this$storyTask, other$storyTask)) return false;
-        return true;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        StoryComment that = (StoryComment) o;
+
+        if (!Objects.equals(id, that.id)) return false;
+        if (!Objects.equals(content, that.content)) return false;
+        return Objects.equals(postedAt, that.postedAt);
     }
 
-    protected boolean canEqual(final Object other) {
-        return other instanceof StoryComment;
-    }
-
+    @Override
     public int hashCode() {
-        final int PRIME = 59;
-        int result = 1;
-        final long $id = this.getId();
-        result = result * PRIME + (int) ($id >>> 32 ^ $id);
-        final Object $content = this.getContent();
-        result = result * PRIME + ($content == null ? 43 : $content.hashCode());
-        final Object $postedAt = this.getPostedAt();
-        result = result * PRIME + ($postedAt == null ? 43 : $postedAt.hashCode());
-        final Object $commentAttachments = this.getCommentAttachments();
-        result = result * PRIME + ($commentAttachments == null ? 43 : $commentAttachments.hashCode());
-        final Object $storyTask = this.getStoryTask();
-        result = result * PRIME + ($storyTask == null ? 43 : $storyTask.hashCode());
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (content != null ? content.hashCode() : 0);
+        result = 31 * result + (postedAt != null ? postedAt.hashCode() : 0);
         return result;
     }
 
+    @Override
     public String toString() {
-        return "StoryComment(id=" + this.getId() + ", content=" + this.getContent() + ", postedAt=" + this.getPostedAt() + ", commentAttachments=" + this.getCommentAttachments() + ", storyTask=" + this.getStoryTask() + ")";
+        return "StoryComment{" +
+                "id=" + id +
+                ", content='" + content + '\'' +
+                ", postedAt=" + postedAt +
+                '}';
     }
 }

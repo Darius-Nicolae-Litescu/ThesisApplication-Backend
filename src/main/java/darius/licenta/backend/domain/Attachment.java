@@ -1,5 +1,7 @@
 package darius.licenta.backend.domain;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
@@ -13,7 +15,7 @@ public class Attachment {
     public static final String TABLE_NAME = "attachment";
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "content_type", nullable = false, length = 256)
@@ -36,7 +38,8 @@ public class Attachment {
     @ManyToOne(fetch = FetchType.LAZY, optional = true)
     private StoryTask storyTask;
 
-    @OneToOne(fetch = FetchType.LAZY, optional = true)
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "story_id", nullable = true, insertable = false, updatable = false)
     private Story story;
 
     public Attachment(Long id, String contentType, Blob content, LocalDateTime postedAt, CommentAttachment commentAttachment, StoryTask storyTask, Story story) {
@@ -108,59 +111,23 @@ public class Attachment {
         this.story = story;
     }
 
-    public boolean equals(final Object o) {
-        if (o == this) return true;
-        if (!(o instanceof Attachment)) return false;
-        final Attachment other = (Attachment) o;
-        if (!other.canEqual(this)) return false;
-        if (this.getId() != other.getId()) return false;
-        final Object this$contentType = this.getContentType();
-        final Object other$contentType = other.getContentType();
-        if (!Objects.equals(this$contentType, other$contentType))
-            return false;
-        final Object this$content = this.getContent();
-        final Object other$content = other.getContent();
-        if (!Objects.equals(this$content, other$content)) return false;
-        final Object this$postedAt = this.getPostedAt();
-        final Object other$postedAt = other.getPostedAt();
-        if (!Objects.equals(this$postedAt, other$postedAt)) return false;
-        final Object this$commentAttachment = this.getCommentAttachment();
-        final Object other$commentAttachment = other.getCommentAttachment();
-        if (!Objects.equals(this$commentAttachment, other$commentAttachment))
-            return false;
-        final Object this$storyTask = this.getStoryTask();
-        final Object other$storyTask = other.getStoryTask();
-        if (!Objects.equals(this$storyTask, other$storyTask)) return false;
-        final Object this$story = this.getStory();
-        final Object other$story = other.getStory();
-        return Objects.equals(this$story, other$story);
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Attachment that = (Attachment) o;
+
+        if (!Objects.equals(id, that.id)) return false;
+        if (!Objects.equals(contentType, that.contentType)) return false;
+        return Objects.equals(postedAt, that.postedAt);
     }
 
-    protected boolean canEqual(final Object other) {
-        return other instanceof Attachment;
-    }
-
+    @Override
     public int hashCode() {
-        final int PRIME = 59;
-        int result = 1;
-        final long $id = this.getId();
-        result = result * PRIME + (int) ($id >>> 32 ^ $id);
-        final Object $contentType = this.getContentType();
-        result = result * PRIME + ($contentType == null ? 43 : $contentType.hashCode());
-        final Object $content = this.getContent();
-        result = result * PRIME + ($content == null ? 43 : $content.hashCode());
-        final Object $postedAt = this.getPostedAt();
-        result = result * PRIME + ($postedAt == null ? 43 : $postedAt.hashCode());
-        final Object $commentAttachment = this.getCommentAttachment();
-        result = result * PRIME + ($commentAttachment == null ? 43 : $commentAttachment.hashCode());
-        final Object $storyTask = this.getStoryTask();
-        result = result * PRIME + ($storyTask == null ? 43 : $storyTask.hashCode());
-        final Object $story = this.getStory();
-        result = result * PRIME + ($story == null ? 43 : $story.hashCode());
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (contentType != null ? contentType.hashCode() : 0);
+        result = 31 * result + (postedAt != null ? postedAt.hashCode() : 0);
         return result;
-    }
-
-    public String toString() {
-        return "Attachment(id=" + this.getId() + ", contentType=" + this.getContentType() + ", content=" + this.getContent() + ", postedAt=" + this.getPostedAt() + ", commentAttachment=" + this.getCommentAttachment() + ", storyTask=" + this.getStoryTask() + ", story=" + this.getStory() + ")";
     }
 }

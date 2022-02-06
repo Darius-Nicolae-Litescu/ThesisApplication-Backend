@@ -10,7 +10,7 @@ public class Person {
     public static final String TABLE_NAME = "person";
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "first_name", nullable = false, length = 256)
@@ -82,48 +82,35 @@ public class Person {
         this.employee = employee;
     }
 
-    public boolean equals(final Object o) {
-        if (o == this) return true;
-        if (!(o instanceof Person)) return false;
-        final Person other = (Person) o;
-        if (!other.canEqual((Object) this)) return false;
-        if (this.getId() != other.getId()) return false;
-        final Object this$firstName = this.getFirstName();
-        final Object other$firstName = other.getFirstName();
-        if (!Objects.equals(this$firstName, other$firstName)) return false;
-        final Object this$lastName = this.getLastName();
-        final Object other$lastName = other.getLastName();
-        if (!Objects.equals(this$lastName, other$lastName)) return false;
-        final Object this$birthDate = this.getBirthDate();
-        final Object other$birthDate = other.getBirthDate();
-        if (!Objects.equals(this$birthDate, other$birthDate)) return false;
-        final Object this$employee = this.getEmployee();
-        final Object other$employee = other.getEmployee();
-        if (!Objects.equals(this$employee, other$employee)) return false;
-        return true;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Person person = (Person) o;
+
+        if (!Objects.equals(id, person.id)) return false;
+        if (!Objects.equals(firstName, person.firstName)) return false;
+        if (!Objects.equals(lastName, person.lastName)) return false;
+        return Objects.equals(birthDate, person.birthDate);
     }
 
-    protected boolean canEqual(final Object other) {
-        return other instanceof Person;
-    }
-
+    @Override
     public int hashCode() {
-        final int PRIME = 59;
-        int result = 1;
-        final long $id = this.getId();
-        result = result * PRIME + (int) ($id >>> 32 ^ $id);
-        final Object $firstName = this.getFirstName();
-        result = result * PRIME + ($firstName == null ? 43 : $firstName.hashCode());
-        final Object $lastName = this.getLastName();
-        result = result * PRIME + ($lastName == null ? 43 : $lastName.hashCode());
-        final Object $birthDate = this.getBirthDate();
-        result = result * PRIME + ($birthDate == null ? 43 : $birthDate.hashCode());
-        final Object $employee = this.getEmployee();
-        result = result * PRIME + ($employee == null ? 43 : $employee.hashCode());
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (firstName != null ? firstName.hashCode() : 0);
+        result = 31 * result + (lastName != null ? lastName.hashCode() : 0);
+        result = 31 * result + (birthDate != null ? birthDate.hashCode() : 0);
         return result;
     }
 
+    @Override
     public String toString() {
-        return "Person(id=" + this.getId() + ", firstName=" + this.getFirstName() + ", lastName=" + this.getLastName() + ", birthDate=" + this.getBirthDate() + ", employee=" + this.getEmployee() + ")";
+        return "Person{" +
+                "id=" + id +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", birthDate=" + birthDate +
+                '}';
     }
 }

@@ -1,5 +1,9 @@
 package darius.licenta.backend.domain;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import org.springframework.data.annotation.PersistenceConstructor;
+
 import javax.persistence.*;
 import java.util.Objects;
 import java.util.Set;
@@ -10,35 +14,37 @@ public class Story {
     public static final String TABLE_NAME = "story";
 
     @Id
-    @GeneratedValue()
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "description", nullable = false, length = 512)
     private String description;
 
     @OneToMany(cascade = CascadeType.MERGE)
-    @JoinColumn(name = "categories", nullable = false, updatable=false, insertable=false)
+    @JoinColumn(name = "story_id", updatable = true, nullable = true)
     private Set<Category> categories;
 
-    @OneToMany(mappedBy = "story", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "story", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<StoryTask> storySubtasks;
 
     @OneToOne(cascade = CascadeType.MERGE)
-    @JoinColumn(name = "priority_id", nullable = false, updatable=false, insertable=false)
+    @JoinColumn(name = "priority_id", updatable = true, nullable = true)
     private Priority priority;
 
-    @OneToMany(mappedBy = "story", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "story", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Attachment> storyAttachments;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = true)
     private SoftwareApplication softwareApplication;
 
-    public Story(Long id, String description, Set<Category> categories, Set<StoryTask> storySubtasks, Priority priority, SoftwareApplication softwareApplication) {
+    @PersistenceConstructor
+    public Story(Long id, String description, Set<Category> categories, Set<StoryTask> storySubtasks, Priority priority, Set<Attachment> storyAttachments, SoftwareApplication softwareApplication) {
         this.id = id;
         this.description = description;
         this.categories = categories;
         this.storySubtasks = storySubtasks;
         this.priority = priority;
+        this.storyAttachments = storyAttachments;
         this.softwareApplication = softwareApplication;
     }
 
@@ -108,26 +114,14 @@ public class Story {
 
         Story story = (Story) o;
 
-        if (id != story.id) return false;
-        if (description != null ? !description.equals(story.description) : story.description != null) return false;
-        if (categories != null ? !categories.equals(story.categories) : story.categories != null) return false;
-        if (storySubtasks != null ? !storySubtasks.equals(story.storySubtasks) : story.storySubtasks != null)
-            return false;
-        if (priority != null ? !priority.equals(story.priority) : story.priority != null) return false;
-        if (storyAttachments != null ? !storyAttachments.equals(story.storyAttachments) : story.storyAttachments != null)
-            return false;
-        return softwareApplication != null ? softwareApplication.equals(story.softwareApplication) : story.softwareApplication == null;
+        if (!Objects.equals(id, story.id)) return false;
+        return Objects.equals(description, story.description);
     }
 
     @Override
     public int hashCode() {
-        int result = (int) (id ^ (id >>> 32));
+        int result = id != null ? id.hashCode() : 0;
         result = 31 * result + (description != null ? description.hashCode() : 0);
-        result = 31 * result + (categories != null ? categories.hashCode() : 0);
-        result = 31 * result + (storySubtasks != null ? storySubtasks.hashCode() : 0);
-        result = 31 * result + (priority != null ? priority.hashCode() : 0);
-        result = 31 * result + (storyAttachments != null ? storyAttachments.hashCode() : 0);
-        result = 31 * result + (softwareApplication != null ? softwareApplication.hashCode() : 0);
         return result;
     }
 
@@ -136,11 +130,6 @@ public class Story {
         return "Story{" +
                 "id=" + id +
                 ", description='" + description + '\'' +
-                ", categories=" + categories +
-                ", storySubtasks=" + storySubtasks +
-                ", priority=" + priority +
-                ", storyAttachments=" + storyAttachments +
-                ", softwareApplication=" + softwareApplication +
                 '}';
     }
 }
