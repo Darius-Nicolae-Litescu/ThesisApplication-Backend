@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import javax.persistence.*;
+import java.sql.Blob;
 import java.util.Objects;
 
 @Entity
@@ -22,16 +23,14 @@ public class Category {
     @JoinColumn(name = "story_id", nullable = true, insertable = false, updatable = false)
     private Story story;
 
-    @OneToOne(orphanRemoval = true)
-    @JoinColumn(name = "attachment_id")
-    private Attachment attachment;
+    @Column(name = "category_picture", nullable = true)
+    @Lob
+    private Blob categoryPicture;
 
-    public Attachment getAttachment() {
-        return attachment;
-    }
-
-    public void setAttachment(Attachment attachment) {
-        this.attachment = attachment;
+    public Category(Long id, String categoryName, Blob categoryPicture) {
+        this.id = id;
+        this.categoryName = categoryName;
+        this.categoryPicture = categoryPicture;
     }
 
     public Category(Long id, String categoryName) {
@@ -40,6 +39,10 @@ public class Category {
     }
 
     public Category() {
+    }
+
+    public Blob getCategoryPicture() {
+        return categoryPicture;
     }
 
     public Long getId() {
@@ -66,17 +69,21 @@ public class Category {
         this.story = story;
     }
 
+    public void setCategoryPicture(Blob categoryPicture) {
+        this.categoryPicture = categoryPicture;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Category category = (Category) o;
-        return Objects.equals(id, category.id) && Objects.equals(categoryName, category.categoryName) && Objects.equals(story, category.story) && Objects.equals(attachment, category.attachment);
+        return Objects.equals(id, category.id) && Objects.equals(categoryName, category.categoryName);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, categoryName, story, attachment);
+        return Objects.hash(id, categoryName);
     }
 
     @Override

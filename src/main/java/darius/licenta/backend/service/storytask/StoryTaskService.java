@@ -1,5 +1,6 @@
 package darius.licenta.backend.service.storytask;
 
+import darius.licenta.backend.dto.comment.storytask.InsertStoryTaskCommentDto;
 import darius.licenta.backend.dto.storytask.InsertStoryTaskDto;
 import darius.licenta.backend.dto.storytask.ResponseStoryTaskDto;
 import darius.licenta.backend.dto.storytask.UpdateStoryTaskDto;
@@ -12,6 +13,8 @@ public interface StoryTaskService {
 
     ApiResponse<ResponseStoryTaskDto> insert(InsertStoryTaskDto storyTaskDto);
 
+    ApiResponse<ResponseStoryTaskDto> insertStoryTaskComment(InsertStoryTaskCommentDto storyTaskCommentDto);
+
     ApiResponse<ResponseStoryTaskDto> update (UpdateStoryTaskDto updateStoryTaskDto);
 
     ApiResponse<List<FullInformationStoryTaskDto>> findStoryTasksByCreatedBy(String username);
@@ -19,6 +22,8 @@ public interface StoryTaskService {
     ApiResponse<List<FullInformationStoryTaskDto>> findStoryTasksByAssignedTo(String username);
 
     ApiResponse<List<FullInformationStoryTaskDto>> findAllStoryTasksByStoryId(Long storyId);
+
+    ApiResponse<FullInformationStoryTaskDto> findStoryTaskById(Long storyTaskId);
 
     ApiResponse<ResponseStoryTaskDto> deleteStoryTask(Long id);
 }

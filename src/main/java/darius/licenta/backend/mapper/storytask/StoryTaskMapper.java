@@ -27,9 +27,8 @@ public interface StoryTaskMapper {
     void updateStoryTaskFromFullInformationStoryTaskDto(FullInformationStoryTaskDto fullInformationStoryTaskDto, @MappingTarget StoryTask storyTask);
 
     @Mapping(source = "createdById", target = "createdBy.id")
-    @Mapping(source = "createdByUsername", target = "createdBy.username")
     @Mapping(source = "assignedToId", target = "assignedTo.id")
-    @Mapping(source = "assignedToUsername", target = "assignedTo.username")
+    @Mapping(source = "storyId", target = "story.id")
     StoryTask insertStoryTaskDtoToStoryTask(InsertStoryTaskDto insertStoryTaskDto);
 
     @InheritInverseConfiguration(name = "insertStoryTaskDtoToStoryTask")

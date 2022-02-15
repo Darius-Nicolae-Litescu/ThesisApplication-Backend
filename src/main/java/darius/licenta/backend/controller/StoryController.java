@@ -1,8 +1,9 @@
 package darius.licenta.backend.controller;
 
 import darius.licenta.backend.domain.UserRole;
-import darius.licenta.backend.dto.story.InsertStoryDto;
-import darius.licenta.backend.dto.story.response.StoryDto;
+import darius.licenta.backend.dto.story.request.insert.InsertStoryDto;
+import darius.licenta.backend.dto.story.response.fulldetails.FullDetailsResponseStoryDto;
+import darius.licenta.backend.dto.story.response.table.ResponseStoryDtoWithoutFullDetails;
 import darius.licenta.backend.payload.response.ApiResponse;
 import darius.licenta.backend.payload.response.PaginatedResponse;
 import darius.licenta.backend.service.story.StoryService;
@@ -24,20 +25,26 @@ public class StoryController {
 
     @PostMapping("/")
     @Secured(UserRole.Rank.ADMIN)
-    public ApiResponse<StoryDto> addStory(@RequestBody InsertStoryDto insertStoryDto) {
+    public ApiResponse<FullDetailsResponseStoryDto> addStory(@RequestBody InsertStoryDto insertStoryDto) {
         return storyService.insert(insertStoryDto);
     }
 
     @GetMapping("/{id}")
     @Secured({UserRole.Rank.ADMIN})
-    public ApiResponse<StoryDto> findStoryById(@PathVariable Long id) {
+    public ApiResponse<FullDetailsResponseStoryDto> findStoryById(@PathVariable Long id) {
         return storyService.findById(id);
+    }
+
+    @DeleteMapping("/{id}")
+    @Secured({UserRole.Rank.ADMIN})
+    public ApiResponse<FullDetailsResponseStoryDto> deleteStoryById(@PathVariable Long id) {
+        return storyService.deleteById(id);
     }
 
     @GetMapping("/pageable")
     @Secured({UserRole.Rank.ADMIN})
-    public ApiResponse<PaginatedResponse<StoryDto>> getStoriesPageable(@RequestParam int page,
-                                                               @RequestParam int size) {
+    public ApiResponse<PaginatedResponse<ResponseStoryDtoWithoutFullDetails>> getStoriesPageable(@RequestParam int page,
+                                                                                                 @RequestParam int size) {
         return storyService.findAll(page, size);
     }
 

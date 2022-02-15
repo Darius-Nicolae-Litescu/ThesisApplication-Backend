@@ -1,4 +1,4 @@
-package darius.licenta.backend.dto.story;
+package darius.licenta.backend.dto.story.request.insert;
 
 import lombok.Data;
 

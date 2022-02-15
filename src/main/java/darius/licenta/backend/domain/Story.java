@@ -1,9 +1,5 @@
 package darius.licenta.backend.domain;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import org.springframework.data.annotation.PersistenceConstructor;
-
 import javax.persistence.*;
 import java.util.Objects;
 import java.util.Set;
@@ -31,13 +27,27 @@ public class Story {
     @JoinColumn(name = "priority_id", updatable = true, nullable = true)
     private Priority priority;
 
+    @OneToMany(mappedBy="story", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Set<Comment> comments;
+
     @OneToMany(mappedBy = "story", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Attachment> storyAttachments;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = true)
     private SoftwareApplication softwareApplication;
 
-    @PersistenceConstructor
+
+    public Story(Long id, String description, Set<Category> categories, Set<StoryTask> storySubtasks, Priority priority, Set<Comment> comments, Set<Attachment> storyAttachments, SoftwareApplication softwareApplication) {
+        this.id = id;
+        this.description = description;
+        this.categories = categories;
+        this.storySubtasks = storySubtasks;
+        this.priority = priority;
+        this.comments = comments;
+        this.storyAttachments = storyAttachments;
+        this.softwareApplication = softwareApplication;
+    }
+
     public Story(Long id, String description, Set<Category> categories, Set<StoryTask> storySubtasks, Priority priority, Set<Attachment> storyAttachments, SoftwareApplication softwareApplication) {
         this.id = id;
         this.description = description;
@@ -49,6 +59,15 @@ public class Story {
     }
 
     public Story() {
+    }
+
+    public void addStoryComment(Comment comment)
+    {
+        this.comments.add(comment);
+    }
+
+    public Set<Comment> getStoryComments() {
+        return comments;
     }
 
     public Set<Category> getCategories() {
@@ -105,6 +124,10 @@ public class Story {
 
     public void setCategories(Set<Category> categories) {
         this.categories = categories;
+    }
+
+    public void setStoryComments(Set<Comment> comments) {
+        this.comments = comments;
     }
 
     @Override

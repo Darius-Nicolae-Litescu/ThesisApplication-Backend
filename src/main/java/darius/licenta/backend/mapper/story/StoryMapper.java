@@ -2,8 +2,12 @@ package darius.licenta.backend.mapper.story;
 
 import darius.licenta.backend.domain.Category;
 import darius.licenta.backend.domain.Story;
-import darius.licenta.backend.dto.story.*;
-import darius.licenta.backend.dto.story.response.StoryDto;
+import darius.licenta.backend.dto.story.response.fulldetails.FullDetailsResponseStoryDto;
+import darius.licenta.backend.dto.story.response.table.ResponseStoryDtoWithoutFullDetails;
+import darius.licenta.backend.dto.story.request.update.UpdateStoryCategories;
+import darius.licenta.backend.dto.story.request.update.UpdateStoryPriority;
+import darius.licenta.backend.dto.story.request.update.UpdateStorySoftwareApplication;
+import darius.licenta.backend.dto.story.request.insert.InsertStoryDto;
 import org.mapstruct.*;
 
 import java.util.Set;
@@ -22,10 +26,38 @@ public interface StoryMapper {
         return categories.stream().map(Category::getId).collect(Collectors.toSet());
     }
 
-    Story storyDtoToStory(StoryDto storyDto);
+    Story storyDtoToStory(FullDetailsResponseStoryDto fullDetailsResponseStoryDto);
 
-    StoryDto storyToStoryDto(Story story);
+    FullDetailsResponseStoryDto storyToStoryDto(Story story);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    void updateStoryFromStoryDto(StoryDto storyDto, @MappingTarget Story story);
+    void updateStoryFromStoryDto(FullDetailsResponseStoryDto fullDetailsResponseStoryDto, @MappingTarget Story story);
+
+    Story updateStoryCategoriesToStory(UpdateStoryCategories updateStoryCategories);
+
+    UpdateStoryCategories storyToUpdateStoryCategories(Story story);
+
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    void updateStoryFromUpdateStoryCategories(UpdateStoryCategories updateStoryCategories, @MappingTarget Story story);
+
+    Story updateStoryPriorityToStory(UpdateStoryPriority updateStoryPriority);
+
+    UpdateStoryPriority storyToUpdateStoryPriority(Story story);
+
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    void updateStoryFromUpdateStoryPriority(UpdateStoryPriority updateStoryPriority, @MappingTarget Story story);
+
+    Story updateStorySoftwareApplicationToStory(UpdateStorySoftwareApplication updateStorySoftwareApplication);
+
+    UpdateStorySoftwareApplication storyToUpdateStorySoftwareApplication(Story story);
+
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    void updateStoryFromUpdateStorySoftwareApplication(UpdateStorySoftwareApplication updateStorySoftwareApplication, @MappingTarget Story story);
+
+    Story responseStoryDtoForTableToStory(ResponseStoryDtoWithoutFullDetails responseStoryDtoWithoutFullDetails);
+
+    ResponseStoryDtoWithoutFullDetails storyToResponseStoryDtoWithoutFullDetails(Story story);
+
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    void updateResponseStoryDtoWithoutFullDetails(ResponseStoryDtoWithoutFullDetails responseStoryDtoWithoutFullDetails, @MappingTarget Story story);
 }

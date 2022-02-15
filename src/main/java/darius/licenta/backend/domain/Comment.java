@@ -1,17 +1,14 @@
 package darius.licenta.backend.domain;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.Set;
 
 @Entity
-@Table(name = StoryComment.TABLE_NAME)
-public class StoryComment {
-    public static final String TABLE_NAME = "story_comment";
+@Table(name = Comment.TABLE_NAME)
+public class Comment {
+    public static final String TABLE_NAME = "comment";
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,21 +20,40 @@ public class StoryComment {
     @Column(name = "posted_at", nullable = false)
     private LocalDateTime postedAt;
 
-    @OneToMany(mappedBy="storyComment", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private Set<CommentAttachment> commentAttachments;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    private Story story;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     private StoryTask storyTask;
 
-    public StoryComment(Long id, String content, LocalDateTime postedAt, Set<CommentAttachment> commentAttachments, StoryTask storyTask) {
+    @OneToMany(mappedBy= "comment", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Set<Attachment> storyAttachments;
+
+    public Comment(Long id, String content, LocalDateTime postedAt, Story story, StoryTask storyTask, Set<Attachment> storyAttachments) {
         this.id = id;
         this.content = content;
         this.postedAt = postedAt;
-        this.commentAttachments = commentAttachments;
+        this.story = story;
+        this.storyTask = storyTask;
+        this.storyAttachments = storyAttachments;
+    }
+
+    public Comment(Long id, String content, LocalDateTime postedAt, StoryTask storyTask) {
+        this.id = id;
+        this.content = content;
+        this.postedAt = postedAt;
         this.storyTask = storyTask;
     }
 
-    public StoryComment() {
+    public Comment() {
+    }
+
+    public Story getStory() {
+        return story;
+    }
+
+    public Set<Attachment> getStoryAttachments() {
+        return storyAttachments;
     }
 
     public long getId() {
@@ -50,10 +66,6 @@ public class StoryComment {
 
     public LocalDateTime getPostedAt() {
         return this.postedAt;
-    }
-
-    public Set<CommentAttachment> getCommentAttachments() {
-        return this.commentAttachments;
     }
 
     public StoryTask getStoryTask() {
@@ -72,12 +84,16 @@ public class StoryComment {
         this.postedAt = postedAt;
     }
 
-    public void setCommentAttachments(Set<CommentAttachment> commentAttachments) {
-        this.commentAttachments = commentAttachments;
-    }
-
     public void setStoryTask(StoryTask storyTask) {
         this.storyTask = storyTask;
+    }
+
+    public void setStory(Story story) {
+        this.story = story;
+    }
+
+    public void setStoryAttachments(Set<Attachment> storyAttachments) {
+        this.storyAttachments = storyAttachments;
     }
 
     @Override
@@ -85,7 +101,7 @@ public class StoryComment {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        StoryComment that = (StoryComment) o;
+        Comment that = (Comment) o;
 
         if (!Objects.equals(id, that.id)) return false;
         if (!Objects.equals(content, that.content)) return false;

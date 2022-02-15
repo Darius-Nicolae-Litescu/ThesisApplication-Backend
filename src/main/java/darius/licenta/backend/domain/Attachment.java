@@ -1,7 +1,5 @@
 package darius.licenta.backend.domain;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
@@ -33,7 +31,7 @@ public class Attachment {
     private User uploadedBy;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = true)
-    private CommentAttachment commentAttachment;
+    private Comment comment;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = true)
     private StoryTask storyTask;
@@ -42,17 +40,35 @@ public class Attachment {
     @JoinColumn(name = "story_id", nullable = true, insertable = false, updatable = false)
     private Story story;
 
-    public Attachment(Long id, String contentType, Blob content, LocalDateTime postedAt, CommentAttachment commentAttachment, StoryTask storyTask, Story story) {
+    public Attachment(Long id, String contentType, Blob content, LocalDateTime postedAt, User uploadedBy, Comment comment, StoryTask storyTask, Story story) {
         this.id = id;
         this.contentType = contentType;
         this.content = content;
         this.postedAt = postedAt;
-        this.commentAttachment = commentAttachment;
+        this.uploadedBy = uploadedBy;
+        this.comment = comment;
+        this.storyTask = storyTask;
+        this.story = story;
+    }
+
+    public Attachment(Long id, String contentType, Blob content, LocalDateTime postedAt, StoryTask storyTask, Story story) {
+        this.id = id;
+        this.contentType = contentType;
+        this.content = content;
+        this.postedAt = postedAt;
         this.storyTask = storyTask;
         this.story = story;
     }
 
     public Attachment() {
+    }
+
+    public User getUploadedBy() {
+        return uploadedBy;
+    }
+
+    public Comment getStoryComment() {
+        return comment;
     }
 
     public Long getId() {
@@ -69,10 +85,6 @@ public class Attachment {
 
     public LocalDateTime getPostedAt() {
         return this.postedAt;
-    }
-
-    public CommentAttachment getCommentAttachment() {
-        return this.commentAttachment;
     }
 
     public StoryTask getStoryTask() {
@@ -99,16 +111,20 @@ public class Attachment {
         this.postedAt = postedAt;
     }
 
-    public void setCommentAttachment(CommentAttachment commentAttachment) {
-        this.commentAttachment = commentAttachment;
-    }
-
     public void setStoryTask(StoryTask storyTask) {
         this.storyTask = storyTask;
     }
 
     public void setStory(Story story) {
         this.story = story;
+    }
+
+    public void setUploadedBy(User uploadedBy) {
+        this.uploadedBy = uploadedBy;
+    }
+
+    public void setStoryComment(Comment comment) {
+        this.comment = comment;
     }
 
     @Override

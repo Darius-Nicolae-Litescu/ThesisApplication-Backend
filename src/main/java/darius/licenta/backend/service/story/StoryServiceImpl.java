@@ -1,20 +1,18 @@
 package darius.licenta.backend.service.story;
 
-import darius.licenta.backend.domain.Category;
-import darius.licenta.backend.domain.Priority;
-import darius.licenta.backend.domain.Story;
-import darius.licenta.backend.dto.story.InsertStoryDto;
-import darius.licenta.backend.dto.story.UpdateStoryCategory;
-import darius.licenta.backend.dto.story.UpdateStoryPriority;
-import darius.licenta.backend.dto.story.UpdateStorySoftwareApplication;
-import darius.licenta.backend.dto.story.response.StoryDto;
+import darius.licenta.backend.domain.*;
+import darius.licenta.backend.dto.comment.story.InsertStoryCommentDto;
+import darius.licenta.backend.dto.story.request.insert.InsertStoryDto;
+import darius.licenta.backend.dto.story.request.update.UpdateStoryCategories;
+import darius.licenta.backend.dto.story.request.update.UpdateStoryPriority;
+import darius.licenta.backend.dto.story.request.update.UpdateStorySoftwareApplication;
+import darius.licenta.backend.dto.story.response.fulldetails.FullDetailsResponseStoryDto;
+import darius.licenta.backend.dto.story.response.table.ResponseStoryDtoWithoutFullDetails;
+import darius.licenta.backend.mapper.comment.CommentMapper;
 import darius.licenta.backend.mapper.story.StoryMapper;
 import darius.licenta.backend.payload.response.ApiResponse;
 import darius.licenta.backend.payload.response.PaginatedResponse;
-import darius.licenta.backend.persistence.CategoryRepository;
-import darius.licenta.backend.persistence.PriorityRepository;
-import darius.licenta.backend.persistence.SoftwareApplicationRepository;
-import darius.licenta.backend.persistence.StoryRepository;
+import darius.licenta.backend.persistence.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,10 +24,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -42,21 +37,27 @@ public class StoryServiceImpl implements StoryService {
 
     private final PriorityRepository priorityRepository;
 
+    private final CommentRepository commentRepository;
+
     private final SoftwareApplicationRepository softwareApplicationRepository;
 
     private final StoryMapper storyMapper;
 
+    private final CommentMapper commentMapper;
+
     @Autowired
-    public StoryServiceImpl(StoryRepository storyRepository, CategoryRepository categoryRepository, PriorityRepository priorityRepository, SoftwareApplicationRepository softwareApplicationRepository, StoryMapper storyMapper) {
+    public StoryServiceImpl(StoryRepository storyRepository, CategoryRepository categoryRepository, PriorityRepository priorityRepository, CommentRepository commentRepository, SoftwareApplicationRepository softwareApplicationRepository, StoryMapper storyMapper, CommentMapper commentMapper) {
         this.storyRepository = storyRepository;
         this.categoryRepository = categoryRepository;
         this.priorityRepository = priorityRepository;
+        this.commentRepository = commentRepository;
         this.softwareApplicationRepository = softwareApplicationRepository;
         this.storyMapper = storyMapper;
+        this.commentMapper = commentMapper;
     }
 
     @Override
-    public ApiResponse<StoryDto> insert(InsertStoryDto insertStoryDto) {
+    public ApiResponse<FullDetailsResponseStoryDto> insert(InsertStoryDto insertStoryDto) {
         Story story = storyMapper.insertStoryDtoToStory(insertStoryDto);
         story = storyRepository.save(story);
 
@@ -72,77 +73,44 @@ public class StoryServiceImpl implements StoryService {
         databaseStory.setPriority(priority.get());
         databaseStory = storyRepository.saveAndFlush(story);
 
-        StoryDto responseStoryDto = storyMapper.storyToStoryDto(databaseStory);
+        FullDetailsResponseStoryDto responseStoryDto = storyMapper.storyToStoryDto(databaseStory);
         return new ApiResponse<>(responseStoryDto, HttpStatus.OK);
     }
 
     @Override
-    public ApiResponse<StoryDto> updateCategory(UpdateStoryCategory updateStoryCategory) {
-        return null;
+    public ApiResponse<FullDetailsResponseStoryDto> insertStoryComment(InsertStoryCommentDto insertStoryCommentDto) {
+        Comment comment = commentMapper.insertStoryCommentDtoToComment(insertStoryCommentDto);
+        commentRepository.save(comment);
+        Story story = storyRepository.getById(comment.getStory().getId());
+        story.addStoryComment(comment);
+        storyRepository.save(story);
+
+        FullDetailsResponseStoryDto fullDetailsResponseStoryDto = storyMapper.storyToStoryDto(story);
+        return new ApiResponse<>(fullDetailsResponseStoryDto, HttpStatus.OK);
     }
 
     @Override
-    public ApiResponse<StoryDto> updatePriority(UpdateStoryPriority updateStoryPriority) {
-        return null;
-    }
-
-    @Override
-    public ApiResponse<StoryDto> updateSoftwareApplication(UpdateStorySoftwareApplication updateStorySoftwareApplication) {
-        return null;
-    }
-
-    @Override
-    public ApiResponse<StoryDto> findById(Long id) {
+    public ApiResponse<FullDetailsResponseStoryDto> findById(Long id) {
         Optional<Story> story = storyRepository.findById(id);
         if (story.isPresent()) {
-            StoryDto storyDto = storyMapper.storyToStoryDto(story.get());
-            return new ApiResponse<>(storyDto, HttpStatus.OK);
+            FullDetailsResponseStoryDto fullDetailsResponseStoryDto = storyMapper.storyToStoryDto(story.get());
+            return new ApiResponse<>(fullDetailsResponseStoryDto, HttpStatus.OK);
         }
         return new ApiResponse<>(null, HttpStatus.NOT_FOUND);
     }
 
     @Override
-    public ApiResponse<StoryDto> deleteById(Long id) {
-        return null;
-    }
-
-    @Override
-    public ApiResponse<PaginatedResponse<StoryDto>> findByPriority(Long priorityId, int page, int size) {
-        return null;
-    }
-
-    @Override
-    public ApiResponse<PaginatedResponse<StoryDto>> findByCategory(Long categoryId, int page, int size) {
-        return null;
-    }
-
-    @Override
-    public ApiResponse<PaginatedResponse<StoryDto>> findByDescription(String description, int page, int size) {
-        return null;
-    }
-
-    @Override
-    public ApiResponse<PaginatedResponse<StoryDto>> findBySoftwareApplicationId(Long softwareApplicationId, int page, int size) {
-        return null;
-    }
-
-    /*
-    @Override
-    public ApiResponse<StoryDto> updateCategory(UpdateStoryCategory updateStoryCategory) {
-        Optional<Story> story = storyRepository.findById(updateStoryCategory.getCategories());
+    public ApiResponse<FullDetailsResponseStoryDto> updateCategories(UpdateStoryCategories updateStoryCategories) {
+        Optional<Story> story = storyRepository.findById(updateStoryCategories.getId());
         if (story.isPresent()) {
-            Optional<Category> category = categoryRepository
-                    .findAllById(updateStoryCategory.getCategories().stream().collect(category => category.get().getId()));
-            if (category.isPresent()) {
-                story.get().setCategories(new HashSet<Category>() {
-
-                    {
-                        add(category.get());
-                    }
-                });
+            List<Long> categoriesIds = updateStoryCategories.getCategories().stream().map(category -> category.getId()).collect(Collectors.toList());
+            Set<Category> categories = new HashSet<>(categoryRepository.findAllById(categoriesIds));
+            ;
+            if (!CollectionUtils.isEmpty(categories)) {
+                story.get().setCategories(categories);
                 storyRepository.save(story.get());
-                StoryDto storyDto = storyMapper.storyToStoryDto(story.get());
-                return new ApiResponse<>(storyDto, HttpStatus.OK);
+                FullDetailsResponseStoryDto fullDetailsResponseStoryDto = storyMapper.storyToStoryDto(story.get());
+                return new ApiResponse<>(fullDetailsResponseStoryDto, HttpStatus.OK);
             } else {
                 return new ApiResponse<>("Category not found", null, HttpStatus.NOT_FOUND);
             }
@@ -152,20 +120,15 @@ public class StoryServiceImpl implements StoryService {
     }
 
     @Override
-    public ApiResponse<StoryDto> updatePriority(UpdateStoryPriority updateStoryPriority) {
-        Optional<Story> story = storyRepository.findById(updateStoryPriority.getStoryId());
+    public ApiResponse<FullDetailsResponseStoryDto> updatePriority(UpdateStoryPriority updateStoryPriority) {
+        Optional<Story> story = storyRepository.findById(updateStoryPriority.getId());
         if (story.isPresent()) {
-            Optional<Priority> priority = priorityRepository.findById(updateStoryPriority.getPriorityId());
+            Optional<Priority> priority = priorityRepository.findById(updateStoryPriority.getPriority().getId());
             if (priority.isPresent()) {
-                story.get().setPriority(new HashSet<Priority>() {
-
-                    {
-                        add(priority.get());
-                    }
-                });
+                story.get().setPriority(priority.get());
                 storyRepository.save(story.get());
-                StoryDto storyDto = storyMapper.storyToStoryDto(story.get());
-                return new ApiResponse<>(storyDto, HttpStatus.OK);
+                FullDetailsResponseStoryDto fullDetailsResponseStoryDto = storyMapper.storyToStoryDto(story.get());
+                return new ApiResponse<>(fullDetailsResponseStoryDto, HttpStatus.OK);
             } else {
                 return new ApiResponse<>("Priority not found", null, HttpStatus.NOT_FOUND);
             }
@@ -175,15 +138,15 @@ public class StoryServiceImpl implements StoryService {
     }
 
     @Override
-    public ApiResponse<StoryDto> updateSoftwareApplication(UpdateStorySoftwareApplication updateStorySoftwareApplication) {
-        Optional<Story> story = storyRepository.findById(updateStorySoftwareApplication.getStoryId());
+    public ApiResponse<FullDetailsResponseStoryDto> updateSoftwareApplication(UpdateStorySoftwareApplication updateStorySoftwareApplication) {
+        Optional<Story> story = storyRepository.findById(updateStorySoftwareApplication.getId());
         if (story.isPresent()) {
-            Optional<SoftwareApplication> softwareApplication = softwareApplicationRepository.findById(updateStorySoftwareApplication.getSoftwareApplicationId());
+            Optional<SoftwareApplication> softwareApplication = softwareApplicationRepository.findById(updateStorySoftwareApplication.getSoftwareApplication().getId());
             if (softwareApplication.isPresent()) {
                 story.get().setSoftwareApplication(softwareApplication.get());
                 storyRepository.save(story.get());
-                StoryDto storyDto = storyMapper.storyToStoryDto(story.get());
-                return new ApiResponse<>(storyDto, HttpStatus.OK);
+                FullDetailsResponseStoryDto fullDetailsResponseStoryDto = storyMapper.storyToStoryDto(story.get());
+                return new ApiResponse<>(fullDetailsResponseStoryDto, HttpStatus.OK);
             } else {
                 return new ApiResponse<>("Software application not found", null, HttpStatus.NOT_FOUND);
             }
@@ -193,11 +156,11 @@ public class StoryServiceImpl implements StoryService {
     }
 
     @Override
-    public ApiResponse<StoryDto> deleteById(Long id) {
+    public ApiResponse<FullDetailsResponseStoryDto> deleteById(Long id) {
         Optional<Story> story = storyRepository.findById(id);
         if (story.isPresent()) {
             storyRepository.delete(story.get());
-            StoryDto responseStoryDto = storyMapper.storyToStoryDto(story.get());
+            FullDetailsResponseStoryDto responseStoryDto = storyMapper.storyToStoryDto(story.get());
             return new ApiResponse<>(responseStoryDto, HttpStatus.ACCEPTED);
         } else {
             return new ApiResponse<>("Story id not found ... ", null, HttpStatus.NOT_FOUND);
@@ -205,91 +168,91 @@ public class StoryServiceImpl implements StoryService {
     }
 
     @Override
-    public ApiResponse<PaginatedResponse<StoryDto>> findByPriority(Long priorityId, int page, int size) {
+    public ApiResponse<PaginatedResponse<ResponseStoryDtoWithoutFullDetails>> findByPriority(Long priorityId, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
         Page<Story> filteredStories = storyRepository.findByPriority_Id(priorityId, pageable);
         if (filteredStories.getNumberOfElements() == 0) {
-            PaginatedResponse<StoryDto> paginatedResponse = new PaginatedResponse<>(filteredStories.getNumber(), filteredStories.getSize(), filteredStories.getNumberOfElements(),
+            PaginatedResponse<ResponseStoryDtoWithoutFullDetails> paginatedResponse = new PaginatedResponse<>(filteredStories.getNumber(), filteredStories.getSize(), filteredStories.getNumberOfElements(),
                     new ArrayList<>(), filteredStories.getTotalElements(), filteredStories.getTotalPages());
             return new ApiResponse<>(paginatedResponse, HttpStatus.NOT_FOUND);
         }
-        List<StoryDto> filteredStoriesDto = new ArrayList<>();
+        List<ResponseStoryDtoWithoutFullDetails> filteredStoriesDto = new ArrayList<>();
 
-        filteredStories.getContent().forEach(story -> filteredStoriesDto.add(storyMapper.storyToStoryDto(story)));
+        filteredStories.getContent().forEach(story -> filteredStoriesDto.add(storyMapper.storyToResponseStoryDtoWithoutFullDetails(story)));
 
-        PaginatedResponse<StoryDto> paginatedResponse = new PaginatedResponse<>(filteredStories.getNumber(), filteredStories.getSize(), filteredStories.getNumberOfElements(),
+        PaginatedResponse<ResponseStoryDtoWithoutFullDetails> paginatedResponse = new PaginatedResponse<>(filteredStories.getNumber(), filteredStories.getSize(), filteredStories.getNumberOfElements(),
                 filteredStoriesDto, filteredStories.getTotalElements(), filteredStories.getTotalPages());
         return new ApiResponse<>(paginatedResponse, HttpStatus.OK);
     }
 
     @Override
-    public ApiResponse<PaginatedResponse<StoryDto>> findByCategory(Long categoryId, int page, int size) {
+    public ApiResponse<PaginatedResponse<ResponseStoryDtoWithoutFullDetails>> findByCategory(Long categoryId, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
-        Page<Story> filteredStories = storyRepository.findByCategory_Id(categoryId, pageable);
+        Page<Story> filteredStories = storyRepository.findByCategories_Id(categoryId, pageable);
         if (filteredStories.getNumberOfElements() == 0) {
-            PaginatedResponse<StoryDto> paginatedResponse = new PaginatedResponse<>(filteredStories.getNumber(), filteredStories.getSize(), filteredStories.getNumberOfElements(),
+            PaginatedResponse<ResponseStoryDtoWithoutFullDetails> paginatedResponse = new PaginatedResponse<>(filteredStories.getNumber(), filteredStories.getSize(), filteredStories.getNumberOfElements(),
                     new ArrayList<>(), filteredStories.getTotalElements(), filteredStories.getTotalPages());
             return new ApiResponse<>(paginatedResponse, HttpStatus.NOT_FOUND);
         }
-        List<StoryDto> filteredStoriesDto = new ArrayList<>();
+        List<ResponseStoryDtoWithoutFullDetails> filteredStoriesDto = new ArrayList<>();
 
-        filteredStories.getContent().forEach(story -> filteredStoriesDto.add(storyMapper.storyToStoryDto(story)));
+        filteredStories.getContent().forEach(story -> filteredStoriesDto.add(storyMapper.storyToResponseStoryDtoWithoutFullDetails(story)));
 
-        PaginatedResponse<StoryDto> paginatedResponse = new PaginatedResponse<>(filteredStories.getNumber(), filteredStories.getSize(), filteredStories.getNumberOfElements(),
+        PaginatedResponse<ResponseStoryDtoWithoutFullDetails> paginatedResponse = new PaginatedResponse<>(filteredStories.getNumber(), filteredStories.getSize(), filteredStories.getNumberOfElements(),
                 filteredStoriesDto, filteredStories.getTotalElements(), filteredStories.getTotalPages());
         return new ApiResponse<>(paginatedResponse, HttpStatus.OK);
     }
 
     @Override
-    public ApiResponse<PaginatedResponse<StoryDto>> findByDescription(String description, int page, int size) {
+    public ApiResponse<PaginatedResponse<ResponseStoryDtoWithoutFullDetails>> findByDescription(String description, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
         Page<Story> filteredStories = storyRepository.findByDescriptionLike(description, pageable);
         if (filteredStories.getNumberOfElements() == 0) {
-            PaginatedResponse<StoryDto> paginatedResponse = new PaginatedResponse<>(filteredStories.getNumber(), filteredStories.getSize(), filteredStories.getNumberOfElements(),
+            PaginatedResponse<ResponseStoryDtoWithoutFullDetails> paginatedResponse = new PaginatedResponse<>(filteredStories.getNumber(), filteredStories.getSize(), filteredStories.getNumberOfElements(),
                     new ArrayList<>(), filteredStories.getTotalElements(), filteredStories.getTotalPages());
             return new ApiResponse<>(paginatedResponse, HttpStatus.NOT_FOUND);
         }
-        List<StoryDto> filteredStoriesDto = new ArrayList<>();
+        List<ResponseStoryDtoWithoutFullDetails> filteredStoriesDto = new ArrayList<>();
 
-        filteredStories.getContent().forEach(story -> filteredStoriesDto.add(storyMapper.storyToStoryDto(story)));
+        filteredStories.getContent().forEach(story -> filteredStoriesDto.add(storyMapper.storyToResponseStoryDtoWithoutFullDetails(story)));
 
-        PaginatedResponse<StoryDto> paginatedResponse = new PaginatedResponse<>(filteredStories.getNumber(), filteredStories.getSize(), filteredStories.getNumberOfElements(),
+        PaginatedResponse<ResponseStoryDtoWithoutFullDetails> paginatedResponse = new PaginatedResponse<>(filteredStories.getNumber(), filteredStories.getSize(), filteredStories.getNumberOfElements(),
                 filteredStoriesDto, filteredStories.getTotalElements(), filteredStories.getTotalPages());
         return new ApiResponse<>(paginatedResponse, HttpStatus.OK);
     }
 
     @Override
-    public ApiResponse<PaginatedResponse<StoryDto>> findBySoftwareApplicationId(Long softwareApplicationId, int page, int size) {
+    public ApiResponse<PaginatedResponse<ResponseStoryDtoWithoutFullDetails>> findBySoftwareApplicationId(Long softwareApplicationId, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
         Page<Story> filteredStories = storyRepository.findBySoftwareApplication_Id(softwareApplicationId, pageable);
         if (filteredStories.getNumberOfElements() == 0) {
-            PaginatedResponse<StoryDto> paginatedResponse = new PaginatedResponse<>(filteredStories.getNumber(), filteredStories.getSize(), filteredStories.getNumberOfElements(),
+            PaginatedResponse<ResponseStoryDtoWithoutFullDetails> paginatedResponse = new PaginatedResponse<>(filteredStories.getNumber(), filteredStories.getSize(), filteredStories.getNumberOfElements(),
                     new ArrayList<>(), filteredStories.getTotalElements(), filteredStories.getTotalPages());
             return new ApiResponse<>(paginatedResponse, HttpStatus.NOT_FOUND);
         }
-        List<StoryDto> filteredStoriesDto = new ArrayList<>();
+        List<ResponseStoryDtoWithoutFullDetails> filteredStoriesDto = new ArrayList<>();
 
-        filteredStories.getContent().forEach(story -> filteredStoriesDto.add(storyMapper.storyToStoryDto(story)));
+        filteredStories.getContent().forEach(story -> filteredStoriesDto.add(storyMapper.storyToResponseStoryDtoWithoutFullDetails(story)));
 
-        PaginatedResponse<StoryDto> paginatedResponse = new PaginatedResponse<>(filteredStories.getNumber(), filteredStories.getSize(), filteredStories.getNumberOfElements(),
+        PaginatedResponse<ResponseStoryDtoWithoutFullDetails> paginatedResponse = new PaginatedResponse<>(filteredStories.getNumber(), filteredStories.getSize(), filteredStories.getNumberOfElements(),
                 filteredStoriesDto, filteredStories.getTotalElements(), filteredStories.getTotalPages());
         return new ApiResponse<>(paginatedResponse, HttpStatus.OK);
     }
-    */
+
     @Transactional(readOnly = true)
     @Override
-    public ApiResponse<PaginatedResponse<StoryDto>> findAll(int page, int size) {
+    public ApiResponse<PaginatedResponse<ResponseStoryDtoWithoutFullDetails>> findAll(int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
         Page<Story> allStories = storyRepository.findAll(pageable);
         if (allStories.getNumberOfElements() == 0) {
-            PaginatedResponse<StoryDto> paginatedResponse = new PaginatedResponse<>(allStories.getNumber(), allStories.getSize(), allStories.getNumberOfElements(),
+            PaginatedResponse<ResponseStoryDtoWithoutFullDetails> paginatedResponse = new PaginatedResponse<>(allStories.getNumber(), allStories.getSize(), allStories.getNumberOfElements(),
                     new ArrayList<>(), allStories.getTotalElements(), allStories.getTotalPages());
             return new ApiResponse<>(paginatedResponse, HttpStatus.NOT_FOUND);
         }
-        PaginatedResponse<StoryDto> paginatedResponse = null;
+        PaginatedResponse<ResponseStoryDtoWithoutFullDetails> paginatedResponse = null;
         try {
-            List<StoryDto> allStoriesDto = allStories.getContent().stream()
-                    .map(story -> storyMapper.storyToStoryDto(story)).collect(Collectors.toList());
+            List<ResponseStoryDtoWithoutFullDetails> allStoriesDto = allStories.getContent().stream()
+                    .map(story -> storyMapper.storyToResponseStoryDtoWithoutFullDetails(story)).collect(Collectors.toList());
 
             paginatedResponse = new PaginatedResponse<>(allStories.getNumber(), allStories.getSize(), allStories.getNumberOfElements(),
                     allStoriesDto, allStories.getTotalElements(), allStories.getTotalPages());

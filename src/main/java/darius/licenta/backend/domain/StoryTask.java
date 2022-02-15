@@ -1,7 +1,5 @@
 package darius.licenta.backend.domain;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
@@ -43,22 +41,42 @@ public class StoryTask {
     private String status;
 
     @CreationTimestamp
-    @Column(name = "finished_at", nullable = false)
+    @Column(name = "finished_at", nullable = true)
     private LocalDateTime finishedAt;
 
     @OneToMany(mappedBy="storyTask", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private Set<StoryComment> storyComments;
+    private Set<Comment> comments;
 
-    @OneToMany(mappedBy="commentAttachment", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy="storyTask", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<Attachment> commentAttachments;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     private Story story;
 
+    public StoryTask(Long id, String title, String description, int storyPoints, User createdBy, LocalDateTime createdAt, User assignedTo, String status, LocalDateTime finishedAt, Set<Comment> comments, Set<Attachment> commentAttachments, Story story) {
+        this.id = id;
+        this.title = title;
+        this.description = description;
+        this.storyPoints = storyPoints;
+        this.createdBy = createdBy;
+        this.createdAt = createdAt;
+        this.assignedTo = assignedTo;
+        this.status = status;
+        this.finishedAt = finishedAt;
+        this.comments = comments;
+        this.commentAttachments = commentAttachments;
+        this.story = story;
+    }
+
     public StoryTask() {
     }
 
-    public long getId() {
+    public void addStoryTaskComment(Comment comment)
+    {
+        this.comments.add(comment);
+    }
+
+    public Long getId() {
         return this.id;
     }
 
@@ -94,8 +112,8 @@ public class StoryTask {
         return this.finishedAt;
     }
 
-    public Set<StoryComment> getStoryComments() {
-        return this.storyComments;
+    public Set<Comment> getStoryComments() {
+        return this.comments;
     }
 
     public Set<Attachment> getCommentAttachments() {
@@ -142,8 +160,8 @@ public class StoryTask {
         this.finishedAt = finishedAt;
     }
 
-    public void setStoryComments(Set<StoryComment> storyComments) {
-        this.storyComments = storyComments;
+    public void setStoryComments(Set<Comment> comments) {
+        this.comments = comments;
     }
 
     public void setCommentAttachments(Set<Attachment> commentAttachments) {

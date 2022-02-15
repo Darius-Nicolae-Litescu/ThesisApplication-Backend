@@ -1,15 +1,20 @@
 package darius.licenta.backend.service.storytask;
 
+import darius.licenta.backend.domain.Comment;
 import darius.licenta.backend.domain.Story;
 import darius.licenta.backend.domain.StoryTask;
 import darius.licenta.backend.domain.User;
+import darius.licenta.backend.dto.comment.storytask.InsertStoryTaskCommentDto;
+import darius.licenta.backend.dto.story.response.fulldetails.FullDetailsResponseStoryDto;
 import darius.licenta.backend.dto.storytask.InsertStoryTaskDto;
 import darius.licenta.backend.dto.storytask.ResponseStoryTaskDto;
 import darius.licenta.backend.dto.storytask.UpdateStoryTaskDto;
 import darius.licenta.backend.dto.storytask.fullinformation.FullInformationStoryTaskDto;
 import darius.licenta.backend.exception.UserNotFoundException;
+import darius.licenta.backend.mapper.comment.CommentMapper;
 import darius.licenta.backend.mapper.storytask.StoryTaskMapper;
 import darius.licenta.backend.payload.response.ApiResponse;
+import darius.licenta.backend.persistence.CommentRepository;
 import darius.licenta.backend.persistence.StoryRepository;
 import darius.licenta.backend.persistence.StoryTaskRepository;
 import darius.licenta.backend.persistence.UserRepository;
@@ -18,6 +23,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -26,26 +32,57 @@ import java.util.Optional;
 public class StoryTaskServiceImpl implements StoryTaskService {
 
     private final StoryTaskRepository storyTaskRepository;
+
     private final StoryRepository storyRepository;
+
     private final UserRepository userRepository;
+
+    private final CommentRepository commentRepository;
+
     private final StoryTaskMapper storyTaskMapper;
 
-    public StoryTaskServiceImpl(StoryTaskRepository storyTaskRepository, StoryRepository storyRepository, UserRepository userRepository, StoryTaskMapper storyTaskMapper) {
+    private final CommentMapper commentMapper;
+
+    public StoryTaskServiceImpl(StoryTaskRepository storyTaskRepository, StoryRepository storyRepository, UserRepository userRepository, CommentRepository commentRepository, StoryTaskMapper storyTaskMapper, CommentMapper commentMapper) {
         this.storyTaskRepository = storyTaskRepository;
         this.storyRepository = storyRepository;
         this.userRepository = userRepository;
+        this.commentRepository = commentRepository;
         this.storyTaskMapper = storyTaskMapper;
+        this.commentMapper = commentMapper;
     }
 
 
     @Override
     public ApiResponse<ResponseStoryTaskDto> insert(InsertStoryTaskDto storyTaskDto) {
         StoryTask storyTask = storyTaskMapper.insertStoryTaskDtoToStoryTask(storyTaskDto);
-
+        User createdBy = userRepository.getById(storyTask.getCreatedBy().getId());
+        if (storyTaskDto.getCreatedAt() == null) {
+            storyTask.setCreatedAt(LocalDateTime.now());
+        }
+        storyTask.setCreatedBy(createdBy);
+        if (storyTaskDto.getAssignedToId() == null) {
+            storyTask.setAssignedTo(storyTask.getCreatedBy());
+        } else {
+            User assignedTo = userRepository.getById(storyTask.getAssignedTo().getId());
+            storyTask.setAssignedTo(assignedTo);
+        }
         storyTaskRepository.save(storyTask);
 
         ResponseStoryTaskDto responseStoryTaskDto = storyTaskMapper.storyTaskToResponseStoryTaskDto(storyTask);
         return new ApiResponse<>(responseStoryTaskDto, HttpStatus.OK);
+    }
+
+    @Override
+    public ApiResponse<ResponseStoryTaskDto> insertStoryTaskComment(InsertStoryTaskCommentDto storyTaskCommentDto) {
+        Comment comment = commentMapper.insertStoryTaskCommentDtoToComment(storyTaskCommentDto);
+        commentRepository.save(comment);
+        StoryTask storyTask = storyTaskRepository.getById(comment.getStoryTask().getId());
+        storyTask.addStoryTaskComment(comment);
+        storyTaskRepository.save(storyTask);
+
+        ResponseStoryTaskDto fullDetailsResponseStoryDto = storyTaskMapper.storyTaskToResponseStoryTaskDto(storyTask);
+        return new ApiResponse<>(fullDetailsResponseStoryDto, HttpStatus.OK);
     }
 
     @Override
@@ -122,6 +159,16 @@ public class StoryTaskServiceImpl implements StoryTaskService {
         } else {
             throw new UserNotFoundException("StoryId " + storyId + " cannot be found in database");
         }
+    }
+
+    @Override
+    public ApiResponse<FullInformationStoryTaskDto> findStoryTaskById(Long storyTaskId) {
+        Optional<StoryTask> storyTask = storyTaskRepository.findById(storyTaskId);
+        if (storyTask.isPresent()) {
+            FullInformationStoryTaskDto fullInformationStoryTaskDto = storyTaskMapper.storyTaskToFullInformationStoryTaskDto(storyTask.get());
+            return new ApiResponse<>(fullInformationStoryTaskDto, HttpStatus.OK);
+        }
+        return new ApiResponse<>(null, HttpStatus.NOT_FOUND);
     }
 
     @Override

@@ -1,32 +1,39 @@
 package darius.licenta.backend.service.story;
 
-import darius.licenta.backend.dto.story.*;
-import darius.licenta.backend.dto.story.response.StoryDto;
+import darius.licenta.backend.dto.comment.story.InsertStoryCommentDto;
+import darius.licenta.backend.dto.story.request.insert.InsertStoryDto;
+import darius.licenta.backend.dto.story.request.update.UpdateStoryCategories;
+import darius.licenta.backend.dto.story.request.update.UpdateStoryPriority;
+import darius.licenta.backend.dto.story.request.update.UpdateStorySoftwareApplication;
+import darius.licenta.backend.dto.story.response.fulldetails.FullDetailsResponseStoryDto;
+import darius.licenta.backend.dto.story.response.table.ResponseStoryDtoWithoutFullDetails;
 import darius.licenta.backend.payload.response.ApiResponse;
 import darius.licenta.backend.payload.response.PaginatedResponse;
 
 public interface StoryService {
-    ApiResponse<StoryDto> insert(InsertStoryDto insertStoryDto);
+    ApiResponse<FullDetailsResponseStoryDto> insert(InsertStoryDto insertStoryDto);
 
-    ApiResponse<StoryDto> updateCategory(UpdateStoryCategory updateStoryCategory);
+    ApiResponse<FullDetailsResponseStoryDto> insertStoryComment(InsertStoryCommentDto insertStoryCommentDto);
 
-    ApiResponse<StoryDto> updatePriority(UpdateStoryPriority updateStoryPriority);
+    ApiResponse<FullDetailsResponseStoryDto> updateCategories(UpdateStoryCategories updateStoryCategories);
 
-    ApiResponse<StoryDto> updateSoftwareApplication(UpdateStorySoftwareApplication updateStorySoftwareApplication);
+    ApiResponse<FullDetailsResponseStoryDto> updatePriority(UpdateStoryPriority updateStoryPriority);
 
-    ApiResponse<StoryDto> findById(Long id);
+    ApiResponse<FullDetailsResponseStoryDto> updateSoftwareApplication(UpdateStorySoftwareApplication updateStorySoftwareApplication);
 
-    ApiResponse<StoryDto> deleteById(Long id);
+    ApiResponse<FullDetailsResponseStoryDto> findById(Long id);
 
-    ApiResponse<PaginatedResponse<StoryDto>> findByPriority(Long priorityId, int page, int size);
+    ApiResponse<FullDetailsResponseStoryDto> deleteById(Long id);
 
-    ApiResponse<PaginatedResponse<StoryDto>> findByCategory(Long categoryId, int page, int size);
+    ApiResponse<PaginatedResponse<ResponseStoryDtoWithoutFullDetails>> findByPriority(Long priorityId, int page, int size);
 
-    ApiResponse<PaginatedResponse<StoryDto>> findByDescription(String description, int page, int size);
+    ApiResponse<PaginatedResponse<ResponseStoryDtoWithoutFullDetails>> findByCategory(Long categoryId, int page, int size);
 
-    ApiResponse<PaginatedResponse<StoryDto>> findBySoftwareApplicationId(Long softwareApplicationId, int page, int size);
+    ApiResponse<PaginatedResponse<ResponseStoryDtoWithoutFullDetails>> findByDescription(String description, int page, int size);
+
+    ApiResponse<PaginatedResponse<ResponseStoryDtoWithoutFullDetails>> findBySoftwareApplicationId(Long softwareApplicationId, int page, int size);
 
     ApiResponse<Long> countAll();
 
-    ApiResponse<PaginatedResponse<StoryDto>> findAll(int page, int size);
+    ApiResponse<PaginatedResponse<ResponseStoryDtoWithoutFullDetails>> findAll(int page, int size);
 }

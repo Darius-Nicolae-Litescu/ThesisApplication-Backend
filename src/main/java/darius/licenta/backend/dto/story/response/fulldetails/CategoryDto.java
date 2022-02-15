@@ -1,4 +1,4 @@
-package darius.licenta.backend.dto.story.response;
+package darius.licenta.backend.dto.story.response.fulldetails;
 
 import lombok.Data;
 
