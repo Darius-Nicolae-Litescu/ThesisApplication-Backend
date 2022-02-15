@@ -1,11 +1,11 @@
 package darius.licenta.backend.service.attachment;
 
-import darius.licenta.backend.domain.Attachment;
-import darius.licenta.backend.dto.attachment.AttachmentDto;
-import darius.licenta.backend.mapper.attachment.AttachmentMapper;
+import darius.licenta.backend.domain.sql.Attachment;
+import darius.licenta.backend.dto.normal.attachment.AttachmentDto;
+import darius.licenta.backend.mapper.normal.attachment.AttachmentMapper;
 import darius.licenta.backend.payload.response.ApiResponse;
 import darius.licenta.backend.payload.response.PaginatedResponse;
-import darius.licenta.backend.persistence.AttachmentRepository;
+import darius.licenta.backend.persistence.jpa.AttachmentRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;

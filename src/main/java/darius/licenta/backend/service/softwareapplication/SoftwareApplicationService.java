@@ -1,12 +1,10 @@
 package darius.licenta.backend.service.softwareapplication;
 
-import darius.licenta.backend.domain.SoftwareApplication;
-import darius.licenta.backend.dto.softwareapplication.InsertSoftwareApplicationDto;
-import darius.licenta.backend.dto.softwareapplication.SoftwareApplicationDto;
+import darius.licenta.backend.dto.normal.softwareapplication.InsertSoftwareApplicationDto;
+import darius.licenta.backend.dto.normal.softwareapplication.SoftwareApplicationDto;
 import darius.licenta.backend.payload.response.ApiResponse;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface SoftwareApplicationService {
     ApiResponse<SoftwareApplicationDto> insert(InsertSoftwareApplicationDto insertSoftwareApplicationDto);

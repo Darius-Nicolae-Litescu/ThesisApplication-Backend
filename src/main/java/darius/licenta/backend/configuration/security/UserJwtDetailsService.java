@@ -1,17 +1,12 @@
 package darius.licenta.backend.configuration.security;
 
-import darius.licenta.backend.domain.User;
+import darius.licenta.backend.domain.sql.User;
 import darius.licenta.backend.exception.UserNotFoundException;
-import darius.licenta.backend.persistence.UserRepository;
-import lombok.RequiredArgsConstructor;
+import darius.licenta.backend.persistence.jpa.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Service
 public class UserJwtDetailsService implements org.springframework.security.core.userdetails.UserDetailsService {

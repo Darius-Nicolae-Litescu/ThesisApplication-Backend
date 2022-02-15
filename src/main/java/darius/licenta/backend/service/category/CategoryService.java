@@ -1,6 +1,6 @@
 package darius.licenta.backend.service.category;
 
-import darius.licenta.backend.dto.category.CategoryDto;
+import darius.licenta.backend.dto.normal.category.CategoryDto;
 import darius.licenta.backend.payload.response.ApiResponse;
 
 import java.util.List;

@@ -1,15 +1,15 @@
 package darius.licenta.backend.service.user;
 
 import darius.licenta.backend.configuration.security.JwtTokenProvider;
-import darius.licenta.backend.domain.User;
-import darius.licenta.backend.domain.UserRole;
-import darius.licenta.backend.dto.user.*;
+import darius.licenta.backend.domain.sql.User;
+import darius.licenta.backend.domain.sql.UserRole;
+import darius.licenta.backend.dto.normal.user.*;
 import darius.licenta.backend.exception.InvalidUsernameAndPasswordException;
 import darius.licenta.backend.exception.UserNotFoundException;
-import darius.licenta.backend.mapper.user.UserMapper;
+import darius.licenta.backend.mapper.normal.user.UserMapper;
 import darius.licenta.backend.payload.response.ApiResponse;
 import darius.licenta.backend.payload.response.PaginatedResponse;
-import darius.licenta.backend.persistence.UserRepository;
+import darius.licenta.backend.persistence.jpa.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

@@ -1,12 +1,12 @@
 package darius.licenta.backend.service.position;
 
-import darius.licenta.backend.domain.Position;
-import darius.licenta.backend.dto.position.CreatePositionDto;
-import darius.licenta.backend.dto.position.PositionDto;
-import darius.licenta.backend.dto.position.UpdatePositionDto;
-import darius.licenta.backend.mapper.position.PositionMapper;
+import darius.licenta.backend.domain.sql.Position;
+import darius.licenta.backend.dto.normal.position.CreatePositionDto;
+import darius.licenta.backend.dto.normal.position.PositionDto;
+import darius.licenta.backend.dto.normal.position.UpdatePositionDto;
+import darius.licenta.backend.mapper.normal.position.PositionMapper;
 import darius.licenta.backend.payload.response.ApiResponse;
-import darius.licenta.backend.persistence.PositionRepository;
+import darius.licenta.backend.persistence.jpa.PositionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;

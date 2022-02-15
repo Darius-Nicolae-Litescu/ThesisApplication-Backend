@@ -1,6 +1,6 @@
 package darius.licenta.backend.service.attachment;
 
-import darius.licenta.backend.dto.attachment.AttachmentDto;
+import darius.licenta.backend.dto.normal.attachment.AttachmentDto;
 import darius.licenta.backend.payload.response.ApiResponse;
 import darius.licenta.backend.payload.response.PaginatedResponse;
 

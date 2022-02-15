@@ -1,8 +1,8 @@
 package darius.licenta.backend.controller;
 
-import darius.licenta.backend.domain.UserRole;
-import darius.licenta.backend.dto.priority.InsertPriorityDto;
-import darius.licenta.backend.dto.priority.PriorityDto;
+import darius.licenta.backend.domain.sql.UserRole;
+import darius.licenta.backend.dto.normal.priority.InsertPriorityDto;
+import darius.licenta.backend.dto.normal.priority.PriorityDto;
 import darius.licenta.backend.payload.response.ApiResponse;
 import darius.licenta.backend.service.priority.PriorityService;
 import org.springframework.beans.factory.annotation.Autowired;

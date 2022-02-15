@@ -1,9 +1,6 @@
 package darius.licenta.backend.service.user;
 
-import darius.licenta.backend.domain.User;
-import darius.licenta.backend.dto.softwareapplication.InsertSoftwareApplicationDto;
-import darius.licenta.backend.dto.softwareapplication.SoftwareApplicationDto;
-import darius.licenta.backend.dto.user.*;
+import darius.licenta.backend.dto.normal.user.*;
 import darius.licenta.backend.payload.response.ApiResponse;
 import darius.licenta.backend.payload.response.PaginatedResponse;
 

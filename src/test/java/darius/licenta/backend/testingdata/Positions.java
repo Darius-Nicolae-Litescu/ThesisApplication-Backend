@@ -1,7 +1,6 @@
 package darius.licenta.backend.testingdata;
 
-import darius.licenta.backend.dto.position.CreatePositionDto;
-import darius.licenta.backend.dto.position.PositionDto;
+import darius.licenta.backend.dto.normal.position.CreatePositionDto;
 
 public class Positions {
     public static CreatePositionDto position1 = new CreatePositionDto("Developer", "Junior");

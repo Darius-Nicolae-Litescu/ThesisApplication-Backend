@@ -1,10 +1,9 @@
 package darius.licenta.backend.controller;
 
-import darius.licenta.backend.domain.UserRole;
-import darius.licenta.backend.dto.user.CreateUserDto;
-import darius.licenta.backend.dto.user.ResponseUserDto;
-import darius.licenta.backend.dto.user.ResponseUserWithJwtDto;
-import darius.licenta.backend.mapper.user.UserMapper;
+import darius.licenta.backend.domain.sql.UserRole;
+import darius.licenta.backend.dto.normal.user.CreateUserDto;
+import darius.licenta.backend.dto.normal.user.ResponseUserDto;
+import darius.licenta.backend.dto.normal.user.ResponseUserWithJwtDto;
 import darius.licenta.backend.payload.response.ApiResponse;
 import darius.licenta.backend.service.user.UserAccountOperationsService;
 import org.springframework.beans.factory.annotation.Autowired;

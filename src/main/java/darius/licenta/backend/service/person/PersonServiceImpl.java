@@ -1,11 +1,11 @@
 package darius.licenta.backend.service.person;
 
-import darius.licenta.backend.domain.Person;
-import darius.licenta.backend.dto.person.PersonDto;
-import darius.licenta.backend.mapper.person.PersonMapper;
+import darius.licenta.backend.domain.sql.Person;
+import darius.licenta.backend.dto.normal.person.PersonDto;
+import darius.licenta.backend.mapper.normal.person.PersonMapper;
 import darius.licenta.backend.payload.response.ApiResponse;
 import darius.licenta.backend.payload.response.PaginatedResponse;
-import darius.licenta.backend.persistence.PersonRepository;
+import darius.licenta.backend.persistence.jpa.PersonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

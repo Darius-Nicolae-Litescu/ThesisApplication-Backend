@@ -1,9 +1,8 @@
 package darius.licenta.backend.service.user;
 
-import darius.licenta.backend.domain.User;
-import darius.licenta.backend.dto.user.CreateUserDto;
-import darius.licenta.backend.dto.user.ResponseUserDto;
-import darius.licenta.backend.dto.user.ResponseUserWithJwtDto;
+import darius.licenta.backend.dto.normal.user.CreateUserDto;
+import darius.licenta.backend.dto.normal.user.ResponseUserDto;
+import darius.licenta.backend.dto.normal.user.ResponseUserWithJwtDto;
 import darius.licenta.backend.payload.response.ApiResponse;
 
 import javax.servlet.http.HttpServletRequest;

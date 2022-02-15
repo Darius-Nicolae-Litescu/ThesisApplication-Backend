@@ -1,10 +1,10 @@
 package darius.licenta.backend.service.storytask;
 
-import darius.licenta.backend.dto.comment.storytask.InsertStoryTaskCommentDto;
-import darius.licenta.backend.dto.storytask.InsertStoryTaskDto;
-import darius.licenta.backend.dto.storytask.ResponseStoryTaskDto;
-import darius.licenta.backend.dto.storytask.UpdateStoryTaskDto;
-import darius.licenta.backend.dto.storytask.fullinformation.FullInformationStoryTaskDto;
+import darius.licenta.backend.dto.normal.comment.storytask.InsertStoryTaskCommentDto;
+import darius.licenta.backend.dto.normal.storytask.InsertStoryTaskDto;
+import darius.licenta.backend.dto.normal.storytask.ResponseStoryTaskDto;
+import darius.licenta.backend.dto.normal.storytask.UpdateStoryTaskDto;
+import darius.licenta.backend.dto.normal.storytask.fullinformation.FullInformationStoryTaskDto;
 import darius.licenta.backend.payload.response.ApiResponse;
 
 import java.util.List;

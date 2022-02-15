@@ -1,11 +1,11 @@
 package darius.licenta.backend.service.employee;
 
-import darius.licenta.backend.domain.Employee;
-import darius.licenta.backend.dto.employee.EmployeeDto;
-import darius.licenta.backend.mapper.employee.EmployeeMapper;
+import darius.licenta.backend.domain.sql.Employee;
+import darius.licenta.backend.dto.normal.employee.EmployeeDto;
+import darius.licenta.backend.mapper.normal.employee.EmployeeMapper;
 import darius.licenta.backend.payload.response.ApiResponse;
 import darius.licenta.backend.payload.response.PaginatedResponse;
-import darius.licenta.backend.persistence.EmployeeRepository;
+import darius.licenta.backend.persistence.jpa.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

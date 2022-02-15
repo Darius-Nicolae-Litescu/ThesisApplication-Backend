@@ -1,13 +1,11 @@
 package darius.licenta.backend.service.softwareapplication;
 
-import darius.licenta.backend.domain.Priority;
-import darius.licenta.backend.domain.SoftwareApplication;
-import darius.licenta.backend.dto.priority.PriorityDto;
-import darius.licenta.backend.dto.softwareapplication.InsertSoftwareApplicationDto;
-import darius.licenta.backend.dto.softwareapplication.SoftwareApplicationDto;
-import darius.licenta.backend.mapper.softwareapplication.SoftwareApplicationMapper;
+import darius.licenta.backend.domain.sql.SoftwareApplication;
+import darius.licenta.backend.dto.normal.softwareapplication.InsertSoftwareApplicationDto;
+import darius.licenta.backend.dto.normal.softwareapplication.SoftwareApplicationDto;
+import darius.licenta.backend.mapper.normal.softwareapplication.SoftwareApplicationMapper;
 import darius.licenta.backend.payload.response.ApiResponse;
-import darius.licenta.backend.persistence.SoftwareApplicationRepository;
+import darius.licenta.backend.persistence.jpa.SoftwareApplicationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;

@@ -1,6 +1,6 @@
 package darius.licenta.backend.service.person;
 
-import darius.licenta.backend.dto.person.PersonDto;
+import darius.licenta.backend.dto.normal.person.PersonDto;
 import darius.licenta.backend.payload.response.ApiResponse;
 import darius.licenta.backend.payload.response.PaginatedResponse;
 

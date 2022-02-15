@@ -1,10 +1,10 @@
 package darius.licenta.backend.service.category;
 
-import darius.licenta.backend.domain.Category;
-import darius.licenta.backend.dto.category.CategoryDto;
-import darius.licenta.backend.mapper.category.CategoryMapper;
+import darius.licenta.backend.domain.sql.Category;
+import darius.licenta.backend.dto.normal.category.CategoryDto;
+import darius.licenta.backend.mapper.normal.category.CategoryMapper;
 import darius.licenta.backend.payload.response.ApiResponse;
-import darius.licenta.backend.persistence.CategoryRepository;
+import darius.licenta.backend.persistence.jpa.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;

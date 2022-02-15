@@ -1,8 +1,7 @@
 package darius.licenta.backend.service.priority;
 
-import darius.licenta.backend.dto.category.CategoryDto;
-import darius.licenta.backend.dto.priority.InsertPriorityDto;
-import darius.licenta.backend.dto.priority.PriorityDto;
+import darius.licenta.backend.dto.normal.priority.InsertPriorityDto;
+import darius.licenta.backend.dto.normal.priority.PriorityDto;
 import darius.licenta.backend.payload.response.ApiResponse;
 
 import java.sql.Blob;

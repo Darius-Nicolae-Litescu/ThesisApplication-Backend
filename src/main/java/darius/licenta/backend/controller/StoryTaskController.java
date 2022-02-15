@@ -1,15 +1,10 @@
 package darius.licenta.backend.controller;
 
-import darius.licenta.backend.domain.UserRole;
-import darius.licenta.backend.dto.story.request.insert.InsertStoryDto;
-import darius.licenta.backend.dto.story.response.fulldetails.FullDetailsResponseStoryDto;
-import darius.licenta.backend.dto.story.response.fulldetails.StoryTaskDto;
-import darius.licenta.backend.dto.storytask.InsertStoryTaskDto;
-import darius.licenta.backend.dto.storytask.ResponseStoryTaskDto;
-import darius.licenta.backend.dto.storytask.fullinformation.FullInformationStoryTaskDto;
+import darius.licenta.backend.domain.sql.UserRole;
+import darius.licenta.backend.dto.normal.storytask.InsertStoryTaskDto;
+import darius.licenta.backend.dto.normal.storytask.ResponseStoryTaskDto;
+import darius.licenta.backend.dto.normal.storytask.fullinformation.FullInformationStoryTaskDto;
 import darius.licenta.backend.payload.response.ApiResponse;
-import darius.licenta.backend.payload.response.PaginatedResponse;
-import darius.licenta.backend.service.story.StoryService;
 import darius.licenta.backend.service.storytask.StoryTaskService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;

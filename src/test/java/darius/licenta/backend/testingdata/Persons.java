@@ -1,8 +1,7 @@
 package darius.licenta.backend.testingdata;
 
-import darius.licenta.backend.dto.person.PersonDto;
+import darius.licenta.backend.dto.normal.person.PersonDto;
 
-import java.time.Instant;
 import java.util.Date;
 
 public class Persons {

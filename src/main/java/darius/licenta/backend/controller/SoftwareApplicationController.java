@@ -1,12 +1,9 @@
 package darius.licenta.backend.controller;
 
-import darius.licenta.backend.domain.UserRole;
-import darius.licenta.backend.dto.position.CreatePositionDto;
-import darius.licenta.backend.dto.position.PositionDto;
-import darius.licenta.backend.dto.softwareapplication.InsertSoftwareApplicationDto;
-import darius.licenta.backend.dto.softwareapplication.SoftwareApplicationDto;
+import darius.licenta.backend.domain.sql.UserRole;
+import darius.licenta.backend.dto.normal.softwareapplication.InsertSoftwareApplicationDto;
+import darius.licenta.backend.dto.normal.softwareapplication.SoftwareApplicationDto;
 import darius.licenta.backend.payload.response.ApiResponse;
-import darius.licenta.backend.service.position.PositionService;
 import darius.licenta.backend.service.softwareapplication.SoftwareApplicationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;

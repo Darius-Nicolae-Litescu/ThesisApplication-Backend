@@ -1,12 +1,12 @@
 package darius.licenta.backend.service.story;
 
-import darius.licenta.backend.dto.comment.story.InsertStoryCommentDto;
-import darius.licenta.backend.dto.story.request.insert.InsertStoryDto;
-import darius.licenta.backend.dto.story.request.update.UpdateStoryCategories;
-import darius.licenta.backend.dto.story.request.update.UpdateStoryPriority;
-import darius.licenta.backend.dto.story.request.update.UpdateStorySoftwareApplication;
-import darius.licenta.backend.dto.story.response.fulldetails.FullDetailsResponseStoryDto;
-import darius.licenta.backend.dto.story.response.table.ResponseStoryDtoWithoutFullDetails;
+import darius.licenta.backend.dto.normal.comment.story.InsertStoryCommentDto;
+import darius.licenta.backend.dto.normal.story.request.insert.InsertStoryDto;
+import darius.licenta.backend.dto.normal.story.request.update.UpdateStoryCategories;
+import darius.licenta.backend.dto.normal.story.request.update.UpdateStoryPriority;
+import darius.licenta.backend.dto.normal.story.request.update.UpdateStorySoftwareApplication;
+import darius.licenta.backend.dto.normal.story.response.fulldetails.FullDetailsResponseStoryDto;
+import darius.licenta.backend.dto.normal.story.response.table.ResponseStoryDtoWithoutFullDetails;
 import darius.licenta.backend.payload.response.ApiResponse;
 import darius.licenta.backend.payload.response.PaginatedResponse;
 
