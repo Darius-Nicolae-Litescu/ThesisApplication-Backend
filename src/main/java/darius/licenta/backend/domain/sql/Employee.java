@@ -12,11 +12,11 @@ public class Employee {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne(cascade = CascadeType.MERGE)
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "person_id")
     private Person person;
 
-    @OneToOne(cascade = CascadeType.MERGE)
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "position_id")
     private Position position;
 
@@ -30,6 +30,12 @@ public class Employee {
         this.user = user;
     }
 
+    public Employee(Person person, Position position, User user) {
+        this.person = person;
+        this.position = position;
+        this.user = user;
+    }
+
     public Employee(Person person, Position position) {
         this.person = person;
         this.position = position;
@@ -38,7 +44,7 @@ public class Employee {
     public Employee() {
     }
 
-    public long getId() {
+    public Long getId() {
         return this.id;
     }
 

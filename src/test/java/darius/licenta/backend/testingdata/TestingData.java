@@ -1,6 +1,5 @@
 package darius.licenta.backend.testingdata;
 
-import darius.licenta.backend.domain.*;
 import darius.licenta.backend.service.employee.EmployeeService;
 import darius.licenta.backend.service.person.PersonService;
 import darius.licenta.backend.service.position.PositionService;

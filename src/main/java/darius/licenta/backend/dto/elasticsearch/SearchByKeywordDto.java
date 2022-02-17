@@ -8,6 +8,7 @@ public class SearchByKeywordDto {
     List<String> collections;
     String term;
     List<String> fields;
+    List<String> returnFields;
     String from;
     String size;
 
@@ -16,12 +17,17 @@ public class SearchByKeywordDto {
 
     }
 
-    public SearchByKeywordDto(List<String> collections, String term, List<String> fields, String from, String size) {
+    public SearchByKeywordDto(List<String> collections, String term, List<String> fields, List<String> returnFields, String from, String size) {
         this.collections = collections;
         this.term = term;
         this.fields = fields;
+        this.returnFields = returnFields;
         this.from = from;
         this.size = size;
+    }
+
+    public List<String> getReturnFields() {
+        return returnFields;
     }
 
     public List<String> getCollections() {
@@ -62,5 +68,9 @@ public class SearchByKeywordDto {
 
     public void setSize(String size) {
         this.size = size;
+    }
+
+    public void setReturnFields(List<String> returnFields) {
+        this.returnFields = returnFields;
     }
 }

@@ -1,4 +1,4 @@
-package darius.licenta.backend.dto.normal.employee;
+package darius.licenta.backend.dto.normal.employee.response;
 
 import java.io.Serializable;
 

@@ -47,7 +47,7 @@ public class SoftwareApplication {
         this.modificationDate = modificationDate;
     }
 
-    public long getId() {
+    public Long getId() {
         return this.id;
     }
 

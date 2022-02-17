@@ -36,7 +36,7 @@ public class Position {
     public Position() {
     }
 
-    public long getId() {
+    public Long getId() {
         return this.id;
     }
 

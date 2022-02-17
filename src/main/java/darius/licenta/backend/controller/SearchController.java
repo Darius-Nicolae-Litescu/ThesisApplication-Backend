@@ -25,6 +25,7 @@ public class SearchController {
     public ApiResponse<ElasticSearchResultQuery> search(@RequestBody SearchByKeywordDto searchByKeywordDto) throws IOException {
         return new ApiResponse<>(searchService.searchFromQuery(
                 searchByKeywordDto.getCollections(),
+                searchByKeywordDto.getReturnFields(),
                 searchByKeywordDto.getTerm().trim().toLowerCase(),
                 searchByKeywordDto.getFields(), searchByKeywordDto.getFrom(),
                 searchByKeywordDto.getSize()),

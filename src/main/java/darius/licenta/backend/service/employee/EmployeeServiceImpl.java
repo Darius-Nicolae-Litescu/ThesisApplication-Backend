@@ -1,11 +1,18 @@
 package darius.licenta.backend.service.employee;
 
 import darius.licenta.backend.domain.sql.Employee;
-import darius.licenta.backend.dto.normal.employee.EmployeeDto;
+import darius.licenta.backend.domain.sql.Person;
+import darius.licenta.backend.domain.sql.Position;
+import darius.licenta.backend.domain.sql.User;
+import darius.licenta.backend.dto.normal.employee.insert.InsertEmployeeDto;
+import darius.licenta.backend.dto.normal.employee.response.EmployeeDto;
 import darius.licenta.backend.mapper.normal.employee.EmployeeMapper;
 import darius.licenta.backend.payload.response.ApiResponse;
 import darius.licenta.backend.payload.response.PaginatedResponse;
 import darius.licenta.backend.persistence.jpa.EmployeeRepository;
+import darius.licenta.backend.persistence.jpa.PersonRepository;
+import darius.licenta.backend.persistence.jpa.PositionRepository;
+import darius.licenta.backend.persistence.jpa.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -24,11 +31,17 @@ public class EmployeeServiceImpl implements EmployeeService {
     private final EmployeeMapper employeeMapper;
 
     private final EmployeeRepository employeeRepository;
+    private final PersonRepository personRepository;
+    private final PositionRepository positionRepository;
+    private final UserRepository userRepository;
 
     @Autowired
-    public EmployeeServiceImpl(EmployeeMapper employeeMapper, EmployeeRepository employeeRepository) {
+    public EmployeeServiceImpl(EmployeeMapper employeeMapper, EmployeeRepository employeeRepository, PersonRepository personRepository, PositionRepository positionRepository, UserRepository userRepository) {
         this.employeeMapper = employeeMapper;
         this.employeeRepository = employeeRepository;
+        this.personRepository = personRepository;
+        this.positionRepository = positionRepository;
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -46,11 +59,14 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public ApiResponse<EmployeeDto> insert(EmployeeDto employeeDto) {
-        Employee employee = employeeMapper.employeeDtoToEmployee(employeeDto);
-
+    public ApiResponse<EmployeeDto> insert(InsertEmployeeDto insertEmployeeDto) {
+        Person person = personRepository.getById(insertEmployeeDto.getPersonId());
+        Position position = positionRepository.getById(insertEmployeeDto.getPositionId());
+        User user = userRepository.getById(insertEmployeeDto.getUserId());
+        Employee employee = new Employee(person,position,user);
         employeeRepository.save(employee);
-
+        user.setEmployee(employee);
+        userRepository.save(user);
         EmployeeDto responseEmployeeDto = employeeMapper.employeeToEmployeeDto(employee);
         return new ApiResponse<>(responseEmployeeDto, HttpStatus.OK);
     }

@@ -1,5 +1,7 @@
 package darius.licenta.backend.dto.normal.person;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Objects;
@@ -8,6 +10,7 @@ public class PersonDto implements Serializable {
     private Long id;
     private String firstName;
     private String lastName;
+    @JsonFormat(pattern = "yyyy/MM/dd")
     private Date birthDate;
 
     public PersonDto(Long id, String firstName, String lastName, Date birthDate) {

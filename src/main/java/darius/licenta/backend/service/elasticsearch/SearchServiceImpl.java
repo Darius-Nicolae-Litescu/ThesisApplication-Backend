@@ -30,8 +30,8 @@ public class SearchServiceImpl implements SearchService {
     private String elasticSearchSearchPrefix;
 
     @Override
-    public ElasticSearchResultQuery searchFromQuery(List<String> collections, String term, List<String> fields, String from, String size) throws IOException {
-        String body = QueryHelperBuilder.buildMultipleFieldSearchQuery(term, fields, from, size);
+    public ElasticSearchResultQuery searchFromQuery(List<String> collections, List<String> returnFields, String term, List<String> fields, String from, String size) throws IOException {
+        String body = QueryHelperBuilder.buildMultipleFieldSearchQuery(term, returnFields , fields, from, size);
         return executeHttpRequest(collections, body);
     }
 

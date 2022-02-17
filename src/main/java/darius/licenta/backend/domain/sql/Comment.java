@@ -71,7 +71,7 @@ public class Comment {
         return storyAttachments;
     }
 
-    public long getId() {
+    public Long getId() {
         return this.id;
     }
 

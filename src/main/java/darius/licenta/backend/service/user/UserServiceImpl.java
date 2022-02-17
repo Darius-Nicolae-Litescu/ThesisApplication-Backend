@@ -1,6 +1,7 @@
 package darius.licenta.backend.service.user;
 
 import darius.licenta.backend.configuration.security.JwtTokenProvider;
+import darius.licenta.backend.domain.sql.Employee;
 import darius.licenta.backend.domain.sql.User;
 import darius.licenta.backend.domain.sql.UserRole;
 import darius.licenta.backend.dto.normal.user.*;
@@ -9,6 +10,7 @@ import darius.licenta.backend.exception.UserNotFoundException;
 import darius.licenta.backend.mapper.normal.user.UserMapper;
 import darius.licenta.backend.payload.response.ApiResponse;
 import darius.licenta.backend.payload.response.PaginatedResponse;
+import darius.licenta.backend.persistence.jpa.EmployeeRepository;
 import darius.licenta.backend.persistence.jpa.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -33,14 +35,16 @@ class UserServiceImpl implements UserService, UserAccountOperationsService {
     private final String USERNAME = "username";
 
     private final UserRepository userRepository;
+    private final EmployeeRepository employeeRepository;
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
     private final AuthenticationManager authenticationManager;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, UserMapper userMapper, PasswordEncoder passwordEncoder, JwtTokenProvider jwtTokenProvider, AuthenticationManager authenticationManager) {
+    public UserServiceImpl(UserRepository userRepository, EmployeeRepository employeeRepository, UserMapper userMapper, PasswordEncoder passwordEncoder, JwtTokenProvider jwtTokenProvider, AuthenticationManager authenticationManager) {
         this.userRepository = userRepository;
+        this.employeeRepository = employeeRepository;
         this.userMapper = userMapper;
         this.passwordEncoder = passwordEncoder;
         this.jwtTokenProvider = jwtTokenProvider;
@@ -81,7 +85,7 @@ class UserServiceImpl implements UserService, UserAccountOperationsService {
             ResponseUserDto responseUserDtoWithoutJwt = userMapper.userToResponseUserDto(user);
             List<UserRole> userRoles = user.getUserRoles();
             String jwtToken = jwtTokenProvider.createToken(user.getUsername(), userRoles);
-            ResponseUserWithJwtDto responseUserWithJwtDto = new ResponseUserWithJwtDto(responseUserDtoWithoutJwt,jwtToken, userRoles);
+            ResponseUserWithJwtDto responseUserWithJwtDto = new ResponseUserWithJwtDto(responseUserDtoWithoutJwt, jwtToken, userRoles);
             return new ApiResponse<>(responseUserWithJwtDto, HttpStatus.OK);
         } else {
             throw new InvalidUsernameAndPasswordException("Username is already in use");
@@ -155,12 +159,23 @@ class UserServiceImpl implements UserService, UserAccountOperationsService {
             Optional<User> user = userRepository.findByUsername(username);
             if (user.isPresent()) {
                 List<UserRole> userRoles = user.get().getUserRoles();
-                String jwtToken = jwtTokenProvider.createToken(username,userRoles);
+                String jwtToken = jwtTokenProvider.createToken(username, userRoles);
                 ResponseUserDto responseUserDtoWithoutJwt = userMapper.userToResponseUserDto(user.get());
-                ResponseUserWithJwtDto responseUserWithJwtDto = new ResponseUserWithJwtDto(responseUserDtoWithoutJwt, jwtToken, userRoles);
+                Optional<Employee> employee = employeeRepository.findByUser_Username(username);
+                ResponseUserWithJwtDto responseUserWithJwtDto;
+                if (employee.isPresent()) {
+                    String firstName = employee.get().getPerson().getFirstName();
+                    String lastname = employee.get().getPerson().getLastName();
+                    String positionName = employee.get().getPosition().getName();
+                    String positionSeniority = employee.get().getPosition().getSeniorityLevel();
+                    responseUserWithJwtDto = new ResponseUserWithJwtDto(responseUserDtoWithoutJwt, jwtToken, userRoles,
+                            firstName, lastname, positionName, positionSeniority);
+
+                } else {
+                    responseUserWithJwtDto = new ResponseUserWithJwtDto(responseUserDtoWithoutJwt, jwtToken, userRoles);
+                }
                 return new ApiResponse<>(responseUserWithJwtDto, HttpStatus.OK);
-            }else
-            {
+            } else {
                 throw new UserNotFoundException("Cannot find username");
             }
         } catch (AuthenticationException e) {

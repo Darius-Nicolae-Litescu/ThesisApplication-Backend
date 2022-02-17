@@ -1,19 +1,26 @@
-package darius.licenta.backend.dto.normal.employee;
+package darius.licenta.backend.dto.normal.employee.response;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 public class UserDto implements Serializable {
+    private String username;
     private String email;
-
-    public UserDto(String email) {
-        this.email = email;
-    }
 
     public UserDto() {
     }
 
+
+    public String getUsername() {
+        return this.username;
+    }
+
     public String getEmail() {
         return this.email;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public void setEmail(String email) {
@@ -25,9 +32,12 @@ public class UserDto implements Serializable {
         if (!(o instanceof UserDto)) return false;
         final UserDto other = (UserDto) o;
         if (!other.canEqual((Object) this)) return false;
+        final Object this$username = this.getUsername();
+        final Object other$username = other.getUsername();
+        if (!Objects.equals(this$username, other$username)) return false;
         final Object this$email = this.getEmail();
         final Object other$email = other.getEmail();
-        if (this$email == null ? other$email != null : !this$email.equals(other$email)) return false;
+        if (!Objects.equals(this$email, other$email)) return false;
         return true;
     }
 
@@ -38,12 +48,14 @@ public class UserDto implements Serializable {
     public int hashCode() {
         final int PRIME = 59;
         int result = 1;
+        final Object $username = this.getUsername();
+        result = result * PRIME + ($username == null ? 43 : $username.hashCode());
         final Object $email = this.getEmail();
         result = result * PRIME + ($email == null ? 43 : $email.hashCode());
         return result;
     }
 
     public String toString() {
-        return "UserDto(email=" + this.getEmail() + ")";
+        return "UserDto(username=" + this.getUsername() + ", email=" + this.getEmail() + ")";
     }
 }
