@@ -1,77 +1,82 @@
 package darius.licenta.backend.dto.normal.user;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 public class ResponseUserDto implements Serializable {
     private Long id;
     private String username;
     private String email;
+    private String bioDescription;
 
-    public ResponseUserDto(Long id, String username, String email) {
+    public ResponseUserDto(Long id, String username, String email, String bioDescription) {
         this.id = id;
         this.username = username;
         this.email = email;
-    }
-
-    public ResponseUserDto() {
+        this.bioDescription = bioDescription;
     }
 
     public Long getId() {
-        return this.id;
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getUsername() {
-        return this.username;
-    }
-
-    public String getEmail() {
-        return this.email;
-    }
-
-    public void setId(long id) {
-        this.id = id;
+        return username;
     }
 
     public void setUsername(String username) {
         this.username = username;
     }
 
+    public String getEmail() {
+        return email;
+    }
+
     public void setEmail(String email) {
         this.email = email;
     }
 
-    public boolean equals(final Object o) {
-        if (o == this) return true;
-        if (!(o instanceof ResponseUserDto)) return false;
-        final ResponseUserDto other = (ResponseUserDto) o;
-        if (!other.canEqual((Object) this)) return false;
-        if (this.getId() != other.getId()) return false;
-        final Object this$username = this.getUsername();
-        final Object other$username = other.getUsername();
-        if (this$username == null ? other$username != null : !this$username.equals(other$username)) return false;
-        final Object this$email = this.getEmail();
-        final Object other$email = other.getEmail();
-        if (this$email == null ? other$email != null : !this$email.equals(other$email)) return false;
-        return true;
+    public String getBioDescription() {
+        return bioDescription;
     }
 
-    protected boolean canEqual(final Object other) {
-        return other instanceof ResponseUserDto;
+    public void setBioDescription(String bioDescription) {
+        this.bioDescription = bioDescription;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        ResponseUserDto that = (ResponseUserDto) o;
+
+        if (!Objects.equals(id, that.id)) return false;
+        if (!Objects.equals(username, that.username)) return false;
+        if (!Objects.equals(email, that.email)) return false;
+        return Objects.equals(bioDescription, that.bioDescription);
+    }
+
+    @Override
     public int hashCode() {
-        final int PRIME = 59;
-        int result = 1;
-        final long $id = this.getId();
-        result = result * PRIME + (int) ($id >>> 32 ^ $id);
-        final Object $username = this.getUsername();
-        result = result * PRIME + ($username == null ? 43 : $username.hashCode());
-        final Object $email = this.getEmail();
-        result = result * PRIME + ($email == null ? 43 : $email.hashCode());
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (username != null ? username.hashCode() : 0);
+        result = 31 * result + (email != null ? email.hashCode() : 0);
+        result = 31 * result + (bioDescription != null ? bioDescription.hashCode() : 0);
         return result;
     }
 
+    @Override
     public String toString() {
-        return "UserDto(id=" + this.getId() + ", username=" + this.getUsername() + ", email=" + this.getEmail() + ")";
+        return "ResponseUserDto{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", email='" + email + '\'' +
+                ", bioDescription='" + bioDescription + '\'' +
+                '}';
     }
 }

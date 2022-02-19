@@ -29,6 +29,9 @@ public class User {
     @Lob
     private Blob profilePicture;
 
+    @Column(name = "bio_description", nullable = true, length = 3000)
+    private String bioDescription;
+
     @Column(name = "email", nullable = false, length = 256)
     private String email;
 

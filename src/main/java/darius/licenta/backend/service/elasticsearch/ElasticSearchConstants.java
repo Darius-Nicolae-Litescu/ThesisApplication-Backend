@@ -4,6 +4,8 @@ public class ElasticSearchConstants {
         public static final Integer MILLISECONDS_INTERVAL = 180_000;
         public static final String MODIFICATION_DATE = "modificationDate";
         public static final String HITS = "hits";
+        public static final String MAPPPINGS = "mappings";
+        public static final String PROPERTIES = "properties";
         public static final String TOOK = "took";
         public static final String TOTAL_HITS = "total";
         public static final String CONTENT_ACCEPT = "Accept";

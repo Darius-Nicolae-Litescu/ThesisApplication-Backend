@@ -56,6 +56,7 @@ public class StoryServiceImpl implements StoryService {
         this.commentMapper = commentMapper;
     }
 
+    @Transactional
     @Override
     public ApiResponse<FullDetailsResponseStoryDto> insert(InsertStoryDto insertStoryDto) {
         Story story = storyMapper.insertStoryDtoToStory(insertStoryDto);

@@ -20,6 +20,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,6 +59,7 @@ public class EmployeeServiceImpl implements EmployeeService {
                 allEmployeeDto, allEmployees.getTotalElements(), allEmployees.getTotalPages()), HttpStatus.OK);
     }
 
+    @Transactional
     @Override
     public ApiResponse<EmployeeDto> insert(InsertEmployeeDto insertEmployeeDto) {
         Person person = personRepository.getById(insertEmployeeDto.getPersonId());

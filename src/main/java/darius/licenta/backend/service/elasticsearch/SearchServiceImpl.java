@@ -1,8 +1,9 @@
 package darius.licenta.backend.service.elasticsearch;
 
-import com.google.gson.*;
 import darius.licenta.backend.dto.elasticsearch.ElasticSearchResultQuery;
+import darius.licenta.backend.dto.elasticsearch.ReturnPropertyNamesDto;
 import org.apache.http.HttpResponse;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
@@ -11,17 +12,17 @@ import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.configurationprocessor.json.JSONArray;
 import org.springframework.boot.configurationprocessor.json.JSONException;
 import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class SearchServiceImpl implements SearchService {
     private static final Logger logger = LoggerFactory.getLogger(SearchService.class);
-    private static final Gson gson = new Gson();
 
     @Value("${api.elasticsearch.uri}")
     private String elasticSearchUri;
@@ -29,16 +30,59 @@ public class SearchServiceImpl implements SearchService {
     @Value("${api.elasticsearch.search}")
     private String elasticSearchSearchPrefix;
 
+    @Value("${api.elasticsearch.mapping}")
+    private String elasticSearchMappingPrefix;
+
     @Override
-    public ElasticSearchResultQuery searchFromQuery(List<String> collections, List<String> returnFields, String term, List<String> fields, String from, String size) throws IOException {
-        String body = QueryHelperBuilder.buildMultipleFieldSearchQuery(term, returnFields , fields, from, size);
-        return executeHttpRequest(collections, body);
+    public ElasticSearchResultQuery searchFromQuery(Optional<List<String>> collections, Optional<List<String>> returnFields, String term, Optional<List<String>> fields, String from, String size) throws IOException {
+        String body = QueryHelperBuilder.buildMultipleFieldSearchQuery(term, returnFields, fields, from, size);
+        return executeHttpRequestForQueryResults(collections, body);
     }
 
-    private ElasticSearchResultQuery executeHttpRequest(List<String> collections, String body) throws IOException {
+    @Override
+    public ReturnPropertyNamesDto getFieldNamesFromQuery(List<String> collectionNamesForFieldReturn) throws IOException {
+        return executeHttpRequestForFieldResults(collectionNamesForFieldReturn);
+    }
+
+    private ReturnPropertyNamesDto executeHttpRequestForFieldResults(List<String> collectionNamesForFieldReturn) throws IOException {
+        try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
+            HttpGet httpGet = new HttpGet(concatUrl(elasticSearchUri, String.join(",", collectionNamesForFieldReturn), elasticSearchMappingPrefix));
+            try {
+                HttpResponse response = httpClient.execute(httpGet);
+                String message = EntityUtils.toString(response.getEntity());
+                JSONObject myObject = new JSONObject(message);
+                Map<String, List<String>> collectionNamePropertiesMap = new HashMap<>();
+                JSONArray keys = myObject.names();
+                for (int i = 0; i < keys.length(); i++) {
+                    String currentKey = keys.get(i).toString();
+                    JSONObject collectionName = myObject.getJSONObject(currentKey);
+                    JSONObject innerObject = collectionName.getJSONObject(ElasticSearchConstants.MAPPPINGS).getJSONObject(ElasticSearchConstants.PROPERTIES);
+                    JSONArray propertyNamesKeys = innerObject.names();
+                    for (int j = 0; j < propertyNamesKeys.length(); j++) {
+                        String currentPropertyNameKey = propertyNamesKeys.get(j).toString();
+                        if (collectionNamePropertiesMap.containsKey(currentKey)) {
+                            collectionNamePropertiesMap.get(currentKey).add(currentPropertyNameKey);
+                        } else {
+                            collectionNamePropertiesMap.put(currentKey, new ArrayList<>(Collections.singletonList(currentPropertyNameKey)));
+                        }
+                    }
+                }
+                return new ReturnPropertyNamesDto(collectionNamePropertiesMap);
+            } catch (IOException | JSONException e) {
+                logger.error("Exception: {}", e.getMessage());
+                return null;
+            }
+        }
+    }
+
+    private ElasticSearchResultQuery executeHttpRequestForQueryResults(Optional<List<String>> collections, String body) throws IOException {
         try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
             ElasticSearchResultQuery elasticSearchResultQuery = new ElasticSearchResultQuery();
-            HttpPost httpPost = new HttpPost(concatUrl(elasticSearchUri, String.join(",", collections), elasticSearchSearchPrefix));
+
+            HttpPost httpPost = collections.map(strings ->
+                    new HttpPost(concatUrl(elasticSearchUri, String.join(",", strings),
+                            elasticSearchSearchPrefix))).orElseGet(() -> new HttpPost(concatUrl(elasticSearchUri, "", elasticSearchSearchPrefix)));
+
             httpPost.setHeader(ElasticSearchConstants.CONTENT_ACCEPT, ElasticSearchConstants.APP_TYPE);
             httpPost.setHeader(ElasticSearchConstants.CONTENT_TYPE, ElasticSearchConstants.APP_TYPE);
             try {

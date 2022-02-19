@@ -16,7 +16,7 @@ public interface UserAccountOperationsService {
 
     ApiResponse<ResponseUserDto> search(String username);
 
-    ApiResponse<ResponseUserDto> whoami(HttpServletRequest req);
+    ApiResponse<ResponseUserWithJwtDto> whoami(HttpServletRequest req);
 
     ApiResponse<ResponseUserDto> deleteUserByUsername(String username);
 

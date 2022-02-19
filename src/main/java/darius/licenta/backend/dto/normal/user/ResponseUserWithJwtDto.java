@@ -11,6 +11,7 @@ public class ResponseUserWithJwtDto implements Serializable {
     private final String username;
     private final String email;
     private final String jwtToken;
+    private final String bioDescription;
     private final List<UserRole> roles;
     private final String firstName;
     private final String lastName;
@@ -22,6 +23,7 @@ public class ResponseUserWithJwtDto implements Serializable {
         this.id = responseUserDto.getId();
         this.username = responseUserDto.getUsername();;
         this.email = responseUserDto.getEmail();
+        this.bioDescription = responseUserDto.getBioDescription();
         this.jwtToken = jwtToken;
         this.roles = roles;
         this.firstName = firstName;
@@ -35,12 +37,17 @@ public class ResponseUserWithJwtDto implements Serializable {
         this.id = responseUserDto.getId();
         this.username = responseUserDto.getUsername();;
         this.email = responseUserDto.getEmail();
+        this.bioDescription = responseUserDto.getBioDescription();
         this.jwtToken = jwtToken;
         this.roles = roles;
         this.firstName = null;
         this.lastName = null;
         this.positionName = null;
         this.positionSeniority = null;
+    }
+
+    public String getBioDescription() {
+        return bioDescription;
     }
 
     public Long getId() {
@@ -93,6 +100,7 @@ public class ResponseUserWithJwtDto implements Serializable {
         if (!Objects.equals(roles, that.roles)) return false;
         if (!Objects.equals(firstName, that.firstName)) return false;
         if (!Objects.equals(lastName, that.lastName)) return false;
+        if (!Objects.equals(bioDescription, that.bioDescription)) return false;
         if (!Objects.equals(positionName, that.positionName)) return false;
         return Objects.equals(positionSeniority, that.positionSeniority);
     }
@@ -106,6 +114,7 @@ public class ResponseUserWithJwtDto implements Serializable {
         result = 31 * result + (roles != null ? roles.hashCode() : 0);
         result = 31 * result + (firstName != null ? firstName.hashCode() : 0);
         result = 31 * result + (lastName != null ? lastName.hashCode() : 0);
+        result = 31 * result + (bioDescription != null ? bioDescription.hashCode() : 0);
         result = 31 * result + (positionName != null ? positionName.hashCode() : 0);
         result = 31 * result + (positionSeniority != null ? positionSeniority.hashCode() : 0);
         return result;
@@ -119,6 +128,7 @@ public class ResponseUserWithJwtDto implements Serializable {
                 ", email='" + email + '\'' +
                 ", jwtToken='" + jwtToken + '\'' +
                 ", roles=" + roles +
+                ", bioDescription=" + bioDescription +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", positionName='" + positionName + '\'' +

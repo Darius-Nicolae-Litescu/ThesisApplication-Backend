@@ -35,21 +35,21 @@ public class UserAccountOperationsController {
         return userService.insert(userDto);
     }
 
-    @DeleteMapping(value = "/{username}")
+    @DeleteMapping(value = "/username/{username}")
     @Secured(UserRole.Rank.ADMIN)
     public ApiResponse<ResponseUserDto> delete(@PathVariable String username) {
         return userService.deleteUserByUsername(username);
     }
 
-    @GetMapping(value = "/{username}")
+    @GetMapping(value = "/username/{username}")
     @Secured(UserRole.Rank.ADMIN)
     public ApiResponse<ResponseUserDto> search(@PathVariable String username) {
         return userService.search(username);
     }
 
-    @GetMapping(value = "/me")
+    @GetMapping(value = "/whoami")
     @Secured({UserRole.Rank.ADMIN,UserRole.Rank.USER})
-    public ApiResponse<ResponseUserDto> whoami(HttpServletRequest req) {
+    public ApiResponse<ResponseUserWithJwtDto> whoami(HttpServletRequest req) {
         return userService.whoami(req);
     }
 
