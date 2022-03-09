@@ -9,6 +9,7 @@ import java.util.Set;
 public class InsertStoryDto implements Serializable {
     private final String title;
     private final String description;
-    private final Set<InsertStoryCategoryDto> categories;
-    private final InsertStoryPriorityDto priority;
+    private final Set<Long> categoryIds;
+    private final Long priorityId;
+    private final Long softwareApplicationId;
 }

@@ -21,14 +21,13 @@ public class StoryTask {
     @Column(name = "title", nullable = false, length = 512)
     private String title;
 
-    @Column(name = "description", nullable = false, length = 1024)
+    @Column(name = "description", nullable = false, length = 10000)
     private String description;
 
     @Column(name = "story_points")
     private int storyPoints;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "created_by")
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     private User createdBy;
 
     @CreationTimestamp

@@ -10,7 +10,6 @@ public class InsertStoryTaskDto implements Serializable {
     private final String title;
     private final String description;
     private final int storyPoints;
-    private final Long createdById;
     private final LocalDateTime createdAt;
     private final Long assignedToId;
     private final String status;

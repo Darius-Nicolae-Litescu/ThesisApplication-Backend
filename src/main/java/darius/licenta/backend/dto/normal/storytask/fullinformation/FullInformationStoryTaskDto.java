@@ -3,6 +3,8 @@ package darius.licenta.backend.dto.normal.storytask.fullinformation;
 import java.io.Serializable;
 import java.sql.Blob;
 import java.time.LocalDateTime;
+import java.util.Date;
+import java.util.Objects;
 import java.util.Set;
 
 public class FullInformationStoryTaskDto implements Serializable {
@@ -219,17 +221,21 @@ public class FullInformationStoryTaskDto implements Serializable {
     }
 
     public static class StoryCommentDto implements Serializable {
-        private final long id;
+        private final Long id;
         private final String content;
+        private final PostedByUserDto postedBy;
         private final LocalDateTime postedAt;
+        private final Date modificationDate;
 
-        public StoryCommentDto(long id, String content, LocalDateTime postedAt) {
+        public StoryCommentDto(Long id, String content, PostedByUserDto postedBy, LocalDateTime postedAt, Date modificationDate) {
             this.id = id;
             this.content = content;
+            this.postedBy = postedBy;
             this.postedAt = postedAt;
+            this.modificationDate = modificationDate;
         }
 
-        public long getId() {
+        public Long getId() {
             return this.id;
         }
 
@@ -237,8 +243,16 @@ public class FullInformationStoryTaskDto implements Serializable {
             return this.content;
         }
 
+        public PostedByUserDto getPostedBy() {
+            return this.postedBy;
+        }
+
         public LocalDateTime getPostedAt() {
             return this.postedAt;
+        }
+
+        public Date getModificationDate() {
+            return this.modificationDate;
         }
 
         public boolean equals(final Object o) {
@@ -247,13 +261,22 @@ public class FullInformationStoryTaskDto implements Serializable {
                 return false;
             final StoryCommentDto other = (StoryCommentDto) o;
             if (!other.canEqual((Object) this)) return false;
-            if (this.getId() != other.getId()) return false;
+            final Object this$id = this.getId();
+            final Object other$id = other.getId();
+            if (this$id == null ? other$id != null : !this$id.equals(other$id)) return false;
             final Object this$content = this.getContent();
             final Object other$content = other.getContent();
             if (this$content == null ? other$content != null : !this$content.equals(other$content)) return false;
+            final Object this$postedBy = this.getPostedBy();
+            final Object other$postedBy = other.getPostedBy();
+            if (this$postedBy == null ? other$postedBy != null : !this$postedBy.equals(other$postedBy)) return false;
             final Object this$postedAt = this.getPostedAt();
             final Object other$postedAt = other.getPostedAt();
             if (this$postedAt == null ? other$postedAt != null : !this$postedAt.equals(other$postedAt)) return false;
+            final Object this$modificationDate = this.getModificationDate();
+            final Object other$modificationDate = other.getModificationDate();
+            if (this$modificationDate == null ? other$modificationDate != null : !this$modificationDate.equals(other$modificationDate))
+                return false;
             return true;
         }
 
@@ -264,27 +287,31 @@ public class FullInformationStoryTaskDto implements Serializable {
         public int hashCode() {
             final int PRIME = 59;
             int result = 1;
-            final long $id = this.getId();
-            result = result * PRIME + (int) ($id >>> 32 ^ $id);
+            final Object $id = this.getId();
+            result = result * PRIME + ($id == null ? 43 : $id.hashCode());
             final Object $content = this.getContent();
             result = result * PRIME + ($content == null ? 43 : $content.hashCode());
+            final Object $postedBy = this.getPostedBy();
+            result = result * PRIME + ($postedBy == null ? 43 : $postedBy.hashCode());
             final Object $postedAt = this.getPostedAt();
             result = result * PRIME + ($postedAt == null ? 43 : $postedAt.hashCode());
+            final Object $modificationDate = this.getModificationDate();
+            result = result * PRIME + ($modificationDate == null ? 43 : $modificationDate.hashCode());
             return result;
         }
 
         public String toString() {
-            return "FullInformationStoryTaskDto.StoryCommentDto(id=" + this.getId() + ", content=" + this.getContent() + ", postedAt=" + this.getPostedAt() + ")";
+            return "FullInformationStoryTaskDto.StoryCommentDto(id=" + this.getId() + ", content=" + this.getContent() + ", postedBy=" + this.getPostedBy() + ", postedAt=" + this.getPostedAt() + ", modificationDate=" + this.getModificationDate() + ")";
         }
     }
 
     public static class AttachmentDto implements Serializable {
         private final long id;
         private final String contentType;
-        private final Blob content;
+        private final byte[] content;
         private final LocalDateTime postedAt;
 
-        public AttachmentDto(long id, String contentType, Blob content, LocalDateTime postedAt) {
+        public AttachmentDto(long id, String contentType, byte[] content, LocalDateTime postedAt) {
             this.id = id;
             this.contentType = contentType;
             this.content = content;
@@ -299,7 +326,7 @@ public class FullInformationStoryTaskDto implements Serializable {
             return this.contentType;
         }
 
-        public Blob getContent() {
+        public byte[] getContent() {
             return this.content;
         }
 
@@ -316,11 +343,11 @@ public class FullInformationStoryTaskDto implements Serializable {
             if (this.getId() != other.getId()) return false;
             final Object this$contentType = this.getContentType();
             final Object other$contentType = other.getContentType();
-            if (this$contentType == null ? other$contentType != null : !this$contentType.equals(other$contentType))
+            if (!Objects.equals(this$contentType, other$contentType))
                 return false;
             final Object this$content = this.getContent();
             final Object other$content = other.getContent();
-            if (this$content == null ? other$content != null : !this$content.equals(other$content)) return false;
+            if (!Objects.equals(this$content, other$content)) return false;
             final Object this$postedAt = this.getPostedAt();
             final Object other$postedAt = other.getPostedAt();
             if (this$postedAt == null ? other$postedAt != null : !this$postedAt.equals(other$postedAt)) return false;
@@ -345,8 +372,13 @@ public class FullInformationStoryTaskDto implements Serializable {
             return result;
         }
 
+        @Override
         public String toString() {
-            return "FullInformationStoryTaskDto.AttachmentDto(id=" + this.getId() + ", contentType=" + this.getContentType() + ", content=" + this.getContent() + ", postedAt=" + this.getPostedAt() + ")";
+            return "AttachmentDto{" +
+                    "id=" + id +
+                    ", contentType='" + contentType + '\'' +
+                    ", postedAt=" + postedAt +
+                    '}';
         }
     }
 }

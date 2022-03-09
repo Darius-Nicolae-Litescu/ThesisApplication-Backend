@@ -109,6 +109,6 @@ public class SearchServiceImpl implements SearchService {
     }
 
     public static String concatUrl(String s1, String s2, String s3) {
-        return new StringBuilder(s1).append(s2).append(s3).toString();
+        return s1 + s2 + s3;
     }
 }

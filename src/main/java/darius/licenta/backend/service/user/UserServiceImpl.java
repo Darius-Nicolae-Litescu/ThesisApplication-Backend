@@ -183,6 +183,17 @@ class UserServiceImpl implements UserService, UserAccountOperationsService {
         }
     }
 
+    @Override
+    public ApiResponse<ResponseUserDto> updateUserBio(UpdateUserBioDto updateUserBioDto, String username) {
+        Optional<User> user = userRepository.findByUsername(username);
+        if (user.isPresent()) {
+            user.get().setBioDescription(updateUserBioDto.getBioDescription());
+            userRepository.save(user.get());
+            ResponseUserDto responseUserDto = userMapper.userToResponseUserDto(user.get());
+            return new ApiResponse<>(responseUserDto, HttpStatus.OK);
+        }
+        return new ApiResponse<>(null, HttpStatus.NOT_FOUND);
+    }
 
     @Override
     public ApiResponse<ResponseUserDto> search(String username) {

@@ -11,9 +11,9 @@ import darius.licenta.backend.payload.response.ApiResponse;
 import darius.licenta.backend.payload.response.PaginatedResponse;
 
 public interface StoryService {
-    ApiResponse<FullDetailsResponseStoryDto> insert(InsertStoryDto insertStoryDto);
+    ApiResponse<FullDetailsResponseStoryDto> insert(InsertStoryDto insertStoryDto, String username);
 
-    ApiResponse<FullDetailsResponseStoryDto> insertStoryComment(InsertStoryCommentDto insertStoryCommentDto);
+    ApiResponse<FullDetailsResponseStoryDto> insertStoryComment(InsertStoryCommentDto insertStoryCommentDto, String username);
 
     ApiResponse<FullDetailsResponseStoryDto> updateCategories(UpdateStoryCategories updateStoryCategories);
 

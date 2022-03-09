@@ -1,6 +1,9 @@
 package darius.licenta.backend.controller;
 
 import darius.licenta.backend.domain.sql.UserRole;
+import darius.licenta.backend.dto.normal.comment.story.InsertStoryCommentDto;
+import darius.licenta.backend.dto.normal.comment.storytask.InsertStoryTaskCommentDto;
+import darius.licenta.backend.dto.normal.story.response.fulldetails.FullDetailsResponseStoryDto;
 import darius.licenta.backend.dto.normal.storytask.InsertStoryTaskDto;
 import darius.licenta.backend.dto.normal.storytask.ResponseStoryTaskDto;
 import darius.licenta.backend.dto.normal.storytask.fullinformation.FullInformationStoryTaskDto;
@@ -10,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -26,8 +30,16 @@ public class StoryTaskController {
 
     @PostMapping("/task")
     @Secured(UserRole.Rank.ADMIN)
-    public ApiResponse<ResponseStoryTaskDto> addStoryTask(@RequestBody InsertStoryTaskDto insertStoryTaskDto) {
-        return storyTaskService.insert(insertStoryTaskDto);
+    public ApiResponse<ResponseStoryTaskDto> addStoryTask(Principal principal, @RequestBody InsertStoryTaskDto insertStoryTaskDto) {
+        String username = principal.getName();
+        return storyTaskService.insert(insertStoryTaskDto, username);
+    }
+
+    @PostMapping("/task/comment")
+    @Secured(UserRole.Rank.ADMIN)
+    public ApiResponse<FullInformationStoryTaskDto> addComment(Principal principal, @ModelAttribute InsertStoryTaskCommentDto insertStoryCommentDto) {
+        String username = principal.getName();
+        return storyTaskService.insertStoryTaskComment(insertStoryCommentDto, username);
     }
 
     @GetMapping("task/{id}")

@@ -16,12 +16,15 @@ public class Attachment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "name", nullable = false, length = 256)
+    private String name;
+
     @Column(name = "content_type", nullable = false, length = 256)
     private String contentType;
 
     @Column(name = "content", nullable = false)
     @Lob
-    private Blob content;
+    private byte[] content;
 
     @CreationTimestamp
     @Column(name = "uploaded_at", nullable = false)
@@ -40,8 +43,9 @@ public class Attachment {
     @JoinColumn(name = "story_id", nullable = true, insertable = false, updatable = false)
     private Story story;
 
-    public Attachment(Long id, String contentType, Blob content, LocalDateTime postedAt, User uploadedBy, Comment comment, StoryTask storyTask, Story story) {
+    public Attachment(Long id, String name, String contentType, byte[] content, LocalDateTime postedAt, User uploadedBy, Comment comment, StoryTask storyTask, Story story) {
         this.id = id;
+        this.name = name;
         this.contentType = contentType;
         this.content = content;
         this.postedAt = postedAt;
@@ -51,16 +55,22 @@ public class Attachment {
         this.story = story;
     }
 
-    public Attachment(Long id, String contentType, Blob content, LocalDateTime postedAt, StoryTask storyTask, Story story) {
-        this.id = id;
+    public Attachment(String name, String contentType, byte[] content, User uploadedBy) {
+        this.name = name;
         this.contentType = contentType;
         this.content = content;
-        this.postedAt = postedAt;
-        this.storyTask = storyTask;
-        this.story = story;
+        this.uploadedBy = uploadedBy;
     }
 
     public Attachment() {
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public Comment getComment() {
+        return comment;
     }
 
     public User getUploadedBy() {
@@ -79,8 +89,8 @@ public class Attachment {
         return this.contentType;
     }
 
-    public Blob getContent() {
-        return this.content;
+    public byte[] getContent() {
+        return content;
     }
 
     public LocalDateTime getPostedAt() {
@@ -103,7 +113,7 @@ public class Attachment {
         this.contentType = contentType;
     }
 
-    public void setContent(Blob content) {
+    public void setContent(byte[] content) {
         this.content = content;
     }
 
@@ -124,6 +134,14 @@ public class Attachment {
     }
 
     public void setStoryComment(Comment comment) {
+        this.comment = comment;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setComment(Comment comment) {
         this.comment = comment;
     }
 

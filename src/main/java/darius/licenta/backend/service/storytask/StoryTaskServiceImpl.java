@@ -1,36 +1,36 @@
 package darius.licenta.backend.service.storytask;
 
-import darius.licenta.backend.domain.sql.Comment;
-import darius.licenta.backend.domain.sql.Story;
-import darius.licenta.backend.domain.sql.StoryTask;
-import darius.licenta.backend.domain.sql.User;
+import darius.licenta.backend.domain.sql.*;
 import darius.licenta.backend.dto.normal.comment.storytask.InsertStoryTaskCommentDto;
 import darius.licenta.backend.dto.normal.storytask.InsertStoryTaskDto;
 import darius.licenta.backend.dto.normal.storytask.ResponseStoryTaskDto;
 import darius.licenta.backend.dto.normal.storytask.UpdateStoryTaskDto;
 import darius.licenta.backend.dto.normal.storytask.fullinformation.FullInformationStoryTaskDto;
 import darius.licenta.backend.exception.UserNotFoundException;
+import darius.licenta.backend.mapper.normal.attachment.AttachmentMapper;
 import darius.licenta.backend.mapper.normal.comment.CommentMapper;
 import darius.licenta.backend.mapper.normal.storytask.StoryTaskMapper;
 import darius.licenta.backend.payload.response.ApiResponse;
-import darius.licenta.backend.persistence.jpa.CommentRepository;
-import darius.licenta.backend.persistence.jpa.StoryRepository;
-import darius.licenta.backend.persistence.jpa.StoryTaskRepository;
-import darius.licenta.backend.persistence.jpa.UserRepository;
+import darius.licenta.backend.persistence.jpa.*;
+import darius.licenta.backend.service.attachment.CommentAttachmentOperationsService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class StoryTaskServiceImpl implements StoryTaskService {
 
+    private final CommentAttachmentOperationsService commentAttachmentOperationsService;
+
     private final StoryTaskRepository storyTaskRepository;
+
+    private final AttachmentRepository attachmentRepository;
 
     private final StoryRepository storyRepository;
 
@@ -42,24 +42,33 @@ public class StoryTaskServiceImpl implements StoryTaskService {
 
     private final CommentMapper commentMapper;
 
-    public StoryTaskServiceImpl(StoryTaskRepository storyTaskRepository, StoryRepository storyRepository, UserRepository userRepository, CommentRepository commentRepository, StoryTaskMapper storyTaskMapper, CommentMapper commentMapper) {
+    private final AttachmentMapper attachmentMapper;
+
+    @Autowired
+    public StoryTaskServiceImpl(CommentAttachmentOperationsService commentAttachmentOperationsService, StoryTaskRepository storyTaskRepository,
+                                AttachmentRepository attachmentRepository, StoryRepository storyRepository, UserRepository userRepository,
+                                CommentRepository commentRepository, StoryTaskMapper storyTaskMapper, CommentMapper commentMapper,
+                                AttachmentMapper attachmentMapper) {
+        this.commentAttachmentOperationsService = commentAttachmentOperationsService;
         this.storyTaskRepository = storyTaskRepository;
+        this.attachmentRepository = attachmentRepository;
         this.storyRepository = storyRepository;
         this.userRepository = userRepository;
         this.commentRepository = commentRepository;
         this.storyTaskMapper = storyTaskMapper;
         this.commentMapper = commentMapper;
+        this.attachmentMapper = attachmentMapper;
     }
 
 
     @Override
-    public ApiResponse<ResponseStoryTaskDto> insert(InsertStoryTaskDto storyTaskDto) {
+    public ApiResponse<ResponseStoryTaskDto> insert(InsertStoryTaskDto storyTaskDto, String username) {
         StoryTask storyTask = storyTaskMapper.insertStoryTaskDtoToStoryTask(storyTaskDto);
-        User createdBy = userRepository.getById(storyTask.getCreatedBy().getId());
+        Optional<User> createdBy = userRepository.findByUsername(username);
         if (storyTaskDto.getCreatedAt() == null) {
             storyTask.setCreatedAt(LocalDateTime.now());
         }
-        storyTask.setCreatedBy(createdBy);
+        createdBy.ifPresent(storyTask::setCreatedBy);
         if (storyTaskDto.getAssignedToId() == null) {
             storyTask.setAssignedTo(storyTask.getCreatedBy());
         } else {
@@ -73,14 +82,25 @@ public class StoryTaskServiceImpl implements StoryTaskService {
     }
 
     @Override
-    public ApiResponse<ResponseStoryTaskDto> insertStoryTaskComment(InsertStoryTaskCommentDto storyTaskCommentDto) {
+    public ApiResponse<FullInformationStoryTaskDto> insertStoryTaskComment(InsertStoryTaskCommentDto storyTaskCommentDto, String username) {
+        Optional<User> user = userRepository.findByUsername(username);
         Comment comment = commentMapper.insertStoryTaskCommentDtoToComment(storyTaskCommentDto);
+        StoryTask storyTask = storyTaskRepository.getById(storyTaskCommentDto.getStoryTaskId());
+
+        user.ifPresent(comment::setPostedBy);
         commentRepository.save(comment);
-        StoryTask storyTask = storyTaskRepository.getById(comment.getStoryTask().getId());
+        if (!CollectionUtils.isEmpty(storyTaskCommentDto.getCommentAttachments()) && user.isPresent()) {
+            Set<Attachment> savedAttachments = new HashSet<>();
+            for (MultipartFile multipartFile : storyTaskCommentDto.getCommentAttachments()) {
+                savedAttachments.add(commentAttachmentOperationsService.insertCommentAttachment(multipartFile, username, user.get(), storyTask));
+            }
+            comment.setCommentAttachments(savedAttachments);
+        }
+        commentRepository.save(comment);
         storyTask.addStoryTaskComment(comment);
         storyTaskRepository.save(storyTask);
 
-        ResponseStoryTaskDto fullDetailsResponseStoryDto = storyTaskMapper.storyTaskToResponseStoryTaskDto(storyTask);
+        FullInformationStoryTaskDto fullDetailsResponseStoryDto = storyTaskMapper.storyTaskToFullInformationStoryTaskDto(storyTask);
         return new ApiResponse<>(fullDetailsResponseStoryDto, HttpStatus.OK);
     }
 
