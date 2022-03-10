@@ -1,9 +1,6 @@
 package darius.licenta.backend.service.attachment;
 
-import darius.licenta.backend.domain.sql.Attachment;
-import darius.licenta.backend.domain.sql.Story;
-import darius.licenta.backend.domain.sql.StoryTask;
-import darius.licenta.backend.domain.sql.User;
+import darius.licenta.backend.domain.sql.*;
 import darius.licenta.backend.dto.normal.attachment.AttachmentDto;
 import darius.licenta.backend.exception.UserNotFoundException;
 import darius.licenta.backend.mapper.normal.attachment.AttachmentMapper;
@@ -124,13 +121,14 @@ public class AttachmentServiceImpl implements AttachmentService, CommentAttachme
     }
 
     @Override
-    public Attachment insertCommentAttachment(MultipartFile multipartFile, String uploadedByUsername, User user, StoryTask storyTask) {
+    public Attachment insertCommentAttachment(MultipartFile multipartFile, String uploadedByUsername, User user, Comment comment, StoryTask storyTask) {
         Attachment attachment = null;
         try {
             String fileName = StringUtils.cleanPath(Objects.requireNonNull(multipartFile.getOriginalFilename()));
             if (user != null) {
                 attachment = new Attachment(fileName, multipartFile.getContentType(), multipartFile.getBytes(), user);
                 attachment.setStoryTask(storyTask);
+                attachment.setComment(comment);
                 attachment = attachmentRepository.save(attachment);
             } else {
                 throw new UserNotFoundException(uploadedByUsername + " user could not be found");
@@ -142,13 +140,14 @@ public class AttachmentServiceImpl implements AttachmentService, CommentAttachme
     }
 
     @Override
-    public Attachment insertCommentAttachment(MultipartFile multipartFile, String uploadedByUsername, User user, Story story) {
+    public Attachment insertCommentAttachment(MultipartFile multipartFile, String uploadedByUsername, User user, Comment comment, Story story) {
         Attachment attachment = null;
         try {
             String fileName = StringUtils.cleanPath(Objects.requireNonNull(multipartFile.getOriginalFilename()));
             if (user != null) {
                 attachment = new Attachment(fileName, multipartFile.getContentType(), multipartFile.getBytes(), user);
                 attachment.setStory(story);
+                attachment.setComment(comment);
                 attachment = attachmentRepository.save(attachment);
             } else {
                 throw new UserNotFoundException(uploadedByUsername + " user could not be found");

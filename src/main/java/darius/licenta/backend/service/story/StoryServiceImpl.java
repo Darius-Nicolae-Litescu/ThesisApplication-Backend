@@ -19,6 +19,7 @@ import darius.licenta.backend.service.attachment.CommentAttachmentOperationsServ
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -53,6 +54,8 @@ public class StoryServiceImpl implements StoryService {
 
     private final CommentMapper commentMapper;
 
+    @Value("${api.rest.base.uri}")
+    private String restApiBaseUri;
 
     @Autowired
     public StoryServiceImpl(CommentAttachmentOperationsService commentAttachmentOperationsService, UserRepository userRepository, StoryRepository storyRepository, CategoryRepository categoryRepository, PriorityRepository priorityRepository, CommentRepository commentRepository, SoftwareApplicationRepository softwareApplicationRepository, StoryMapper storyMapper, CommentMapper commentMapper) {
@@ -94,6 +97,7 @@ public class StoryServiceImpl implements StoryService {
     }
 
     @Override
+    @Transactional
     public ApiResponse<FullDetailsResponseStoryDto> insertStoryComment(InsertStoryCommentDto insertStoryCommentDto, String username) {
         Optional<User> user = userRepository.findByUsername(username);
         Comment comment = commentMapper.insertStoryCommentDtoToComment(insertStoryCommentDto);
@@ -102,13 +106,10 @@ public class StoryServiceImpl implements StoryService {
         user.ifPresent(comment::setPostedBy);
         commentRepository.save(comment);
         if (!CollectionUtils.isEmpty(insertStoryCommentDto.getCommentAttachments()) && user.isPresent()) {
-            Set<Attachment> savedAttachments = new HashSet<>();
             for (MultipartFile multipartFile : insertStoryCommentDto.getCommentAttachments()) {
-                savedAttachments.add(commentAttachmentOperationsService.insertCommentAttachment(multipartFile, username, user.get(), story));
+                commentAttachmentOperationsService.insertCommentAttachment(multipartFile, username, user.get(), comment, story);
             }
-            comment.setCommentAttachments(savedAttachments);
         }
-        commentRepository.save(comment);
         story.addStoryComment(comment);
         storyRepository.save(story);
 
@@ -126,6 +127,8 @@ public class StoryServiceImpl implements StoryService {
                 for (Attachment attachment : comment.getCommentAttachments()) {
                     AttachmentResponseDto attachmentResponseDto = new AttachmentResponseDto();
                     String uri = "http://localhost:8080/" + "api/attachment/" + attachment.getId();
+                    attachmentResponseDto.setId(attachment.getId());
+                    attachmentResponseDto.setPostedAt(attachment.getPostedAt());
                     attachmentResponseDto.setName(attachment.getName());
                     attachmentResponseDto.setSize(attachment.getContent().length);
                     attachmentResponseDto.setContentType(attachment.getContentType());
@@ -139,7 +142,7 @@ public class StoryServiceImpl implements StoryService {
                 commentDto.getCommentAttachments().forEach(commentAttachmentDto -> {
                     commentDto.getAttachmentResponseDto().add(attachmentResponseDtos.get(commentAttachmentDto.getId()));
                 });
-                ;
+
             });
             return new ApiResponse<>(fullDetailsResponseStoryDto, HttpStatus.OK);
         }

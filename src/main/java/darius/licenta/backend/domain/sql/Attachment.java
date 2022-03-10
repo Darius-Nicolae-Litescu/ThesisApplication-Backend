@@ -19,7 +19,7 @@ public class Attachment {
     @Column(name = "name", nullable = false, length = 256)
     private String name;
 
-    @Column(name = "content_type", nullable = false, length = 256)
+    @Column(name = "content_type", nullable = false, length = 1024)
     private String contentType;
 
     @Column(name = "content", nullable = false)
@@ -36,11 +36,12 @@ public class Attachment {
     @ManyToOne(fetch = FetchType.LAZY, optional = true)
     private Comment comment;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = true)
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "story_task_id")
     private StoryTask storyTask;
 
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "story_id", nullable = true, insertable = false, updatable = false)
+    @JoinColumn(name = "story_id")
     private Story story;
 
     public Attachment(Long id, String name, String contentType, byte[] content, LocalDateTime postedAt, User uploadedBy, Comment comment, StoryTask storyTask, Story story) {
