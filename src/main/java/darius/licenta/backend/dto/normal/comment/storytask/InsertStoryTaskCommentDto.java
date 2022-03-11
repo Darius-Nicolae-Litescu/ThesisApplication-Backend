@@ -4,9 +4,7 @@ import lombok.Data;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.Serializable;
-import java.sql.Blob;
 import java.util.List;
-import java.util.Set;
 
 @Data
 public class InsertStoryTaskCommentDto implements Serializable {

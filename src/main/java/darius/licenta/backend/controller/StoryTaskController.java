@@ -35,7 +35,7 @@ public class StoryTaskController {
         return storyTaskService.insert(insertStoryTaskDto, username);
     }
 
-    @PostMapping("/task/comment")
+    @PostMapping(value = "/task/comment", consumes = "multipart/form-data")
     @Secured(UserRole.Rank.ADMIN)
     public ApiResponse<FullInformationStoryTaskDto> addComment(Principal principal, @ModelAttribute InsertStoryTaskCommentDto insertStoryCommentDto) {
         String username = principal.getName();

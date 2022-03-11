@@ -25,10 +25,13 @@ public class AttachmentController {
     @GetMapping("/{id}")
     public ResponseEntity<byte[]> getFile(@PathVariable Long id) {
         Attachment attachment = commentAttachmentOperationsService.getAttachmentById(id);
-        return ResponseEntity.ok()
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + attachment.getName())
+
+        ResponseEntity<byte[]> responseEntity = ResponseEntity.ok()
+                .header("filename", attachment.getName())
                 .contentType(MediaType.APPLICATION_OCTET_STREAM)
                 .body(attachment.getContent());
+
+        return responseEntity;
     }
 
 }

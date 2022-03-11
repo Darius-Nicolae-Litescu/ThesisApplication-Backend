@@ -1,6 +1,7 @@
 package darius.licenta.backend.configuration.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -17,8 +18,12 @@ import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Configuration
 @EnableWebSecurity
@@ -50,11 +55,40 @@ public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    CorsConfigurationSource corsConfigurationSource() {
+    public CorsConfigurationSource corsConfigurationSource() {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", new CorsConfiguration().applyPermitDefaultValues());
+
+        final CorsConfiguration configuration = new CorsConfiguration();
+
+        List<String> allowedOrigins = new ArrayList<>();
+        allowedOrigins.add("http://localhost:3000");
+        allowedOrigins.add("http://localhost:3000");
+
+        configuration.setAllowedOrigins(allowedOrigins);
+        List<String> allowedMethods = new ArrayList<>();
+        allowedMethods.add("HEAD");
+        allowedMethods.add("GET");
+        allowedMethods.add("POST");
+        allowedMethods.add("PUT");
+        allowedMethods.add("DELETE");
+        allowedMethods.add("PATCH");
+
+        configuration.setAllowedMethods(allowedMethods);
+
+        configuration.setAllowCredentials(true);
+
+        List<String> allowedHeaders = new ArrayList<>();
+        allowedHeaders.add("Authorization");
+        allowedHeaders.add("Cache-Control");
+        allowedHeaders.add("Content-Type");
+        allowedHeaders.add("Content-Disposition");
+
+        configuration.setAllowedHeaders(allowedHeaders);
+        configuration.addExposedHeader("Filename");
+        source.registerCorsConfiguration("/**", configuration);
         return source;
     }
+
 
     @Override
     public void configure(WebSecurity web) throws Exception {
