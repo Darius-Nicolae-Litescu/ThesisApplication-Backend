@@ -1,11 +1,13 @@
 package darius.licenta.backend.service.story;
 
 import darius.licenta.backend.domain.sql.*;
+import darius.licenta.backend.dto.normal.attachment.AttachmentResponseDto;
 import darius.licenta.backend.dto.normal.comment.story.InsertStoryCommentDto;
 import darius.licenta.backend.dto.normal.story.request.insert.InsertStoryDto;
 import darius.licenta.backend.dto.normal.story.request.update.UpdateStoryCategories;
 import darius.licenta.backend.dto.normal.story.request.update.UpdateStoryPriority;
 import darius.licenta.backend.dto.normal.story.request.update.UpdateStorySoftwareApplication;
+import darius.licenta.backend.dto.normal.story.response.fulldetails.CommentDto;
 import darius.licenta.backend.dto.normal.story.response.fulldetails.FullDetailsResponseStoryDto;
 import darius.licenta.backend.dto.normal.story.response.table.ResponseStoryDtoWithoutFullDetails;
 import darius.licenta.backend.mapper.normal.comment.CommentMapper;
@@ -13,9 +15,11 @@ import darius.licenta.backend.mapper.normal.story.StoryMapper;
 import darius.licenta.backend.payload.response.ApiResponse;
 import darius.licenta.backend.payload.response.PaginatedResponse;
 import darius.licenta.backend.persistence.jpa.*;
+import darius.licenta.backend.service.attachment.CommentAttachmentOperationsService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -23,6 +27,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -30,6 +35,10 @@ import java.util.stream.Collectors;
 @Service
 public class StoryServiceImpl implements StoryService {
     Logger logger = LoggerFactory.getLogger(StoryServiceImpl.class);
+
+    private final CommentAttachmentOperationsService commentAttachmentOperationsService;
+
+    private final UserRepository userRepository;
 
     private final StoryRepository storyRepository;
 
@@ -45,8 +54,13 @@ public class StoryServiceImpl implements StoryService {
 
     private final CommentMapper commentMapper;
 
+    @Value("${api.rest.base.uri}")
+    private String restApiBaseUri;
+
     @Autowired
-    public StoryServiceImpl(StoryRepository storyRepository, CategoryRepository categoryRepository, PriorityRepository priorityRepository, CommentRepository commentRepository, SoftwareApplicationRepository softwareApplicationRepository, StoryMapper storyMapper, CommentMapper commentMapper) {
+    public StoryServiceImpl(CommentAttachmentOperationsService commentAttachmentOperationsService, UserRepository userRepository, StoryRepository storyRepository, CategoryRepository categoryRepository, PriorityRepository priorityRepository, CommentRepository commentRepository, SoftwareApplicationRepository softwareApplicationRepository, StoryMapper storyMapper, CommentMapper commentMapper) {
+        this.commentAttachmentOperationsService = commentAttachmentOperationsService;
+        this.userRepository = userRepository;
         this.storyRepository = storyRepository;
         this.categoryRepository = categoryRepository;
         this.priorityRepository = priorityRepository;
@@ -56,36 +70,50 @@ public class StoryServiceImpl implements StoryService {
         this.commentMapper = commentMapper;
     }
 
+    @Transactional
     @Override
-    public ApiResponse<FullDetailsResponseStoryDto> insert(InsertStoryDto insertStoryDto) {
+    public ApiResponse<FullDetailsResponseStoryDto> insert(InsertStoryDto insertStoryDto, String username) {
+        Optional<User> user = userRepository.findByUsername(username);
         Story story = storyMapper.insertStoryDtoToStory(insertStoryDto);
+        user.ifPresent(story::setCreatedBy);
         story = storyRepository.save(story);
 
-        List<Long> categoriesIds = story.getCategories().stream().map(category -> category.getId()).collect(Collectors.toList());
-        Set<Category> categories = categoryRepository.findByIdIn(categoriesIds);
-        Optional<Priority> priority = priorityRepository.findById(story.getPriority().getId());
-        if (CollectionUtils.isEmpty(categories) || !priority.isPresent()) {
-            return new ApiResponse<>("One of the categories or the priority is not found", null, HttpStatus.NOT_FOUND);
+        Set<Category> categories = categoryRepository.findByIdIn(insertStoryDto.getCategoryIds());
+        Optional<Priority> priority = priorityRepository.findById(insertStoryDto.getPriorityId());
+        Optional<SoftwareApplication> softwareApplication = softwareApplicationRepository.findById(insertStoryDto.getSoftwareApplicationId());
+
+        if (CollectionUtils.isEmpty(categories) || !priority.isPresent() || !softwareApplication.isPresent()) {
+            return new ApiResponse<>("One of the categories or the priority or software application is not found", null, HttpStatus.NOT_FOUND);
         }
 
         Story databaseStory = storyRepository.getById(story.getId());
         databaseStory.setCategories(categories);
         databaseStory.setPriority(priority.get());
+        databaseStory.setSoftwareApplication(softwareApplication.get());
         databaseStory = storyRepository.saveAndFlush(story);
 
-        FullDetailsResponseStoryDto responseStoryDto = storyMapper.storyToStoryDto(databaseStory);
+        FullDetailsResponseStoryDto responseStoryDto = storyMapper.storyToFullDetailsResponseStoryDto(databaseStory);
         return new ApiResponse<>(responseStoryDto, HttpStatus.OK);
     }
 
     @Override
-    public ApiResponse<FullDetailsResponseStoryDto> insertStoryComment(InsertStoryCommentDto insertStoryCommentDto) {
+    @Transactional
+    public ApiResponse<FullDetailsResponseStoryDto> insertStoryComment(InsertStoryCommentDto insertStoryCommentDto, String username) {
+        Optional<User> user = userRepository.findByUsername(username);
         Comment comment = commentMapper.insertStoryCommentDtoToComment(insertStoryCommentDto);
+        Story story = storyRepository.getById(insertStoryCommentDto.getStoryId());
+
+        user.ifPresent(comment::setPostedBy);
         commentRepository.save(comment);
-        Story story = storyRepository.getById(comment.getStory().getId());
+        if (!CollectionUtils.isEmpty(insertStoryCommentDto.getCommentAttachments()) && user.isPresent()) {
+            for (MultipartFile multipartFile : insertStoryCommentDto.getCommentAttachments()) {
+                commentAttachmentOperationsService.insertCommentAttachment(multipartFile, username, user.get(), comment, story);
+            }
+        }
         story.addStoryComment(comment);
         storyRepository.save(story);
 
-        FullDetailsResponseStoryDto fullDetailsResponseStoryDto = storyMapper.storyToStoryDto(story);
+        FullDetailsResponseStoryDto fullDetailsResponseStoryDto = storyMapper.storyToFullDetailsResponseStoryDto(story);
         return new ApiResponse<>(fullDetailsResponseStoryDto, HttpStatus.OK);
     }
 
@@ -93,7 +121,29 @@ public class StoryServiceImpl implements StoryService {
     public ApiResponse<FullDetailsResponseStoryDto> findById(Long id) {
         Optional<Story> story = storyRepository.findById(id);
         if (story.isPresent()) {
-            FullDetailsResponseStoryDto fullDetailsResponseStoryDto = storyMapper.storyToStoryDto(story.get());
+            HashMap<Long, AttachmentResponseDto> attachmentResponseDtos = new HashMap<>();
+            Set<CommentDto> commentDtos = new HashSet<>();
+            for (Comment comment : story.get().getComments()) {
+                for (Attachment attachment : comment.getCommentAttachments()) {
+                    AttachmentResponseDto attachmentResponseDto = new AttachmentResponseDto();
+                    String uri = "http://localhost:8080/" + "api/attachment/" + attachment.getId();
+                    attachmentResponseDto.setId(attachment.getId());
+                    attachmentResponseDto.setPostedAt(attachment.getPostedAt());
+                    attachmentResponseDto.setName(attachment.getName());
+                    attachmentResponseDto.setSize(attachment.getContent().length);
+                    attachmentResponseDto.setContentType(attachment.getContentType());
+                    attachmentResponseDto.setUrl(uri);
+                    attachmentResponseDtos.put(attachment.getId(), attachmentResponseDto);
+                }
+            }
+            FullDetailsResponseStoryDto fullDetailsResponseStoryDto = storyMapper.storyToFullDetailsResponseStoryDto(story.get());
+            fullDetailsResponseStoryDto.getComments().forEach(commentDto -> {
+                commentDto.setAttachmentResponseDto(new ArrayList<>());
+                commentDto.getCommentAttachments().forEach(commentAttachmentDto -> {
+                    commentDto.getAttachmentResponseDto().add(attachmentResponseDtos.get(commentAttachmentDto.getId()));
+                });
+
+            });
             return new ApiResponse<>(fullDetailsResponseStoryDto, HttpStatus.OK);
         }
         return new ApiResponse<>(null, HttpStatus.NOT_FOUND);
@@ -103,13 +153,13 @@ public class StoryServiceImpl implements StoryService {
     public ApiResponse<FullDetailsResponseStoryDto> updateCategories(UpdateStoryCategories updateStoryCategories) {
         Optional<Story> story = storyRepository.findById(updateStoryCategories.getId());
         if (story.isPresent()) {
-            List<Long> categoriesIds = updateStoryCategories.getCategories().stream().map(category -> category.getId()).collect(Collectors.toList());
+            List<Long> categoriesIds = updateStoryCategories.getCategories().stream().map(UpdateStoryCategories.CategoryDto::getId).collect(Collectors.toList());
             Set<Category> categories = new HashSet<>(categoryRepository.findAllById(categoriesIds));
             ;
             if (!CollectionUtils.isEmpty(categories)) {
                 story.get().setCategories(categories);
                 storyRepository.save(story.get());
-                FullDetailsResponseStoryDto fullDetailsResponseStoryDto = storyMapper.storyToStoryDto(story.get());
+                FullDetailsResponseStoryDto fullDetailsResponseStoryDto = storyMapper.storyToFullDetailsResponseStoryDto(story.get());
                 return new ApiResponse<>(fullDetailsResponseStoryDto, HttpStatus.OK);
             } else {
                 return new ApiResponse<>("Category not found", null, HttpStatus.NOT_FOUND);
@@ -127,7 +177,7 @@ public class StoryServiceImpl implements StoryService {
             if (priority.isPresent()) {
                 story.get().setPriority(priority.get());
                 storyRepository.save(story.get());
-                FullDetailsResponseStoryDto fullDetailsResponseStoryDto = storyMapper.storyToStoryDto(story.get());
+                FullDetailsResponseStoryDto fullDetailsResponseStoryDto = storyMapper.storyToFullDetailsResponseStoryDto(story.get());
                 return new ApiResponse<>(fullDetailsResponseStoryDto, HttpStatus.OK);
             } else {
                 return new ApiResponse<>("Priority not found", null, HttpStatus.NOT_FOUND);
@@ -145,7 +195,7 @@ public class StoryServiceImpl implements StoryService {
             if (softwareApplication.isPresent()) {
                 story.get().setSoftwareApplication(softwareApplication.get());
                 storyRepository.save(story.get());
-                FullDetailsResponseStoryDto fullDetailsResponseStoryDto = storyMapper.storyToStoryDto(story.get());
+                FullDetailsResponseStoryDto fullDetailsResponseStoryDto = storyMapper.storyToFullDetailsResponseStoryDto(story.get());
                 return new ApiResponse<>(fullDetailsResponseStoryDto, HttpStatus.OK);
             } else {
                 return new ApiResponse<>("Software application not found", null, HttpStatus.NOT_FOUND);
@@ -160,7 +210,7 @@ public class StoryServiceImpl implements StoryService {
         Optional<Story> story = storyRepository.findById(id);
         if (story.isPresent()) {
             storyRepository.delete(story.get());
-            FullDetailsResponseStoryDto responseStoryDto = storyMapper.storyToStoryDto(story.get());
+            FullDetailsResponseStoryDto responseStoryDto = storyMapper.storyToFullDetailsResponseStoryDto(story.get());
             return new ApiResponse<>(responseStoryDto, HttpStatus.ACCEPTED);
         } else {
             return new ApiResponse<>("Story id not found ... ", null, HttpStatus.NOT_FOUND);
@@ -252,7 +302,7 @@ public class StoryServiceImpl implements StoryService {
         PaginatedResponse<ResponseStoryDtoWithoutFullDetails> paginatedResponse = null;
         try {
             List<ResponseStoryDtoWithoutFullDetails> allStoriesDto = allStories.getContent().stream()
-                    .map(story -> storyMapper.storyToResponseStoryDtoWithoutFullDetails(story)).collect(Collectors.toList());
+                    .map(storyMapper::storyToResponseStoryDtoWithoutFullDetails).collect(Collectors.toList());
 
             paginatedResponse = new PaginatedResponse<>(allStories.getNumber(), allStories.getSize(), allStories.getNumberOfElements(),
                     allStoriesDto, allStories.getTotalElements(), allStories.getTotalPages());

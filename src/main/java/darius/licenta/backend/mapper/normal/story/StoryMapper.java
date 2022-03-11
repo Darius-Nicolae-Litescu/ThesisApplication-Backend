@@ -2,12 +2,12 @@ package darius.licenta.backend.mapper.normal.story;
 
 import darius.licenta.backend.domain.sql.Category;
 import darius.licenta.backend.domain.sql.Story;
-import darius.licenta.backend.dto.normal.story.response.fulldetails.FullDetailsResponseStoryDto;
-import darius.licenta.backend.dto.normal.story.response.table.ResponseStoryDtoWithoutFullDetails;
+import darius.licenta.backend.dto.normal.story.request.insert.InsertStoryDto;
 import darius.licenta.backend.dto.normal.story.request.update.UpdateStoryCategories;
 import darius.licenta.backend.dto.normal.story.request.update.UpdateStoryPriority;
 import darius.licenta.backend.dto.normal.story.request.update.UpdateStorySoftwareApplication;
-import darius.licenta.backend.dto.normal.story.request.insert.InsertStoryDto;
+import darius.licenta.backend.dto.normal.story.response.fulldetails.FullDetailsResponseStoryDto;
+import darius.licenta.backend.dto.normal.story.response.table.ResponseStoryDtoWithoutFullDetails;
 import org.mapstruct.*;
 
 import java.util.Set;
@@ -15,23 +15,9 @@ import java.util.stream.Collectors;
 
 @Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, componentModel = "spring")
 public interface StoryMapper {
-    Story insertStoryDtoToStory(InsertStoryDto insertStoryDto);
-
-    InsertStoryDto storyToInsertStoryDto(Story story);
-
-    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    void updateStoryFromInsertStoryDto(InsertStoryDto insertStoryDto, @MappingTarget Story story);
-
     default Set<Long> categoriesToCategoryIds(Set<Category> categories) {
         return categories.stream().map(Category::getId).collect(Collectors.toSet());
     }
-
-    Story storyDtoToStory(FullDetailsResponseStoryDto fullDetailsResponseStoryDto);
-
-    FullDetailsResponseStoryDto storyToStoryDto(Story story);
-
-    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    void updateStoryFromStoryDto(FullDetailsResponseStoryDto fullDetailsResponseStoryDto, @MappingTarget Story story);
 
     Story updateStoryCategoriesToStory(UpdateStoryCategories updateStoryCategories);
 
@@ -60,4 +46,27 @@ public interface StoryMapper {
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void updateResponseStoryDtoWithoutFullDetails(ResponseStoryDtoWithoutFullDetails responseStoryDtoWithoutFullDetails, @MappingTarget Story story);
+
+    Story fullDetailsResponseStoryDtoToStory(FullDetailsResponseStoryDto fullDetailsResponseStoryDto);
+
+    FullDetailsResponseStoryDto storyToFullDetailsResponseStoryDto(Story story);
+
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    void updateStoryFromFullDetailsResponseStoryDto(FullDetailsResponseStoryDto fullDetailsResponseStoryDto, @MappingTarget Story story);
+
+    @Mapping(source = "priorityId", target = "priority.id")
+    @Mapping(source = "softwareApplicationId", target = "softwareApplication.id")
+    Story insertStoryDtoToStory(InsertStoryDto insertStoryDto);
+
+    @InheritInverseConfiguration(name = "insertStoryDtoToStory")
+    @Mapping(target = "categoryIds", expression = "java(categoriesToCategoryIds(story.getCategories()))")
+    InsertStoryDto storyToInsertStoryDto(Story story);
+
+    @InheritConfiguration(name = "insertStoryDtoToStory")
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    void updateStoryFromInsertStoryDto(InsertStoryDto insertStoryDto, @MappingTarget Story story);
+
+    default Set<Long> categoriesToCategoryIds1(Set<Category> categories) {
+        return categories.stream().map(Category::getId).collect(Collectors.toSet());
+    }
 }

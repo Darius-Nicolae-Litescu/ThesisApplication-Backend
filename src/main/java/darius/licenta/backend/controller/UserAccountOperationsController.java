@@ -4,6 +4,7 @@ import darius.licenta.backend.domain.sql.UserRole;
 import darius.licenta.backend.dto.normal.user.CreateUserDto;
 import darius.licenta.backend.dto.normal.user.ResponseUserDto;
 import darius.licenta.backend.dto.normal.user.ResponseUserWithJwtDto;
+import darius.licenta.backend.dto.normal.user.UpdateUserBioDto;
 import darius.licenta.backend.payload.response.ApiResponse;
 import darius.licenta.backend.service.user.UserAccountOperationsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.security.Principal;
 
 @RestController
 @RequestMapping("/api/users")
@@ -35,21 +37,27 @@ public class UserAccountOperationsController {
         return userService.insert(userDto);
     }
 
-    @DeleteMapping(value = "/{username}")
+    @PutMapping("/update/bio")
+    public ApiResponse<ResponseUserDto> updateProfilePicture(Principal principal, @RequestBody UpdateUserBioDto updateUserBioDto) {
+        String username = principal.getName();
+        return userService.updateUserBio(updateUserBioDto, username);
+    }
+
+    @DeleteMapping(value = "/username/{username}")
     @Secured(UserRole.Rank.ADMIN)
     public ApiResponse<ResponseUserDto> delete(@PathVariable String username) {
         return userService.deleteUserByUsername(username);
     }
 
-    @GetMapping(value = "/{username}")
+    @GetMapping(value = "/username/{username}")
     @Secured(UserRole.Rank.ADMIN)
     public ApiResponse<ResponseUserDto> search(@PathVariable String username) {
         return userService.search(username);
     }
 
-    @GetMapping(value = "/me")
+    @GetMapping(value = "/whoami")
     @Secured({UserRole.Rank.ADMIN,UserRole.Rank.USER})
-    public ApiResponse<ResponseUserDto> whoami(HttpServletRequest req) {
+    public ApiResponse<ResponseUserWithJwtDto> whoami(HttpServletRequest req) {
         return userService.whoami(req);
     }
 

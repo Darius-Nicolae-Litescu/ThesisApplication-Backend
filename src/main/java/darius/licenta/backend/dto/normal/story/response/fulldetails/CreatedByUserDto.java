@@ -4,10 +4,10 @@ import lombok.Data;
 
 import java.io.Serializable;
 import java.sql.Blob;
-import java.time.LocalDateTime;
 
 @Data
-public class AttachmentDto implements Serializable {
+public class CreatedByUserDto implements Serializable {
     private final Long id;
-    private final LocalDateTime postedAt;
+    private final String username;
+    private final Blob profilePicture;
 }

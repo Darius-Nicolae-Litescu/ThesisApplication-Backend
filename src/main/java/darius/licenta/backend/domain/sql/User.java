@@ -29,6 +29,9 @@ public class User {
     @Lob
     private Blob profilePicture;
 
+    @Column(name = "bio_description", nullable = true, length = 3000)
+    private String bioDescription;
+
     @Column(name = "email", nullable = false, length = 256)
     private String email;
 
@@ -42,6 +45,31 @@ public class User {
 
     @OneToMany(mappedBy = "uploadedBy", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<Attachment> userAttachments;
+
+    @OneToMany(mappedBy = "postedBy", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Set<Comment> userComments;
+
+    @OneToMany(mappedBy = "createdBy", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Set<Story> userStories;
+
+    @OneToMany(mappedBy = "createdBy", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Set<StoryTask> userStoryTasks;
+
+    public User(Long id, Employee employee, String username, String password, Blob profilePicture, String bioDescription, String email, Date modificationDate, List<UserRole> userRoles, Set<Attachment> userAttachments, Set<Comment> userComments, Set<Story> userStories, Set<StoryTask> userStoryTasks) {
+        this.id = id;
+        this.employee = employee;
+        this.username = username;
+        this.password = password;
+        this.profilePicture = profilePicture;
+        this.bioDescription = bioDescription;
+        this.email = email;
+        this.modificationDate = modificationDate;
+        this.userRoles = userRoles;
+        this.userAttachments = userAttachments;
+        this.userComments = userComments;
+        this.userStories = userStories;
+        this.userStoryTasks = userStoryTasks;
+    }
 
     public User(Employee employee, String username, String password, String email, Boolean isActive, Boolean isDeleted) {
         this.employee = employee;
@@ -75,6 +103,22 @@ public class User {
         userRoles.add(adminUserRole);
         userRoles.add(moderatorUserRole);
 
+    }
+
+    public Set<Comment> getUserComments() {
+        return userComments;
+    }
+
+    public Set<Story> getUserStories() {
+        return userStories;
+    }
+
+    public Set<StoryTask> getUserStoryTasks() {
+        return userStoryTasks;
+    }
+
+    public String getBioDescription() {
+        return bioDescription;
     }
 
     public Date getModificationDate() {
@@ -137,6 +181,17 @@ public class User {
         this.email = email;
     }
 
+    public void setUserComments(Set<Comment> userComments) {
+        this.userComments = userComments;
+    }
+
+    public void setUserStories(Set<Story> userStories) {
+        this.userStories = userStories;
+    }
+
+    public void setUserStoryTasks(Set<StoryTask> userStoryTasks) {
+        this.userStoryTasks = userStoryTasks;
+    }
 
     public void setProfilePicture(Blob profilePicture) {
         this.profilePicture = profilePicture;
@@ -154,9 +209,18 @@ public class User {
         this.userRoles.remove(userRole);
     }
 
+    public void setBioDescription(String bioDescription) {
+        this.bioDescription = bioDescription;
+    }
+
+    public void addUserComment(Comment comment) {
+        this.userComments.add(comment);
+    }
+
     public void addUserRole(UserRole userRole) {
         this.userRoles.add(userRole);
     }
+
 
     @Override
     public boolean equals(Object o) {
@@ -165,9 +229,9 @@ public class User {
 
         User user = (User) o;
 
-        if (id != null ? !id.equals(user.id) : user.id != null) return false;
-        if (username != null ? !username.equals(user.username) : user.username != null) return false;
-        return email != null ? email.equals(user.email) : user.email == null;
+        if (!Objects.equals(id, user.id)) return false;
+        if (!Objects.equals(username, user.username)) return false;
+        return Objects.equals(email, user.email);
     }
 
     @Override

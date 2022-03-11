@@ -183,6 +183,17 @@ class UserServiceImpl implements UserService, UserAccountOperationsService {
         }
     }
 
+    @Override
+    public ApiResponse<ResponseUserDto> updateUserBio(UpdateUserBioDto updateUserBioDto, String username) {
+        Optional<User> user = userRepository.findByUsername(username);
+        if (user.isPresent()) {
+            user.get().setBioDescription(updateUserBioDto.getBioDescription());
+            userRepository.save(user.get());
+            ResponseUserDto responseUserDto = userMapper.userToResponseUserDto(user.get());
+            return new ApiResponse<>(responseUserDto, HttpStatus.OK);
+        }
+        return new ApiResponse<>(null, HttpStatus.NOT_FOUND);
+    }
 
     @Override
     public ApiResponse<ResponseUserDto> search(String username) {
@@ -197,11 +208,30 @@ class UserServiceImpl implements UserService, UserAccountOperationsService {
     }
 
     @Override
-    public ApiResponse<ResponseUserDto> whoami(HttpServletRequest req) {
+    public ApiResponse<ResponseUserWithJwtDto> whoami(HttpServletRequest req) {
         String username = jwtTokenProvider.getUsername(jwtTokenProvider.resolveToken(req));
-        User user = userRepository.findByUsername(username).orElseThrow(ResourceNotFoundException::new);
-        ResponseUserDto userDto = userMapper.userToResponseUserDto(user);
-        return new ApiResponse<>(userDto, HttpStatus.OK);
+        Optional<User> user = userRepository.findByUsername(username);
+        if (user.isPresent()) {
+            List<UserRole> userRoles = user.get().getUserRoles();
+            String jwtToken = jwtTokenProvider.createToken(username, userRoles);
+            ResponseUserDto responseUserDtoWithoutJwt = userMapper.userToResponseUserDto(user.get());
+            Optional<Employee> employee = employeeRepository.findByUser_Username(username);
+            ResponseUserWithJwtDto responseUserWithJwtDto;
+            if (employee.isPresent()) {
+                String firstName = employee.get().getPerson().getFirstName();
+                String lastname = employee.get().getPerson().getLastName();
+                String positionName = employee.get().getPosition().getName();
+                String positionSeniority = employee.get().getPosition().getSeniorityLevel();
+                responseUserWithJwtDto = new ResponseUserWithJwtDto(responseUserDtoWithoutJwt, jwtToken, userRoles,
+                        firstName, lastname, positionName, positionSeniority);
+
+            } else {
+                responseUserWithJwtDto = new ResponseUserWithJwtDto(responseUserDtoWithoutJwt, jwtToken, userRoles);
+            }
+            return new ApiResponse<>(responseUserWithJwtDto, HttpStatus.OK);
+        } else {
+            throw new UserNotFoundException("Cannot find username");
+        }
     }
 
     @Override

@@ -1,5 +1,6 @@
 package darius.licenta.backend.domain.sql;
 
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
@@ -20,6 +21,10 @@ public class Comment {
     @Column(name = "content", nullable = false, length = 512)
     private String content;
 
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    private User postedBy;
+
+    @CreationTimestamp
     @Column(name = "posted_at", nullable = false)
     private LocalDateTime postedAt;
 
@@ -27,22 +32,33 @@ public class Comment {
     @UpdateTimestamp
     private Date modificationDate;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.LAZY, optional = true)
     private Story story;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.LAZY, optional = true)
     private StoryTask storyTask;
 
     @OneToMany(mappedBy= "comment", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private Set<Attachment> storyAttachments;
+    private Set<Attachment> commentAttachments;
 
-    public Comment(Long id, String content, LocalDateTime postedAt, Story story, StoryTask storyTask, Set<Attachment> storyAttachments) {
+    public Comment(Long id, String content, User postedBy, LocalDateTime postedAt, Date modificationDate, Story story, StoryTask storyTask, Set<Attachment> commentAttachment) {
+        this.id = id;
+        this.content = content;
+        this.postedBy = postedBy;
+        this.postedAt = postedAt;
+        this.modificationDate = modificationDate;
+        this.story = story;
+        this.storyTask = storyTask;
+        this.commentAttachments = commentAttachment;
+    }
+
+    public Comment(Long id, String content, LocalDateTime postedAt, Story story, StoryTask storyTask, Set<Attachment> commentAttachment) {
         this.id = id;
         this.content = content;
         this.postedAt = postedAt;
         this.story = story;
         this.storyTask = storyTask;
-        this.storyAttachments = storyAttachments;
+        this.commentAttachments = commentAttachment;
     }
 
     public Comment(Long id, String content, LocalDateTime postedAt, StoryTask storyTask) {
@@ -53,6 +69,10 @@ public class Comment {
     }
 
     public Comment() {
+    }
+
+    public User getPostedBy() {
+        return postedBy;
     }
 
     public Date getModificationDate() {
@@ -67,8 +87,8 @@ public class Comment {
         return story;
     }
 
-    public Set<Attachment> getStoryAttachments() {
-        return storyAttachments;
+    public Set<Attachment> getCommentAttachments() {
+        return commentAttachments;
     }
 
     public Long getId() {
@@ -107,8 +127,12 @@ public class Comment {
         this.story = story;
     }
 
-    public void setStoryAttachments(Set<Attachment> storyAttachments) {
-        this.storyAttachments = storyAttachments;
+    public void setCommentAttachments(Set<Attachment> commentAttachments) {
+        this.commentAttachments = commentAttachments;
+    }
+
+    public void setPostedBy(User postedBy) {
+        this.postedBy = postedBy;
     }
 
     @Override

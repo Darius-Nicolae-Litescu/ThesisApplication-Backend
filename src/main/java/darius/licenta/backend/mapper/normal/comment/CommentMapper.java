@@ -16,20 +16,16 @@ public interface CommentMapper {
     void updateStoryCommentFromStoryCommentDto(StoryCommentDto storyCommentDto, @MappingTarget Comment comment);
 
     @Mapping(source = "storyId", target = "story.id")
+    @Mapping(target = "commentAttachments", ignore = true)
     Comment insertStoryCommentDtoToComment(InsertStoryCommentDto insertStoryCommentDto);
-
-    @Mapping(source = "story.id", target = "storyId")
-    InsertStoryCommentDto commentToInsertStoryCommentDto(Comment comment);
 
     @Mapping(source = "storyId", target = "story.id")
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void updateCommentFromInsertStoryCommentDto(InsertStoryCommentDto insertStoryCommentDto, @MappingTarget Comment comment);
 
     @Mapping(source = "storyTaskId", target = "storyTask.id")
+    @Mapping(target = "commentAttachments", ignore = true)
     Comment insertStoryTaskCommentDtoToComment(InsertStoryTaskCommentDto insertStoryTaskCommentDto);
-
-    @Mapping(source = "storyTask.id", target = "storyTaskId")
-    InsertStoryTaskCommentDto commentToInsertStoryTaskCommentDto(Comment comment);
 
     @Mapping(source = "storyTaskId", target = "storyTask.id")
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)

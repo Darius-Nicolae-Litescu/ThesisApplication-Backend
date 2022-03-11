@@ -1,8 +1,10 @@
 package darius.licenta.backend.domain.sql;
 
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.Objects;
 import java.util.Set;
@@ -19,8 +21,15 @@ public class Story {
     @Column(name = "title", nullable = false, length = 512)
     private String title;
 
-    @Column(name = "description", nullable = false, length = 1024)
+    @Column(name = "description", nullable = false, length = 10000)
     private String description;
+
+    @CreationTimestamp
+    @Column(name = "created_at", nullable = false)
+    private LocalDateTime createdAt;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    private User createdBy;
 
     @Temporal(TemporalType.TIMESTAMP)
     @UpdateTimestamp
@@ -40,11 +49,40 @@ public class Story {
     @OneToMany(mappedBy="story", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<Comment> comments;
 
-    @OneToMany(mappedBy = "story", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "story", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<Attachment> storyAttachments;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = true)
     private SoftwareApplication softwareApplication;
+
+    public Story(Long id, String title, String description, LocalDateTime createdAt, User createdBy, Date modificationDate, Set<Category> categories, Set<StoryTask> storySubtasks, Priority priority, Set<Comment> comments, Set<Attachment> storyAttachments, SoftwareApplication softwareApplication) {
+        this.id = id;
+        this.title = title;
+        this.description = description;
+        this.createdAt = createdAt;
+        this.createdBy = createdBy;
+        this.modificationDate = modificationDate;
+        this.categories = categories;
+        this.storySubtasks = storySubtasks;
+        this.priority = priority;
+        this.comments = comments;
+        this.storyAttachments = storyAttachments;
+        this.softwareApplication = softwareApplication;
+    }
+
+    public Story(Long id, String title, String description, LocalDateTime createdAt, Date modificationDate, Set<Category> categories, Set<StoryTask> storySubtasks, Priority priority, Set<Comment> comments, Set<Attachment> storyAttachments, SoftwareApplication softwareApplication) {
+        this.id = id;
+        this.title = title;
+        this.description = description;
+        this.createdAt = createdAt;
+        this.modificationDate = modificationDate;
+        this.categories = categories;
+        this.storySubtasks = storySubtasks;
+        this.priority = priority;
+        this.comments = comments;
+        this.storyAttachments = storyAttachments;
+        this.softwareApplication = softwareApplication;
+    }
 
     public Story(Long id, String title, String description, Set<Category> categories, Set<StoryTask> storySubtasks, Priority priority, Set<Comment> comments, Set<Attachment> storyAttachments, SoftwareApplication softwareApplication) {
         this.id = id;
@@ -86,6 +124,14 @@ public class Story {
     public void addStoryComment(Comment comment)
     {
         this.comments.add(comment);
+    }
+
+    public User getCreatedBy() {
+        return createdBy;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
     }
 
     public Date getModificationDate() {
@@ -166,6 +212,14 @@ public class Story {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public void setCreatedBy(User createdBy) {
+        this.createdBy = createdBy;
     }
 
     @Override

@@ -11,9 +11,9 @@ import java.util.List;
 
 public interface StoryTaskService {
 
-    ApiResponse<ResponseStoryTaskDto> insert(InsertStoryTaskDto storyTaskDto);
+    ApiResponse<ResponseStoryTaskDto> insert(InsertStoryTaskDto storyTaskDto, String username);
 
-    ApiResponse<ResponseStoryTaskDto> insertStoryTaskComment(InsertStoryTaskCommentDto storyTaskCommentDto);
+    ApiResponse<FullInformationStoryTaskDto> insertStoryTaskComment(InsertStoryTaskCommentDto storyTaskCommentDto, String username);
 
     ApiResponse<ResponseStoryTaskDto> update (UpdateStoryTaskDto updateStoryTaskDto);
 

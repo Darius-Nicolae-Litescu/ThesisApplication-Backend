@@ -6,10 +6,15 @@ import org.mapstruct.*;
 
 @Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, componentModel = "spring")
 public interface ElasticSearchStoryTaskMapper {
+
+    @Mapping(source = "createdByUsername", target = "createdBy.username")
+    @Mapping(source = "assignedToUsername", target = "assignedTo.username")
     StoryTask elasticSearchStoryTaskDtoToStoryTask(ElasticSearchStoryTaskDto elasticSearchStoryTaskDto);
 
+    @InheritInverseConfiguration(name = "elasticSearchStoryTaskDtoToStoryTask")
     ElasticSearchStoryTaskDto storyTaskToElasticSearchStoryTaskDto(StoryTask storyTask);
 
+    @InheritConfiguration(name = "elasticSearchStoryTaskDtoToStoryTask")
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void updateStoryTaskFromElasticSearchStoryTaskDto(ElasticSearchStoryTaskDto elasticSearchStoryTaskDto, @MappingTarget StoryTask storyTask);
 }

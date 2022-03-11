@@ -26,7 +26,6 @@ public interface StoryTaskMapper {
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void updateStoryTaskFromFullInformationStoryTaskDto(FullInformationStoryTaskDto fullInformationStoryTaskDto, @MappingTarget StoryTask storyTask);
 
-    @Mapping(source = "createdById", target = "createdBy.id")
     @Mapping(source = "assignedToId", target = "assignedTo.id")
     @Mapping(source = "storyId", target = "story.id")
     StoryTask insertStoryTaskDtoToStoryTask(InsertStoryTaskDto insertStoryTaskDto);
