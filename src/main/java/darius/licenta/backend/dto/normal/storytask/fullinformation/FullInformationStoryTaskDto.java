@@ -9,10 +9,7 @@ import lombok.Setter;
 import java.io.Serializable;
 import java.sql.Blob;
 import java.time.LocalDateTime;
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 @Data
 public class FullInformationStoryTaskDto implements Serializable {
@@ -29,7 +26,7 @@ public class FullInformationStoryTaskDto implements Serializable {
     private final String assignedToEmail;
     private final String status;
     private final LocalDateTime finishedAt;
-    private Set<StoryCommentDto> storyComments;
+    private List<StoryCommentDto> storyComments;
     private final Set<AttachmentDto> commentAttachments;
     private final long storyId;
     private final String storyDescription;

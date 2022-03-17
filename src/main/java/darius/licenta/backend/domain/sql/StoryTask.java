@@ -5,9 +5,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.Date;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Table(name = StoryTask.TABLE_NAME)
@@ -48,8 +46,9 @@ public class StoryTask {
     @UpdateTimestamp
     private Date modificationDate;
 
+    @OrderBy("id ASC")
     @OneToMany(mappedBy="storyTask", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private Set<Comment> comments;
+    private List<Comment> comments;
 
     @OneToMany(mappedBy="storyTask", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<Attachment> commentAttachments;
@@ -57,7 +56,7 @@ public class StoryTask {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     private Story story;
 
-    public StoryTask(Long id, String title, String description, int storyPoints, User createdBy, LocalDateTime createdAt, User assignedTo, String status, LocalDateTime finishedAt, Set<Comment> comments, Set<Attachment> commentAttachments, Story story) {
+    public StoryTask(Long id, String title, String description, int storyPoints, User createdBy, LocalDateTime createdAt, User assignedTo, String status, LocalDateTime finishedAt, List<Comment> comments, Set<Attachment> commentAttachments, Story story) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -124,7 +123,7 @@ public class StoryTask {
         return this.finishedAt;
     }
 
-    public Set<Comment> getStoryComments() {
+    public List<Comment> getStoryComments() {
         return this.comments;
     }
 
@@ -172,7 +171,7 @@ public class StoryTask {
         this.finishedAt = finishedAt;
     }
 
-    public void setStoryComments(Set<Comment> comments) {
+    public void setStoryComments(List<Comment> comments) {
         this.comments = comments;
     }
 

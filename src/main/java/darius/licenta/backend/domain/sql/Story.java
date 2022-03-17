@@ -5,9 +5,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.Date;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Table(name = Story.TABLE_NAME)
@@ -46,8 +44,9 @@ public class Story {
     @JoinColumn(name = "priority_id", updatable = true, nullable = true)
     private Priority priority;
 
+    @OrderBy("id ASC")
     @OneToMany(mappedBy="story", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private Set<Comment> comments;
+    private List<Comment> comments;
 
     @OneToMany(mappedBy = "story", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<Attachment> storyAttachments;
@@ -55,7 +54,7 @@ public class Story {
     @ManyToOne(fetch = FetchType.LAZY, optional = true)
     private SoftwareApplication softwareApplication;
 
-    public Story(Long id, String title, String description, LocalDateTime createdAt, User createdBy, Date modificationDate, Set<Category> categories, Set<StoryTask> storySubtasks, Priority priority, Set<Comment> comments, Set<Attachment> storyAttachments, SoftwareApplication softwareApplication) {
+    public Story(Long id, String title, String description, LocalDateTime createdAt, User createdBy, Date modificationDate, Set<Category> categories, Set<StoryTask> storySubtasks, Priority priority, List<Comment> comments, Set<Attachment> storyAttachments, SoftwareApplication softwareApplication) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -70,7 +69,7 @@ public class Story {
         this.softwareApplication = softwareApplication;
     }
 
-    public Story(Long id, String title, String description, LocalDateTime createdAt, Date modificationDate, Set<Category> categories, Set<StoryTask> storySubtasks, Priority priority, Set<Comment> comments, Set<Attachment> storyAttachments, SoftwareApplication softwareApplication) {
+    public Story(Long id, String title, String description, LocalDateTime createdAt, Date modificationDate, Set<Category> categories, Set<StoryTask> storySubtasks, Priority priority, List<Comment> comments, Set<Attachment> storyAttachments, SoftwareApplication softwareApplication) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -84,7 +83,7 @@ public class Story {
         this.softwareApplication = softwareApplication;
     }
 
-    public Story(Long id, String title, String description, Set<Category> categories, Set<StoryTask> storySubtasks, Priority priority, Set<Comment> comments, Set<Attachment> storyAttachments, SoftwareApplication softwareApplication) {
+    public Story(Long id, String title, String description, Set<Category> categories, Set<StoryTask> storySubtasks, Priority priority, List<Comment> comments, Set<Attachment> storyAttachments, SoftwareApplication softwareApplication) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -96,7 +95,7 @@ public class Story {
         this.softwareApplication = softwareApplication;
     }
 
-    public Story(Long id, String description, Set<Category> categories, Set<StoryTask> storySubtasks, Priority priority, Set<Comment> comments, Set<Attachment> storyAttachments, SoftwareApplication softwareApplication) {
+    public Story(Long id, String description, Set<Category> categories, Set<StoryTask> storySubtasks, Priority priority, List<Comment> comments, Set<Attachment> storyAttachments, SoftwareApplication softwareApplication) {
         this.id = id;
         this.description = description;
         this.categories = categories;
@@ -146,7 +145,7 @@ public class Story {
         return title;
     }
 
-    public Set<Comment> getComments() {
+    public List<Comment> getComments() {
         return comments;
     }
 
@@ -206,7 +205,7 @@ public class Story {
         this.categories = categories;
     }
 
-    public void setComments(Set<Comment> comments) {
+    public void setComments(List<Comment> comments) {
         this.comments = comments;
     }
 

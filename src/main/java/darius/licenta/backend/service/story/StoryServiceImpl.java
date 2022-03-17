@@ -7,7 +7,6 @@ import darius.licenta.backend.dto.normal.story.request.insert.InsertStoryDto;
 import darius.licenta.backend.dto.normal.story.request.update.UpdateStoryCategories;
 import darius.licenta.backend.dto.normal.story.request.update.UpdateStoryPriority;
 import darius.licenta.backend.dto.normal.story.request.update.UpdateStorySoftwareApplication;
-import darius.licenta.backend.dto.normal.story.response.fulldetails.CommentDto;
 import darius.licenta.backend.dto.normal.story.response.fulldetails.FullDetailsResponseStoryDto;
 import darius.licenta.backend.dto.normal.story.response.table.ResponseStoryDtoWithoutFullDetails;
 import darius.licenta.backend.mapper.normal.comment.CommentMapper;
@@ -101,32 +100,33 @@ public class StoryServiceImpl implements StoryService {
     public ApiResponse<FullDetailsResponseStoryDto> insertStoryComment(InsertStoryCommentDto insertStoryCommentDto, String username) {
         Optional<User> user = userRepository.findByUsername(username);
         Comment comment = commentMapper.insertStoryCommentDtoToComment(insertStoryCommentDto);
-        Story story = storyRepository.getById(insertStoryCommentDto.getStoryId());
-
+        Optional<Story> story = storyRepository.findById(insertStoryCommentDto.getStoryId());
+        if (!story.isPresent()) {
+            return new ApiResponse<>("Story not found", null, HttpStatus.NOT_FOUND);
+        }
         user.ifPresent(comment::setPostedBy);
         commentRepository.save(comment);
         if (!CollectionUtils.isEmpty(insertStoryCommentDto.getCommentAttachments()) && user.isPresent()) {
             for (MultipartFile multipartFile : insertStoryCommentDto.getCommentAttachments()) {
-                commentAttachmentOperationsService.insertCommentAttachment(multipartFile, username, user.get(), comment, story);
+                commentAttachmentOperationsService.insertCommentAttachment(multipartFile, username, user.get(), comment, story.get());
             }
         }
-        story.addStoryComment(comment);
-        storyRepository.save(story);
+        story.get().addStoryComment(comment);
+        storyRepository.saveAndFlush(story.get());
 
-        FullDetailsResponseStoryDto fullDetailsResponseStoryDto = storyMapper.storyToFullDetailsResponseStoryDto(story);
+        FullDetailsResponseStoryDto fullDetailsResponseStoryDto = populateDtoWithAttachmentInfo(story.get());
         return new ApiResponse<>(fullDetailsResponseStoryDto, HttpStatus.OK);
     }
 
-    @Override
-    public ApiResponse<FullDetailsResponseStoryDto> findById(Long id) {
-        Optional<Story> story = storyRepository.findById(id);
-        if (story.isPresent()) {
-            HashMap<Long, AttachmentResponseDto> attachmentResponseDtos = new HashMap<>();
-            Set<CommentDto> commentDtos = new HashSet<>();
-            for (Comment comment : story.get().getComments()) {
-                for (Attachment attachment : comment.getCommentAttachments()) {
+    private FullDetailsResponseStoryDto populateDtoWithAttachmentInfo(Story story) {
+        HashMap<Long, AttachmentResponseDto> attachmentResponseDtos = new HashMap<>();
+        story.getComments().forEach(comment ->
+        {
+            if (!CollectionUtils.isEmpty(comment.getCommentAttachments()))
+                comment.getCommentAttachments().forEach(attachment ->
+                {
                     AttachmentResponseDto attachmentResponseDto = new AttachmentResponseDto();
-                    String uri = "http://localhost:8080/" + "api/attachment/" + attachment.getId();
+                    String uri = restApiBaseUri + "api/attachment/" + attachment.getId();
                     attachmentResponseDto.setId(attachment.getId());
                     attachmentResponseDto.setPostedAt(attachment.getPostedAt());
                     attachmentResponseDto.setName(attachment.getName());
@@ -134,17 +134,28 @@ public class StoryServiceImpl implements StoryService {
                     attachmentResponseDto.setContentType(attachment.getContentType());
                     attachmentResponseDto.setUrl(uri);
                     attachmentResponseDtos.put(attachment.getId(), attachmentResponseDto);
-                }
-            }
-            FullDetailsResponseStoryDto fullDetailsResponseStoryDto = storyMapper.storyToFullDetailsResponseStoryDto(story.get());
-            fullDetailsResponseStoryDto.getComments().forEach(commentDto -> {
-                commentDto.setAttachmentResponseDto(new ArrayList<>());
-                commentDto.getCommentAttachments().forEach(commentAttachmentDto -> {
+                });
+        });
+
+        FullDetailsResponseStoryDto fullDetailsResponseStoryDto = storyMapper.storyToFullDetailsResponseStoryDto(story);
+        fullDetailsResponseStoryDto.getComments().parallelStream().forEach(commentDto -> {
+            commentDto.setAttachmentResponseDto(new ArrayList<>());
+            if (!CollectionUtils.isEmpty(commentDto.getCommentAttachments())) {
+                commentDto.getCommentAttachments().parallelStream().forEach(commentAttachmentDto ->
+                {
                     commentDto.getAttachmentResponseDto().add(attachmentResponseDtos.get(commentAttachmentDto.getId()));
                 });
+            }
+        });
+        return fullDetailsResponseStoryDto;
+    }
 
-            });
-            return new ApiResponse<>(fullDetailsResponseStoryDto, HttpStatus.OK);
+    @Override
+    public ApiResponse<FullDetailsResponseStoryDto> findById(Long id) {
+        Optional<Story> story = storyRepository.findById(id);
+        if (story.isPresent()) {
+            FullDetailsResponseStoryDto fullInformationStoryTaskDto = populateDtoWithAttachmentInfo(story.get());
+            return new ApiResponse<>(fullInformationStoryTaskDto, HttpStatus.OK);
         }
         return new ApiResponse<>(null, HttpStatus.NOT_FOUND);
     }
@@ -155,7 +166,6 @@ public class StoryServiceImpl implements StoryService {
         if (story.isPresent()) {
             List<Long> categoriesIds = updateStoryCategories.getCategories().stream().map(UpdateStoryCategories.CategoryDto::getId).collect(Collectors.toList());
             Set<Category> categories = new HashSet<>(categoryRepository.findAllById(categoriesIds));
-            ;
             if (!CollectionUtils.isEmpty(categories)) {
                 story.get().setCategories(categories);
                 storyRepository.save(story.get());

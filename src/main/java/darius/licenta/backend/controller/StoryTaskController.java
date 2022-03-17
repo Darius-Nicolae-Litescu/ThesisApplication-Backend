@@ -4,6 +4,8 @@ import darius.licenta.backend.domain.sql.UserRole;
 import darius.licenta.backend.dto.normal.comment.story.InsertStoryCommentDto;
 import darius.licenta.backend.dto.normal.comment.storytask.InsertStoryTaskCommentDto;
 import darius.licenta.backend.dto.normal.story.response.fulldetails.FullDetailsResponseStoryDto;
+import darius.licenta.backend.dto.normal.storytask.ChangeStoryTaskGeneralDetails;
+import darius.licenta.backend.dto.normal.storytask.ChangeStoryTaskTitleAndDescription;
 import darius.licenta.backend.dto.normal.storytask.InsertStoryTaskDto;
 import darius.licenta.backend.dto.normal.storytask.ResponseStoryTaskDto;
 import darius.licenta.backend.dto.normal.storytask.fullinformation.FullInformationStoryTaskDto;
@@ -33,6 +35,18 @@ public class StoryTaskController {
     public ApiResponse<ResponseStoryTaskDto> addStoryTask(Principal principal, @RequestBody InsertStoryTaskDto insertStoryTaskDto) {
         String username = principal.getName();
         return storyTaskService.insert(insertStoryTaskDto, username);
+    }
+
+    @PutMapping("/task/general")
+    @Secured(UserRole.Rank.ADMIN)
+    public ApiResponse<ChangeStoryTaskGeneralDetails> updateStoryTaskGeneralInfo(@RequestBody ChangeStoryTaskGeneralDetails changeStoryTaskGeneralDetails) {
+        return storyTaskService.updateStoryTaskGeneralDetails(changeStoryTaskGeneralDetails);
+    }
+
+    @PutMapping("/task/details")
+    @Secured(UserRole.Rank.ADMIN)
+    public ApiResponse<ChangeStoryTaskTitleAndDescription> updateStoryTaskTitleAndDescription(@RequestBody ChangeStoryTaskTitleAndDescription changeStoryTaskTitleAndDescription) {
+        return storyTaskService.updateStoryTaskTitleAndDescription(changeStoryTaskTitleAndDescription);
     }
 
     @PostMapping(value = "/task/comment", consumes = "multipart/form-data")

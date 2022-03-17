@@ -6,9 +6,7 @@ import darius.licenta.backend.domain.sql.StoryTask;
 import darius.licenta.backend.domain.sql.User;
 import darius.licenta.backend.dto.normal.attachment.AttachmentResponseDto;
 import darius.licenta.backend.dto.normal.comment.storytask.InsertStoryTaskCommentDto;
-import darius.licenta.backend.dto.normal.storytask.InsertStoryTaskDto;
-import darius.licenta.backend.dto.normal.storytask.ResponseStoryTaskDto;
-import darius.licenta.backend.dto.normal.storytask.UpdateStoryTaskDto;
+import darius.licenta.backend.dto.normal.storytask.*;
 import darius.licenta.backend.dto.normal.storytask.fullinformation.FullInformationStoryTaskDto;
 import darius.licenta.backend.exception.UserNotFoundException;
 import darius.licenta.backend.mapper.normal.attachment.AttachmentMapper;
@@ -27,10 +25,8 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class StoryTaskServiceImpl implements StoryTaskService {
@@ -93,28 +89,12 @@ public class StoryTaskServiceImpl implements StoryTaskService {
         return new ApiResponse<>(responseStoryTaskDto, HttpStatus.OK);
     }
 
-    @Override
-    @Transactional
-    public ApiResponse<FullInformationStoryTaskDto> insertStoryTaskComment(InsertStoryTaskCommentDto storyTaskCommentDto, String username) {
-        Optional<User> user = userRepository.findByUsername(username);
-        Comment commentToBeInserted = commentMapper.insertStoryTaskCommentDtoToComment(storyTaskCommentDto);
-        StoryTask storyTask = storyTaskRepository.getById(storyTaskCommentDto.getStoryTaskId());
-
-        user.ifPresent(commentToBeInserted::setPostedBy);
-        commentRepository.save(commentToBeInserted);
-        if (!CollectionUtils.isEmpty(storyTaskCommentDto.getCommentAttachments()) && user.isPresent()) {
-            for (MultipartFile multipartFile : storyTaskCommentDto.getCommentAttachments()) {
-                commentAttachmentOperationsService.insertCommentAttachment(multipartFile, username, user.get(), commentToBeInserted, storyTask);
-            }
-        }
-        storyTask.addStoryTaskComment(commentToBeInserted);
-        storyTaskRepository.saveAndFlush(storyTask);
-
+    private FullInformationStoryTaskDto populateDtoWithAttachmentInfo(StoryTask storyTask) {
         HashMap<Long, AttachmentResponseDto> attachmentResponseDtos = new HashMap<>();
-        storyTask.getStoryComments().parallelStream().forEach(comment ->
+        storyTask.getStoryComments().forEach(comment ->
         {
             if (!CollectionUtils.isEmpty(comment.getCommentAttachments()))
-                comment.getCommentAttachments().parallelStream().forEach(attachment ->
+                comment.getCommentAttachments().forEach(attachment ->
                 {
                     AttachmentResponseDto attachmentResponseDto = new AttachmentResponseDto();
                     String uri = restApiBaseUri + "api/attachment/" + attachment.getId();
@@ -139,42 +119,78 @@ public class StoryTaskServiceImpl implements StoryTaskService {
             }
         });
 
+        return fullInformationStoryTaskDto;
+    }
+
+    @Override
+    @Transactional
+    public ApiResponse<FullInformationStoryTaskDto> insertStoryTaskComment(InsertStoryTaskCommentDto storyTaskCommentDto, String username) {
+        Optional<User> user = userRepository.findByUsername(username);
+        Comment commentToBeInserted = commentMapper.insertStoryTaskCommentDtoToComment(storyTaskCommentDto);
+        Optional<StoryTask> storyTask = storyTaskRepository.findById(storyTaskCommentDto.getStoryTaskId());
+        if(!storyTask.isPresent())
+        {
+            return new ApiResponse<>("Story task not found", null, HttpStatus.NOT_FOUND);
+        }
+        user.ifPresent(commentToBeInserted::setPostedBy);
+        commentRepository.save(commentToBeInserted);
+        if (!CollectionUtils.isEmpty(storyTaskCommentDto.getCommentAttachments()) && user.isPresent()) {
+            for (MultipartFile multipartFile : storyTaskCommentDto.getCommentAttachments()) {
+                commentAttachmentOperationsService.insertCommentAttachment(multipartFile, username, user.get(), commentToBeInserted, storyTask.get());
+            }
+        }
+        storyTask.get().addStoryTaskComment(commentToBeInserted);
+        storyTaskRepository.saveAndFlush(storyTask.get());
+
+        FullInformationStoryTaskDto fullInformationStoryTaskDto = populateDtoWithAttachmentInfo(storyTask.get());
+
         return new ApiResponse<>(fullInformationStoryTaskDto, HttpStatus.OK);
+    }
+
+    @Override
+    public ApiResponse<ChangeStoryTaskGeneralDetails> updateStoryTaskGeneralDetails(ChangeStoryTaskGeneralDetails changeStoryTaskGeneralDetails) {
+        Optional<StoryTask> storyTask = storyTaskRepository.findById(changeStoryTaskGeneralDetails.getId());
+        if (storyTask.isPresent()) {
+            Optional<User> assignedToUser = userRepository.findByUsername(changeStoryTaskGeneralDetails.getAssignedToUsername());
+            if (assignedToUser.isPresent()) {
+                storyTask.get().setAssignedTo(assignedToUser.get());
+            } else {
+                return new ApiResponse<>("Provided user is not found", null, HttpStatus.NOT_FOUND);
+            }
+            storyTask.get().setStoryPoints(changeStoryTaskGeneralDetails.getStoryPoints());
+            storyTask.get().setStatus(changeStoryTaskGeneralDetails.getStatus());
+            if (changeStoryTaskGeneralDetails.getFinishedAt() != null) {
+                storyTask.get().setFinishedAt(LocalDateTime.now());
+            } else {
+                storyTask.get().setFinishedAt(null);
+            }
+            storyTaskRepository.save(storyTask.get());
+            ChangeStoryTaskGeneralDetails changeStoryTaskGeneralDetails1 = storyTaskMapper.storyTaskToChangeStoryTaskGeneralDetails(storyTask.get());
+            return new ApiResponse<>(changeStoryTaskGeneralDetails1, HttpStatus.OK);
+        } else {
+            return new ApiResponse<>("Story task not found", null, HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @Override
+    public ApiResponse<ChangeStoryTaskTitleAndDescription> updateStoryTaskTitleAndDescription(ChangeStoryTaskTitleAndDescription changeStoryTaskTitleAndDescription) {
+        Optional<StoryTask> storyTask = storyTaskRepository.findById(changeStoryTaskTitleAndDescription.getId());
+        if (storyTask.isPresent()) {
+            storyTask.get().setTitle(changeStoryTaskTitleAndDescription.getTitle());
+            storyTask.get().setDescription(changeStoryTaskTitleAndDescription.getDescription());
+            storyTaskRepository.save(storyTask.get());
+            ChangeStoryTaskTitleAndDescription changeStoryTaskGeneralDetails = storyTaskMapper.storyTaskToChangeStoryTaskTitleAndDescription(storyTask.get());
+            return new ApiResponse<>(changeStoryTaskGeneralDetails, HttpStatus.OK);
+        } else {
+            return new ApiResponse<>("Story task not found", null, HttpStatus.NOT_FOUND);
+        }
     }
 
     @Override
     public ApiResponse<FullInformationStoryTaskDto> findStoryTaskById(Long storyTaskId) {
         Optional<StoryTask> storyTask = storyTaskRepository.findById(storyTaskId);
         if (storyTask.isPresent()) {
-            HashMap<Long, AttachmentResponseDto> attachmentResponseDtos = new HashMap<>();
-            storyTask.get().getStoryComments().parallelStream().forEach(comment ->
-            {
-                if (!CollectionUtils.isEmpty(comment.getCommentAttachments())) {
-                    comment.getCommentAttachments().parallelStream().forEach(attachment ->
-                    {
-                        AttachmentResponseDto attachmentResponseDto = new AttachmentResponseDto();
-                        String uri = restApiBaseUri + "api/attachment/" + attachment.getId();
-                        attachmentResponseDto.setId(attachment.getId());
-                        attachmentResponseDto.setPostedAt(attachment.getPostedAt());
-                        attachmentResponseDto.setName(attachment.getName());
-                        attachmentResponseDto.setSize(attachment.getContent().length);
-                        attachmentResponseDto.setContentType(attachment.getContentType());
-                        attachmentResponseDto.setUrl(uri);
-                        attachmentResponseDtos.put(attachment.getId(), attachmentResponseDto);
-                    });
-                }
-            });
-
-            FullInformationStoryTaskDto fullInformationStoryTaskDto = storyTaskMapper.storyTaskToFullInformationStoryTaskDto(storyTask.get());
-            fullInformationStoryTaskDto.getStoryComments().parallelStream().forEach(commentDto -> {
-                commentDto.setAttachmentResponseDto(new ArrayList<>());
-                if (!CollectionUtils.isEmpty(commentDto.getCommentAttachments())) {
-                    commentDto.getCommentAttachments().parallelStream().forEach(commentAttachmentDto ->
-                    {
-                        commentDto.getAttachmentResponseDto().add(attachmentResponseDtos.get(commentAttachmentDto.getId()));
-                    });
-                }
-            });
+            FullInformationStoryTaskDto fullInformationStoryTaskDto = populateDtoWithAttachmentInfo(storyTask.get());
             return new ApiResponse<>(fullInformationStoryTaskDto, HttpStatus.OK);
         }
         return new ApiResponse<>(null, HttpStatus.NOT_FOUND);
@@ -268,4 +284,5 @@ public class StoryTaskServiceImpl implements StoryTaskService {
             return new ApiResponse<>("Story task id not found ... ", null, HttpStatus.NOT_FOUND);
         }
     }
+
 }

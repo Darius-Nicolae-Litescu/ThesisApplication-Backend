@@ -33,7 +33,7 @@ public class StoryController {
         return storyService.insert(insertStoryDto, username);
     }
 
-    @PostMapping("/comment")
+    @PostMapping(value = "/comment", consumes = "multipart/form-data")
     @Secured(UserRole.Rank.ADMIN)
     public ApiResponse<FullDetailsResponseStoryDto> addComment(Principal principal, @ModelAttribute InsertStoryCommentDto insertStoryCommentDto) {
         String username = principal.getName();
