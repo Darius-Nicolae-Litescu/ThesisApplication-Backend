@@ -23,4 +23,5 @@ public class FullDetailsResponseStoryDto implements Serializable {
     private List<CommentDto> comments;
     private final Set<AttachmentDto> storyAttachments;
     private final SoftwareApplicationDto softwareApplication;
+    private final boolean isFinished;
 }

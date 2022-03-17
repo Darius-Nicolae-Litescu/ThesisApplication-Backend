@@ -1,6 +1,7 @@
 package darius.licenta.backend.domain.sql;
 
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.Formula;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
@@ -53,6 +54,11 @@ public class Story {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = true)
     private SoftwareApplication softwareApplication;
+
+    @Formula("(SELECT case when count(storytask.id) = sum(case when storytask.finished_at is null then 0 else 1 end)" +
+            " then 1 else 0 end FROM story as story INNER JOIN story_task as storytask" +
+            " ON story.id = storytask.story_id where story.id = id)")
+    private boolean isFinished;
 
     public Story(Long id, String title, String description, LocalDateTime createdAt, User createdBy, Date modificationDate, Set<Category> categories, Set<StoryTask> storySubtasks, Priority priority, List<Comment> comments, Set<Attachment> storyAttachments, SoftwareApplication softwareApplication) {
         this.id = id;
@@ -119,10 +125,17 @@ public class Story {
     public Story() {
     }
 
-
     public void addStoryComment(Comment comment)
     {
         this.comments.add(comment);
+    }
+
+    public void setFinished(boolean finished) {
+        isFinished = finished;
+    }
+
+    public boolean isFinished() {
+        return isFinished;
     }
 
     public User getCreatedBy() {
