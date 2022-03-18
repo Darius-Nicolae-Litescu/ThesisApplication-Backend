@@ -58,7 +58,11 @@ public class Story {
     @Formula("(SELECT case when count(storytask.id) = sum(case when storytask.finished_at is null then 0 else 1 end)" +
             " then 1 else 0 end FROM story as story INNER JOIN story_task as storytask" +
             " ON story.id = storytask.story_id where story.id = id)")
-    private boolean isFinished;
+    private Boolean isFinished;
+
+    @Formula("(SELECT SUM(storytask.story_points) FROM story as story INNER JOIN story_task as storytask" +
+            " ON story.id = storytask.story_id where story.id = id)")
+    private Long totalStoryPoints;
 
     public Story(Long id, String title, String description, LocalDateTime createdAt, User createdBy, Date modificationDate, Set<Category> categories, Set<StoryTask> storySubtasks, Priority priority, List<Comment> comments, Set<Attachment> storyAttachments, SoftwareApplication softwareApplication) {
         this.id = id;
@@ -130,11 +134,19 @@ public class Story {
         this.comments.add(comment);
     }
 
-    public void setFinished(boolean finished) {
+    public Long getTotalStoryPoints() {
+        return totalStoryPoints;
+    }
+
+    public void setTotalStoryPoints(Long totalStoryPoints) {
+        this.totalStoryPoints = totalStoryPoints;
+    }
+
+    public void setFinished(Boolean finished) {
         isFinished = finished;
     }
 
-    public boolean isFinished() {
+    public Boolean isFinished() {
         return isFinished;
     }
 

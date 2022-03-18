@@ -169,4 +169,5 @@ public class ElasticSearchSynchronizer {
                 currentTime
         );
     }
+
 }
