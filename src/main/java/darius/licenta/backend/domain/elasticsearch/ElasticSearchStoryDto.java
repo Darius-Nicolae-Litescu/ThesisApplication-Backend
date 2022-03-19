@@ -18,14 +18,14 @@ public class ElasticSearchStoryDto implements Serializable {
     private final Long priorityId;
     private final String priorityTitle;
     private final String priorityDescription;
-    private final int priorityLevel;
+    private final Integer priorityLevel;
     private final Blob priorityPriorityIcon;
     private final Long softwareApplicationId;
     private final String softwareApplicationName;
     private final String softwareApplicationDescription;
     private final Date softwareApplicationModificationDate;
 
-    public ElasticSearchStoryDto(Long id, String title, String description, Date modificationDate, Set<CategoryDto> categories, Long priorityId, String priorityTitle, String priorityDescription, int priorityLevel, Blob priorityPriorityIcon, Long softwareApplicationId, String softwareApplicationName, String softwareApplicationDescription, Date softwareApplicationModificationDate) {
+    public ElasticSearchStoryDto(Long id, String title, String description, Date modificationDate, Set<CategoryDto> categories, Long priorityId, String priorityTitle, String priorityDescription, Integer priorityLevel, Blob priorityPriorityIcon, Long softwareApplicationId, String softwareApplicationName, String softwareApplicationDescription, Date softwareApplicationModificationDate) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -74,7 +74,7 @@ public class ElasticSearchStoryDto implements Serializable {
         return this.priorityDescription;
     }
 
-    public int getPriorityLevel() {
+    public Integer getPriorityLevel() {
         return this.priorityLevel;
     }
 

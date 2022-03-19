@@ -12,7 +12,7 @@ public class ElasticSearchStoryTaskDto implements Serializable {
     private final Long id;
     private final String title;
     private final String description;
-    private final int storyPoints;
+    private final Integer storyPoints;
     private final String createdByUsername;
     private final LocalDateTime createdAt;
     private final String assignedToUsername;
@@ -20,7 +20,7 @@ public class ElasticSearchStoryTaskDto implements Serializable {
     private final LocalDateTime finishedAt;
     private final Date modificationDate;
 
-    public ElasticSearchStoryTaskDto(Long id, String title, String description, int storyPoints, String createdByUsername, LocalDateTime createdAt, String assignedToUsername, String status, LocalDateTime finishedAt, Date modificationDate) {
+    public ElasticSearchStoryTaskDto(Long id, String title, String description, Integer storyPoints, String createdByUsername, LocalDateTime createdAt, String assignedToUsername, String status, LocalDateTime finishedAt, Date modificationDate) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -45,7 +45,7 @@ public class ElasticSearchStoryTaskDto implements Serializable {
         return this.description;
     }
 
-    public int getStoryPoints() {
+    public Integer getStoryPoints() {
         return this.storyPoints;
     }
 

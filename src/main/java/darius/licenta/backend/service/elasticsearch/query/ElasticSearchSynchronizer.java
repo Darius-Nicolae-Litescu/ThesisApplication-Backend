@@ -1,4 +1,4 @@
-package darius.licenta.backend.service.elasticsearch;
+package darius.licenta.backend.service.elasticsearch.query;
 
 import darius.licenta.backend.domain.sql.*;
 import darius.licenta.backend.mapper.elasticsearch.comment.ElasticSearchCommentMapper;

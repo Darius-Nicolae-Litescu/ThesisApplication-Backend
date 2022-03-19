@@ -17,37 +17,19 @@ import java.io.IOException;
 @RestController
 @RequestMapping("/api/elasticsearch")
 @CrossOrigin(origins = "http://localhost:3000")
-public class SearchController {
-    private final SearchService searchService;
+public class FilterController {
 
     private final ElasticSearchExactQueryService elasticSearchExactQueryService;
 
     @Autowired
-    public SearchController(SearchService searchService, ElasticSearchExactQueryService elasticSearchExactQueryService) {
-        this.searchService = searchService;
+    public FilterController(ElasticSearchExactQueryService elasticSearchExactQueryService) {
         this.elasticSearchExactQueryService = elasticSearchExactQueryService;
     }
 
-    @PostMapping(value = "/query/exact")
+    @PostMapping(value = "/filter/exact")
     public ApiResponse<ElasticSearchResultQuery> queryForExactHits(@RequestBody FilterByMultipleFieldsDto filterByMultipleFieldsDto) throws IOException {
         return new ApiResponse<>(elasticSearchExactQueryService.getExactSearchFromFilters(filterByMultipleFieldsDto),
                 HttpStatus.OK);
     }
 
-    @PostMapping(value = "/query")
-    public ApiResponse<ElasticSearchResultQuery> search(@RequestBody SearchByKeywordDto searchByKeywordDto) throws IOException {
-        return new ApiResponse<>(searchService.searchFromQuery(
-                searchByKeywordDto.getCollections(),
-                searchByKeywordDto.getReturnFields(),
-                searchByKeywordDto.getTerm().trim().toLowerCase(),
-                searchByKeywordDto.getFields(), searchByKeywordDto.getFrom(),
-                searchByKeywordDto.getSize()),
-                HttpStatus.OK);
-    }
-
-    @PostMapping(value = "/")
-    public ApiResponse<ReturnPropertyNamesDto> getFieldNames(@RequestBody CollectionNamesForFieldReturn collectionNamesForFieldReturn) throws IOException {
-        return new ApiResponse<>(searchService.getFieldNamesFromQuery(collectionNamesForFieldReturn.getCollectionNames()),
-                HttpStatus.OK);
-    }
 }
