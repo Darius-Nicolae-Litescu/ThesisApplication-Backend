@@ -4,13 +4,13 @@ import com.fasterxml.jackson.annotation.JsonRawValue;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 import java.io.Serializable;
+import java.util.List;
 
 public class ElasticSearchResultQuery implements Serializable {
 
     private Float timeTook;
     private Long numberOfResults;
 
-    @JsonValue
     @JsonRawValue
     private String elements;
 

@@ -14,6 +14,8 @@ import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.configurationprocessor.json.JSONException;
+import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -68,13 +70,17 @@ public class ElasticSearchExactQueryServiceImpl implements ElasticSearchExactQue
                 SearchResponse searchResponse = item.getResponse();
                 totalHitsNumber += searchResponse.getHits().getTotalHits().value;
                 for (SearchHit hit : searchResponse.getHits()) {
+                    String index = hit.getIndex();
+                    JSONObject json = new JSONObject();
+                    json.put("_index", index);
                     String stringObject = hit.getSourceAsString();
-                    sourceAsString.add(stringObject);
+                    json.put("_source", new JSONObject(stringObject));
+                    sourceAsString.add(json.toString());
                 }
             }
 
             return new ElasticSearchResultQuery((float) seconds, totalHitsNumber, sourceAsString.toString());
-        } catch (IOException e) {
+        } catch (IOException | JSONException e) {
             e.printStackTrace();
         }
         return null;

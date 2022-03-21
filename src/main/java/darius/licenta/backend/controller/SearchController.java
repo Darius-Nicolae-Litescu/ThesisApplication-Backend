@@ -20,18 +20,9 @@ import java.io.IOException;
 public class SearchController {
     private final SearchService searchService;
 
-    private final ElasticSearchExactQueryService elasticSearchExactQueryService;
-
     @Autowired
-    public SearchController(SearchService searchService, ElasticSearchExactQueryService elasticSearchExactQueryService) {
+    public SearchController(SearchService searchService) {
         this.searchService = searchService;
-        this.elasticSearchExactQueryService = elasticSearchExactQueryService;
-    }
-
-    @PostMapping(value = "/query/exact")
-    public ApiResponse<ElasticSearchResultQuery> queryForExactHits(@RequestBody FilterByMultipleFieldsDto filterByMultipleFieldsDto) throws IOException {
-        return new ApiResponse<>(elasticSearchExactQueryService.getExactSearchFromFilters(filterByMultipleFieldsDto),
-                HttpStatus.OK);
     }
 
     @PostMapping(value = "/query")
