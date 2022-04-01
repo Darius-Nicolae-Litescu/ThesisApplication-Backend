@@ -1,9 +1,7 @@
 package darius.licenta.backend.mapper.normal.storytask;
 
 import darius.licenta.backend.domain.sql.StoryTask;
-import darius.licenta.backend.dto.normal.storytask.InsertStoryTaskDto;
-import darius.licenta.backend.dto.normal.storytask.ResponseStoryTaskDto;
-import darius.licenta.backend.dto.normal.storytask.UpdateStoryTaskDto;
+import darius.licenta.backend.dto.normal.storytask.*;
 import darius.licenta.backend.dto.normal.storytask.fullinformation.FullInformationStoryTaskDto;
 import org.mapstruct.*;
 
@@ -56,4 +54,21 @@ public interface StoryTaskMapper {
     @InheritConfiguration(name = "updateStoryTaskDtoToStoryTask")
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void updateStoryTaskFromUpdateStoryTaskDto(UpdateStoryTaskDto updateStoryTaskDto, @MappingTarget StoryTask storyTask);
+
+    @Mapping(source = "assignedToUsername", target = "assignedTo.username")
+    StoryTask changeStoryTaskGeneralDetailsToStoryTask(ChangeStoryTaskGeneralDetails changeStoryTaskGeneralDetails);
+
+    @Mapping(source = "assignedTo.username", target = "assignedToUsername")
+    ChangeStoryTaskGeneralDetails storyTaskToChangeStoryTaskGeneralDetails(StoryTask storyTask);
+
+    @Mapping(source = "assignedToUsername", target = "assignedTo.username")
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    void updateStoryTaskFromChangeStoryTaskGeneralDetails(ChangeStoryTaskGeneralDetails changeStoryTaskGeneralDetails, @MappingTarget StoryTask storyTask);
+
+    StoryTask changeStoryTaskTitleAndDescriptionToStoryTask(ChangeStoryTaskTitleAndDescription changeStoryTaskTitleAndDescription);
+
+    ChangeStoryTaskTitleAndDescription storyTaskToChangeStoryTaskTitleAndDescription(StoryTask storyTask);
+
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    void updateStoryTaskFromChangeStoryTaskTitleAndDescription(ChangeStoryTaskTitleAndDescription changeStoryTaskTitleAndDescription, @MappingTarget StoryTask storyTask);
 }

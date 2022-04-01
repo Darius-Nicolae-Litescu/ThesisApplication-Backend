@@ -1,9 +1,7 @@
 package darius.licenta.backend.service.storytask;
 
 import darius.licenta.backend.dto.normal.comment.storytask.InsertStoryTaskCommentDto;
-import darius.licenta.backend.dto.normal.storytask.InsertStoryTaskDto;
-import darius.licenta.backend.dto.normal.storytask.ResponseStoryTaskDto;
-import darius.licenta.backend.dto.normal.storytask.UpdateStoryTaskDto;
+import darius.licenta.backend.dto.normal.storytask.*;
 import darius.licenta.backend.dto.normal.storytask.fullinformation.FullInformationStoryTaskDto;
 import darius.licenta.backend.payload.response.ApiResponse;
 
@@ -14,6 +12,10 @@ public interface StoryTaskService {
     ApiResponse<ResponseStoryTaskDto> insert(InsertStoryTaskDto storyTaskDto, String username);
 
     ApiResponse<FullInformationStoryTaskDto> insertStoryTaskComment(InsertStoryTaskCommentDto storyTaskCommentDto, String username);
+
+    ApiResponse<ChangeStoryTaskGeneralDetails> updateStoryTaskGeneralDetails(ChangeStoryTaskGeneralDetails changeStoryTaskGeneralDetails);
+
+    ApiResponse<ChangeStoryTaskTitleAndDescription> updateStoryTaskTitleAndDescription(ChangeStoryTaskTitleAndDescription changeStoryTaskTitleAndDescription);
 
     ApiResponse<ResponseStoryTaskDto> update (UpdateStoryTaskDto updateStoryTaskDto);
 

@@ -49,6 +49,7 @@ public interface StoryMapper {
 
     Story fullDetailsResponseStoryDtoToStory(FullDetailsResponseStoryDto fullDetailsResponseStoryDto);
 
+    @Mapping(target = "totalStoryPoints", source = "totalStoryPoints")
     FullDetailsResponseStoryDto storyToFullDetailsResponseStoryDto(Story story);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)

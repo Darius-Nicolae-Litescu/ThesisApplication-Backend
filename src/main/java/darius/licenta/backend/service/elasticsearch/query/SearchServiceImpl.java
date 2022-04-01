@@ -1,7 +1,7 @@
-package darius.licenta.backend.service.elasticsearch;
+package darius.licenta.backend.service.elasticsearch.query;
 
-import darius.licenta.backend.dto.elasticsearch.ElasticSearchResultQuery;
-import darius.licenta.backend.dto.elasticsearch.ReturnPropertyNamesDto;
+import darius.licenta.backend.dto.elasticsearch.search.ElasticSearchResultQuery;
+import darius.licenta.backend.dto.elasticsearch.search.ReturnPropertyNamesDto;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
@@ -90,18 +90,18 @@ public class SearchServiceImpl implements SearchService {
                 HttpResponse response = httpClient.execute(httpPost);
                 String message = EntityUtils.toString(response.getEntity());
                 JSONObject myObject = new JSONObject(message);
-                int totalHits = myObject.getJSONObject(ElasticSearchConstants.HITS).getJSONObject(ElasticSearchConstants.TOTAL_HITS).getInt("value");
+                Long totalHits = myObject.getJSONObject(ElasticSearchConstants.HITS).getJSONObject(ElasticSearchConstants.TOTAL_HITS).getLong("value");
                 if (totalHits != 0) {
                     elasticSearchResultQuery.setElements(message);
                     elasticSearchResultQuery.setNumberOfResults(totalHits);
                 } else {
                     elasticSearchResultQuery.setElements(null);
-                    elasticSearchResultQuery.setNumberOfResults(0);
+                    elasticSearchResultQuery.setNumberOfResults(0L);
                 }
                 elasticSearchResultQuery.setTimeTook((float) ((double) myObject.getInt(ElasticSearchConstants.TOOK) / ElasticSearchConstants.TO_MS));
             } catch (IOException | JSONException e) {
                 logger.error("Exception: {}", e.getMessage());
-                elasticSearchResultQuery.setNumberOfResults(0);
+                elasticSearchResultQuery.setNumberOfResults(0L);
             }
 
             return elasticSearchResultQuery;

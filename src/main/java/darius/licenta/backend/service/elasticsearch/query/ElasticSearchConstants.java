@@ -1,4 +1,4 @@
-package darius.licenta.backend.service.elasticsearch;
+package darius.licenta.backend.service.elasticsearch.query;
 
 public class ElasticSearchConstants {
         public static final Integer MILLISECONDS_INTERVAL = 180_000;

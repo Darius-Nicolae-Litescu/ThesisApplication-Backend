@@ -1,23 +1,23 @@
-package darius.licenta.backend.dto.elasticsearch;
+package darius.licenta.backend.dto.elasticsearch.search;
 
 import com.fasterxml.jackson.annotation.JsonRawValue;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 import java.io.Serializable;
+import java.util.List;
 
 public class ElasticSearchResultQuery implements Serializable {
 
     private Float timeTook;
-    private Integer numberOfResults;
+    private Long numberOfResults;
 
-    @JsonValue
     @JsonRawValue
     private String elements;
 
     public ElasticSearchResultQuery() {
     }
 
-    public ElasticSearchResultQuery(Float timeTook, Integer numberOfResults, String elements) {
+    public ElasticSearchResultQuery(Float timeTook, Long numberOfResults, String elements) {
         this.timeTook = timeTook;
         this.numberOfResults = numberOfResults;
         this.elements = elements;
@@ -31,11 +31,11 @@ public class ElasticSearchResultQuery implements Serializable {
         this.timeTook = timeTook;
     }
 
-    public Integer getNumberOfResults() {
+    public Long getNumberOfResults() {
         return numberOfResults;
     }
 
-    public void setNumberOfResults(Integer numberOfResults) {
+    public void setNumberOfResults(Long numberOfResults) {
         this.numberOfResults = numberOfResults;
     }
 

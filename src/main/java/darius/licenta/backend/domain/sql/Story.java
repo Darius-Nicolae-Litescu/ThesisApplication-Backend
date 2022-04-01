@@ -1,13 +1,13 @@
 package darius.licenta.backend.domain.sql;
 
+import darius.licenta.backend.domain.sql.kanban.Card;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.Formula;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.Date;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Table(name = Story.TABLE_NAME)
@@ -46,16 +46,29 @@ public class Story {
     @JoinColumn(name = "priority_id", updatable = true, nullable = true)
     private Priority priority;
 
+    @OrderBy("id ASC")
     @OneToMany(mappedBy="story", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private Set<Comment> comments;
+    private List<Comment> comments;
 
     @OneToMany(mappedBy = "story", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<Attachment> storyAttachments;
 
+    @OneToMany(mappedBy= "story", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Set<Card> cards;
+
     @ManyToOne(fetch = FetchType.LAZY, optional = true)
     private SoftwareApplication softwareApplication;
 
-    public Story(Long id, String title, String description, LocalDateTime createdAt, User createdBy, Date modificationDate, Set<Category> categories, Set<StoryTask> storySubtasks, Priority priority, Set<Comment> comments, Set<Attachment> storyAttachments, SoftwareApplication softwareApplication) {
+    @Formula("(SELECT case when count(storytask.id) = sum(case when storytask.finished_at is null then 0 else 1 end)" +
+            " then 1 else 0 end FROM story as story INNER JOIN story_task as storytask" +
+            " ON story.id = storytask.story_id where story.id = id)")
+    private Boolean isFinished;
+
+    @Formula("(SELECT SUM(storytask.story_points) FROM story as story INNER JOIN story_task as storytask" +
+            " ON story.id = storytask.story_id where story.id = id)")
+    private Long totalStoryPoints;
+
+    public Story(Long id, String title, String description, LocalDateTime createdAt, User createdBy, Date modificationDate, Set<Category> categories, Set<StoryTask> storySubtasks, Priority priority, List<Comment> comments, Set<Attachment> storyAttachments, Set<Card> cards, SoftwareApplication softwareApplication, Boolean isFinished, Long totalStoryPoints) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -67,63 +80,38 @@ public class Story {
         this.priority = priority;
         this.comments = comments;
         this.storyAttachments = storyAttachments;
+        this.cards = cards;
         this.softwareApplication = softwareApplication;
-    }
-
-    public Story(Long id, String title, String description, LocalDateTime createdAt, Date modificationDate, Set<Category> categories, Set<StoryTask> storySubtasks, Priority priority, Set<Comment> comments, Set<Attachment> storyAttachments, SoftwareApplication softwareApplication) {
-        this.id = id;
-        this.title = title;
-        this.description = description;
-        this.createdAt = createdAt;
-        this.modificationDate = modificationDate;
-        this.categories = categories;
-        this.storySubtasks = storySubtasks;
-        this.priority = priority;
-        this.comments = comments;
-        this.storyAttachments = storyAttachments;
-        this.softwareApplication = softwareApplication;
-    }
-
-    public Story(Long id, String title, String description, Set<Category> categories, Set<StoryTask> storySubtasks, Priority priority, Set<Comment> comments, Set<Attachment> storyAttachments, SoftwareApplication softwareApplication) {
-        this.id = id;
-        this.title = title;
-        this.description = description;
-        this.categories = categories;
-        this.storySubtasks = storySubtasks;
-        this.priority = priority;
-        this.comments = comments;
-        this.storyAttachments = storyAttachments;
-        this.softwareApplication = softwareApplication;
-    }
-
-    public Story(Long id, String description, Set<Category> categories, Set<StoryTask> storySubtasks, Priority priority, Set<Comment> comments, Set<Attachment> storyAttachments, SoftwareApplication softwareApplication) {
-        this.id = id;
-        this.description = description;
-        this.categories = categories;
-        this.storySubtasks = storySubtasks;
-        this.priority = priority;
-        this.comments = comments;
-        this.storyAttachments = storyAttachments;
-        this.softwareApplication = softwareApplication;
-    }
-
-    public Story(Long id, String description, Set<Category> categories, Set<StoryTask> storySubtasks, Priority priority, Set<Attachment> storyAttachments, SoftwareApplication softwareApplication) {
-        this.id = id;
-        this.description = description;
-        this.categories = categories;
-        this.storySubtasks = storySubtasks;
-        this.priority = priority;
-        this.storyAttachments = storyAttachments;
-        this.softwareApplication = softwareApplication;
+        this.isFinished = isFinished;
+        this.totalStoryPoints = totalStoryPoints;
     }
 
     public Story() {
     }
 
-
     public void addStoryComment(Comment comment)
     {
         this.comments.add(comment);
+    }
+
+    public Long getTotalStoryPoints() {
+        return totalStoryPoints;
+    }
+
+    public void setCards(Set<Card> cards) {
+        this.cards = cards;
+    }
+
+    public void setTotalStoryPoints(Long totalStoryPoints) {
+        this.totalStoryPoints = totalStoryPoints;
+    }
+
+    public void setIsFinished(Boolean finished) {
+        isFinished = finished;
+    }
+
+    public Boolean getIsFinished() {
+        return isFinished;
     }
 
     public User getCreatedBy() {
@@ -146,7 +134,7 @@ public class Story {
         return title;
     }
 
-    public Set<Comment> getComments() {
+    public List<Comment> getComments() {
         return comments;
     }
 
@@ -172,6 +160,10 @@ public class Story {
 
     public Set<Attachment> getStoryAttachments() {
         return this.storyAttachments;
+    }
+
+    public Set<Card> getCards() {
+        return cards;
     }
 
     public SoftwareApplication getSoftwareApplication() {
@@ -206,7 +198,7 @@ public class Story {
         this.categories = categories;
     }
 
-    public void setComments(Set<Comment> comments) {
+    public void setComments(List<Comment> comments) {
         this.comments = comments;
     }
 

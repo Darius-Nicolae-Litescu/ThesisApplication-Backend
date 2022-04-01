@@ -7,6 +7,7 @@ import darius.licenta.backend.dto.normal.story.request.update.UpdateStoryPriorit
 import darius.licenta.backend.dto.normal.story.request.update.UpdateStorySoftwareApplication;
 import darius.licenta.backend.dto.normal.story.response.fulldetails.FullDetailsResponseStoryDto;
 import darius.licenta.backend.dto.normal.story.response.table.ResponseStoryDtoWithoutFullDetails;
+import darius.licenta.backend.dto.normal.storytask.ChangeStoryTaskGeneralDetails;
 import darius.licenta.backend.payload.response.ApiResponse;
 import darius.licenta.backend.payload.response.PaginatedResponse;
 

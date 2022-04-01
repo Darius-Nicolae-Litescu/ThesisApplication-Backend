@@ -1,4 +1,4 @@
-package darius.licenta.backend.service.elasticsearch;
+package darius.licenta.backend.service.elasticsearch.query;
 
 import org.apache.http.client.methods.HttpPost;
 import org.springframework.boot.configurationprocessor.json.JSONArray;
