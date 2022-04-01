@@ -1,4 +1,4 @@
-package darius.licenta.backend.dto.normal.board;
+package darius.licenta.backend.dto.normal.board.response;
 
 import lombok.Data;
 

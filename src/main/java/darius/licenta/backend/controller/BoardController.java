@@ -1,14 +1,15 @@
 package darius.licenta.backend.controller;
 
-import darius.licenta.backend.domain.sql.Attachment;
-import darius.licenta.backend.domain.sql.kanban.Board;
-import darius.licenta.backend.dto.normal.board.FullBoardDetailsDto;
+import darius.licenta.backend.dto.normal.board.request.CreateBoardDto;
+import darius.licenta.backend.dto.normal.board.request.UpdateBoardDto;
+import darius.licenta.backend.dto.normal.board.response.BoardSearchResponseDto;
+import darius.licenta.backend.dto.normal.board.response.FullBoardDetailsDto;
 import darius.licenta.backend.payload.response.ApiResponse;
-import darius.licenta.backend.service.kanban.BoardService;
+import darius.licenta.backend.service.board.BoardService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/board")
@@ -27,4 +28,18 @@ public class BoardController {
         return boardService.getFullDetailsByBoardId(id);
     }
 
+    @GetMapping()
+    public ApiResponse<List<BoardSearchResponseDto>> getAllBoards() {
+        return boardService.getAllBoards();
+    }
+
+    @PutMapping("/")
+    public ApiResponse<FullBoardDetailsDto> updateBoard(@RequestBody UpdateBoardDto updateBoardDto) {
+        return boardService.updateBoardDetails(updateBoardDto);
+    }
+
+    @PostMapping
+    public ApiResponse<FullBoardDetailsDto> createBoard(@RequestBody CreateBoardDto createBoardDto) {
+        return boardService.createBoard(createBoardDto);
+    }
 }
