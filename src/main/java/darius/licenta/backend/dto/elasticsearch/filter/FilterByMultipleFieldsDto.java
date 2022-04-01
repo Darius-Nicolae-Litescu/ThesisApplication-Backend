@@ -11,4 +11,5 @@ public class FilterByMultipleFieldsDto {
     FilterUserDto filterUserDto;
     int startFromResult;
     int pageSize;
+
 }

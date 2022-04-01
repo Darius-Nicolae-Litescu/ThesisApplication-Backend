@@ -2,14 +2,12 @@ package darius.licenta.backend.mapper.normal.story;
 
 import darius.licenta.backend.domain.sql.Category;
 import darius.licenta.backend.domain.sql.Story;
-import darius.licenta.backend.domain.sql.StoryTask;
 import darius.licenta.backend.dto.normal.story.request.insert.InsertStoryDto;
 import darius.licenta.backend.dto.normal.story.request.update.UpdateStoryCategories;
 import darius.licenta.backend.dto.normal.story.request.update.UpdateStoryPriority;
 import darius.licenta.backend.dto.normal.story.request.update.UpdateStorySoftwareApplication;
 import darius.licenta.backend.dto.normal.story.response.fulldetails.FullDetailsResponseStoryDto;
 import darius.licenta.backend.dto.normal.story.response.table.ResponseStoryDtoWithoutFullDetails;
-import darius.licenta.backend.dto.normal.storytask.ChangeStoryTaskGeneralDetails;
 import org.mapstruct.*;
 
 import java.util.Set;
@@ -51,7 +49,6 @@ public interface StoryMapper {
 
     Story fullDetailsResponseStoryDtoToStory(FullDetailsResponseStoryDto fullDetailsResponseStoryDto);
 
-    @Mapping(target = "isFinished", source = "finished")
     @Mapping(target = "totalStoryPoints", source = "totalStoryPoints")
     FullDetailsResponseStoryDto storyToFullDetailsResponseStoryDto(Story story);
 
