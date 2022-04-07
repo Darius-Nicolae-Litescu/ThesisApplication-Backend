@@ -4,11 +4,12 @@ import darius.licenta.backend.domain.sql.*;
 import darius.licenta.backend.dto.normal.attachment.AttachmentResponseDto;
 import darius.licenta.backend.dto.normal.comment.story.InsertStoryCommentDto;
 import darius.licenta.backend.dto.normal.story.request.insert.InsertStoryDto;
-import darius.licenta.backend.dto.normal.story.request.update.UpdateStoryCategories;
-import darius.licenta.backend.dto.normal.story.request.update.UpdateStoryPriority;
-import darius.licenta.backend.dto.normal.story.request.update.UpdateStorySoftwareApplication;
+import darius.licenta.backend.dto.normal.story.request.update.*;
 import darius.licenta.backend.dto.normal.story.response.fulldetails.FullDetailsResponseStoryDto;
-import darius.licenta.backend.dto.normal.story.response.table.ResponseStoryDtoWithoutFullDetails;
+import darius.licenta.backend.dto.normal.story.response.notfulldetails.ResponseStoryDtoWithoutFullDetails;
+import darius.licenta.backend.dto.normal.story.response.table.TableStoryDto;
+import darius.licenta.backend.dto.normal.storytask.ChangeStoryTaskGeneralDetails;
+import darius.licenta.backend.dto.normal.storytask.ChangeStoryTaskTitleAndDescription;
 import darius.licenta.backend.mapper.normal.comment.CommentMapper;
 import darius.licenta.backend.mapper.normal.story.StoryMapper;
 import darius.licenta.backend.payload.response.ApiResponse;
@@ -19,15 +20,18 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -299,20 +303,59 @@ public class StoryServiceImpl implements StoryService {
         return new ApiResponse<>(paginatedResponse, HttpStatus.OK);
     }
 
+    @Override
+    public ApiResponse<ChangeStoryGeneralDetails> updateStoryGeneralDetails(ChangeStoryGeneralDetails changeStoryGeneralDetails) {
+        Optional<Story> story = storyRepository.findById(changeStoryGeneralDetails.getId());
+        if (story.isPresent()) {
+            List<Category> categories = new ArrayList<>();
+            for (Long categoryId: changeStoryGeneralDetails.getCategoryIds())
+            {
+                Optional<Category> category = categoryRepository.findById(categoryId);
+                category.ifPresent(categories::add);
+            }
+
+            story.get().setCategories(new HashSet<>(categories));
+            Priority priority = priorityRepository.findById(changeStoryGeneralDetails.getPriorityId()).orElseThrow(
+                    () -> new ResourceNotFoundException("Priority not found")
+            );
+            story.get().setPriority(priority);
+
+            storyRepository.save(story.get());
+            ChangeStoryGeneralDetails changeStoryGeneralDetailsDto = storyMapper.storyToChangeStoryGeneralDetails(story.get());
+            return new ApiResponse<>(changeStoryGeneralDetailsDto, HttpStatus.OK);
+        } else {
+            return new ApiResponse<>("Story not found", null, HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @Override
+    public ApiResponse<ChangeStoryTitleAndDescription> updateStoryTitleAndDescription(ChangeStoryTitleAndDescription changeStoryTitleAndDescription) {
+        Optional<Story> story = storyRepository.findById(changeStoryTitleAndDescription.getId());
+        if (story.isPresent()) {
+            story.get().setTitle(changeStoryTitleAndDescription.getTitle());
+            story.get().setDescription(changeStoryTitleAndDescription.getDescription());
+            storyRepository.save(story.get());
+            ChangeStoryTitleAndDescription changeStoryGeneralDetails = storyMapper.storyToChangeStoryTitleAndDescription(story.get());
+            return new ApiResponse<>(changeStoryGeneralDetails, HttpStatus.OK);
+        } else {
+            return new ApiResponse<>("Story not found", null, HttpStatus.NOT_FOUND);
+        }
+    }
+
     @Transactional(readOnly = true)
     @Override
-    public ApiResponse<PaginatedResponse<ResponseStoryDtoWithoutFullDetails>> findAll(int page, int size) {
+    public ApiResponse<PaginatedResponse<TableStoryDto>> findAll(Integer page, Integer size) {
         Pageable pageable = PageRequest.of(page, size);
         Page<Story> allStories = storyRepository.findAll(pageable);
         if (allStories.getNumberOfElements() == 0) {
-            PaginatedResponse<ResponseStoryDtoWithoutFullDetails> paginatedResponse = new PaginatedResponse<>(allStories.getNumber(), allStories.getSize(), allStories.getNumberOfElements(),
+            PaginatedResponse<TableStoryDto> paginatedResponse = new PaginatedResponse<>(allStories.getNumber(), allStories.getSize(), allStories.getNumberOfElements(),
                     new ArrayList<>(), allStories.getTotalElements(), allStories.getTotalPages());
             return new ApiResponse<>(paginatedResponse, HttpStatus.NOT_FOUND);
         }
-        PaginatedResponse<ResponseStoryDtoWithoutFullDetails> paginatedResponse = null;
+        PaginatedResponse<TableStoryDto> paginatedResponse = null;
         try {
-            List<ResponseStoryDtoWithoutFullDetails> allStoriesDto = allStories.getContent().stream()
-                    .map(storyMapper::storyToResponseStoryDtoWithoutFullDetails).collect(Collectors.toList());
+            List<TableStoryDto> allStoriesDto = allStories.getContent().stream()
+                    .map(storyMapper::storyToTableStoryDto).collect(Collectors.toList());
 
             paginatedResponse = new PaginatedResponse<>(allStories.getNumber(), allStories.getSize(), allStories.getNumberOfElements(),
                     allStoriesDto, allStories.getTotalElements(), allStories.getTotalPages());

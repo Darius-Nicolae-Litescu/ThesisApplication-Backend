@@ -1,15 +1,14 @@
 package darius.licenta.backend.controller;
 
 import darius.licenta.backend.domain.sql.UserRole;
-import darius.licenta.backend.dto.normal.comment.story.InsertStoryCommentDto;
 import darius.licenta.backend.dto.normal.comment.storytask.InsertStoryTaskCommentDto;
-import darius.licenta.backend.dto.normal.story.response.fulldetails.FullDetailsResponseStoryDto;
 import darius.licenta.backend.dto.normal.storytask.ChangeStoryTaskGeneralDetails;
 import darius.licenta.backend.dto.normal.storytask.ChangeStoryTaskTitleAndDescription;
 import darius.licenta.backend.dto.normal.storytask.InsertStoryTaskDto;
 import darius.licenta.backend.dto.normal.storytask.ResponseStoryTaskDto;
 import darius.licenta.backend.dto.normal.storytask.fullinformation.FullInformationStoryTaskDto;
 import darius.licenta.backend.payload.response.ApiResponse;
+import darius.licenta.backend.payload.response.PaginatedResponse;
 import darius.licenta.backend.service.storytask.StoryTaskService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
@@ -74,5 +73,10 @@ public class StoryTaskController {
         return storyTaskService.findAllStoryTasksByStoryId(storyId);
     }
 
-
+    @GetMapping("/task/pageable")
+    @Secured({UserRole.Rank.ADMIN})
+    public ApiResponse<PaginatedResponse<ResponseStoryTaskDto>> getStoryTasksPageable(@RequestParam Integer page,
+                                                                                      @RequestParam Integer size) {
+        return storyTaskService.findAll(page, size);
+    }
 }

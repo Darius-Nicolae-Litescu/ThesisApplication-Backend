@@ -2,12 +2,12 @@ package darius.licenta.backend.service.story;
 
 import darius.licenta.backend.dto.normal.comment.story.InsertStoryCommentDto;
 import darius.licenta.backend.dto.normal.story.request.insert.InsertStoryDto;
-import darius.licenta.backend.dto.normal.story.request.update.UpdateStoryCategories;
-import darius.licenta.backend.dto.normal.story.request.update.UpdateStoryPriority;
-import darius.licenta.backend.dto.normal.story.request.update.UpdateStorySoftwareApplication;
+import darius.licenta.backend.dto.normal.story.request.update.*;
 import darius.licenta.backend.dto.normal.story.response.fulldetails.FullDetailsResponseStoryDto;
-import darius.licenta.backend.dto.normal.story.response.table.ResponseStoryDtoWithoutFullDetails;
+import darius.licenta.backend.dto.normal.story.response.notfulldetails.ResponseStoryDtoWithoutFullDetails;
+import darius.licenta.backend.dto.normal.story.response.table.TableStoryDto;
 import darius.licenta.backend.dto.normal.storytask.ChangeStoryTaskGeneralDetails;
+import darius.licenta.backend.dto.normal.storytask.ChangeStoryTaskTitleAndDescription;
 import darius.licenta.backend.payload.response.ApiResponse;
 import darius.licenta.backend.payload.response.PaginatedResponse;
 
@@ -34,7 +34,11 @@ public interface StoryService {
 
     ApiResponse<PaginatedResponse<ResponseStoryDtoWithoutFullDetails>> findBySoftwareApplicationId(Long softwareApplicationId, int page, int size);
 
+    ApiResponse<ChangeStoryGeneralDetails> updateStoryGeneralDetails(ChangeStoryGeneralDetails changeStoryGeneralDetails);
+
+    ApiResponse<ChangeStoryTitleAndDescription> updateStoryTitleAndDescription(ChangeStoryTitleAndDescription changeStoryTitleAndDescription);
+
     ApiResponse<Long> countAll();
 
-    ApiResponse<PaginatedResponse<ResponseStoryDtoWithoutFullDetails>> findAll(int page, int size);
+    ApiResponse<PaginatedResponse<TableStoryDto>> findAll(Integer page, Integer size);
 }

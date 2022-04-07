@@ -3,8 +3,12 @@ package darius.licenta.backend.controller;
 import darius.licenta.backend.domain.sql.UserRole;
 import darius.licenta.backend.dto.normal.comment.story.InsertStoryCommentDto;
 import darius.licenta.backend.dto.normal.story.request.insert.InsertStoryDto;
+import darius.licenta.backend.dto.normal.story.request.update.ChangeStoryGeneralDetails;
+import darius.licenta.backend.dto.normal.story.request.update.ChangeStoryTitleAndDescription;
 import darius.licenta.backend.dto.normal.story.response.fulldetails.FullDetailsResponseStoryDto;
-import darius.licenta.backend.dto.normal.story.response.table.ResponseStoryDtoWithoutFullDetails;
+import darius.licenta.backend.dto.normal.story.response.table.TableStoryDto;
+import darius.licenta.backend.dto.normal.storytask.ChangeStoryTaskGeneralDetails;
+import darius.licenta.backend.dto.normal.storytask.ChangeStoryTaskTitleAndDescription;
 import darius.licenta.backend.payload.response.ApiResponse;
 import darius.licenta.backend.payload.response.PaginatedResponse;
 import darius.licenta.backend.service.story.StoryService;
@@ -55,9 +59,21 @@ public class StoryController {
 
     @GetMapping("/pageable")
     @Secured({UserRole.Rank.ADMIN})
-    public ApiResponse<PaginatedResponse<ResponseStoryDtoWithoutFullDetails>> getStoriesPageable(@RequestParam int page,
-                                                                                                 @RequestParam int size) {
+    public ApiResponse<PaginatedResponse<TableStoryDto>> getStoriesPageable(@RequestParam Integer page,
+                                                                            @RequestParam Integer size) {
         return storyService.findAll(page, size);
+    }
+
+    @PutMapping("/general")
+    @Secured(UserRole.Rank.ADMIN)
+    public ApiResponse<ChangeStoryGeneralDetails> updateStoryTaskGeneralInfo(@RequestBody ChangeStoryGeneralDetails changeStoryGeneralDetails) {
+        return storyService.updateStoryGeneralDetails(changeStoryGeneralDetails);
+    }
+
+    @PutMapping("/details")
+    @Secured(UserRole.Rank.ADMIN)
+    public ApiResponse<ChangeStoryTitleAndDescription> updateStoryTaskTitleAndDescription(@RequestBody ChangeStoryTitleAndDescription changeStoryTaskTitleAndDescription) {
+        return storyService.updateStoryTitleAndDescription(changeStoryTaskTitleAndDescription);
     }
 
     @GetMapping("/count")

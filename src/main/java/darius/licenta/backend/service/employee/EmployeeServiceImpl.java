@@ -6,6 +6,7 @@ import darius.licenta.backend.domain.sql.Position;
 import darius.licenta.backend.domain.sql.User;
 import darius.licenta.backend.dto.normal.employee.insert.InsertEmployeeDto;
 import darius.licenta.backend.dto.normal.employee.response.EmployeeDto;
+import darius.licenta.backend.dto.normal.story.response.table.TableEmployeeDto;
 import darius.licenta.backend.mapper.normal.employee.EmployeeMapper;
 import darius.licenta.backend.payload.response.ApiResponse;
 import darius.licenta.backend.payload.response.PaginatedResponse;
@@ -46,15 +47,15 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public ApiResponse<PaginatedResponse<EmployeeDto>> getAllEmployees(int page, int size) {
+    public ApiResponse<PaginatedResponse<TableEmployeeDto>> getAllEmployees(int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
         Page<Employee> allEmployees = employeeRepository.findAll(pageable);
         if (allEmployees.getNumberOfElements() == 0) {
             return new ApiResponse<>(new PaginatedResponse<>(allEmployees.getNumber(), allEmployees.getSize(), allEmployees.getNumberOfElements(),
                     new ArrayList<>(), allEmployees.getTotalElements(), allEmployees.getTotalPages()), HttpStatus.NOT_FOUND);
         }
-        List<EmployeeDto> allEmployeeDto = new ArrayList<>();
-        allEmployees.getContent().forEach(employee -> allEmployeeDto.add(employeeMapper.employeeToEmployeeDto(employee)));
+        List<TableEmployeeDto> allEmployeeDto = new ArrayList<>();
+        allEmployees.getContent().forEach(employee -> allEmployeeDto.add(employeeMapper.employeeToTableEmployeeDto(employee)));
         return new ApiResponse<>(new PaginatedResponse<>(allEmployees.getNumber(), allEmployees.getSize(), allEmployees.getNumberOfElements(),
                 allEmployeeDto, allEmployees.getTotalElements(), allEmployees.getTotalPages()), HttpStatus.OK);
     }
