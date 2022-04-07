@@ -4,6 +4,7 @@ import darius.licenta.backend.dto.normal.comment.storytask.InsertStoryTaskCommen
 import darius.licenta.backend.dto.normal.storytask.*;
 import darius.licenta.backend.dto.normal.storytask.fullinformation.FullInformationStoryTaskDto;
 import darius.licenta.backend.payload.response.ApiResponse;
+import darius.licenta.backend.payload.response.PaginatedResponse;
 
 import java.util.List;
 
@@ -26,6 +27,8 @@ public interface StoryTaskService {
     ApiResponse<List<FullInformationStoryTaskDto>> findAllStoryTasksByStoryId(Long storyId);
 
     ApiResponse<FullInformationStoryTaskDto> findStoryTaskById(Long storyTaskId);
+
+    ApiResponse<PaginatedResponse<ResponseStoryTaskDto>> findAll(Integer page, Integer size);
 
     ApiResponse<ResponseStoryTaskDto> deleteStoryTask(Long id);
 }

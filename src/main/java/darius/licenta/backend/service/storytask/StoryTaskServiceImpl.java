@@ -13,10 +13,16 @@ import darius.licenta.backend.mapper.normal.attachment.AttachmentMapper;
 import darius.licenta.backend.mapper.normal.comment.CommentMapper;
 import darius.licenta.backend.mapper.normal.storytask.StoryTaskMapper;
 import darius.licenta.backend.payload.response.ApiResponse;
+import darius.licenta.backend.payload.response.PaginatedResponse;
 import darius.licenta.backend.persistence.jpa.*;
 import darius.licenta.backend.service.attachment.CommentAttachmentOperationsService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -25,11 +31,16 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
 public class StoryTaskServiceImpl implements StoryTaskService {
+    Logger logger = LoggerFactory.getLogger(StoryTaskServiceImpl.class);
+
 
     private final CommentAttachmentOperationsService commentAttachmentOperationsService;
 
@@ -128,8 +139,7 @@ public class StoryTaskServiceImpl implements StoryTaskService {
         Optional<User> user = userRepository.findByUsername(username);
         Comment commentToBeInserted = commentMapper.insertStoryTaskCommentDtoToComment(storyTaskCommentDto);
         Optional<StoryTask> storyTask = storyTaskRepository.findById(storyTaskCommentDto.getStoryTaskId());
-        if(!storyTask.isPresent())
-        {
+        if (!storyTask.isPresent()) {
             return new ApiResponse<>("Story task not found", null, HttpStatus.NOT_FOUND);
         }
         user.ifPresent(commentToBeInserted::setPostedBy);
@@ -194,6 +204,29 @@ public class StoryTaskServiceImpl implements StoryTaskService {
             return new ApiResponse<>(fullInformationStoryTaskDto, HttpStatus.OK);
         }
         return new ApiResponse<>(null, HttpStatus.NOT_FOUND);
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public ApiResponse<PaginatedResponse<ResponseStoryTaskDto>> findAll(Integer page, Integer size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<StoryTask> allStoryTasks = storyTaskRepository.findAll(pageable);
+        if (allStoryTasks.getNumberOfElements() == 0) {
+            PaginatedResponse<ResponseStoryTaskDto> paginatedResponse = new PaginatedResponse<>(allStoryTasks.getNumber(), allStoryTasks.getSize(), allStoryTasks.getNumberOfElements(),
+                    new ArrayList<>(), allStoryTasks.getTotalElements(), allStoryTasks.getTotalPages());
+            return new ApiResponse<>(paginatedResponse, HttpStatus.NOT_FOUND);
+        }
+        PaginatedResponse<ResponseStoryTaskDto> paginatedResponse = null;
+        try {
+            List<ResponseStoryTaskDto> allStoriesDto = allStoryTasks.getContent().stream()
+                    .map(storyTaskMapper::storyTaskToResponseStoryTaskDto).collect(Collectors.toList());
+
+            paginatedResponse = new PaginatedResponse<>(allStoryTasks.getNumber(), allStoryTasks.getSize(), allStoryTasks.getNumberOfElements(),
+                    allStoriesDto, allStoryTasks.getTotalElements(), allStoryTasks.getTotalPages());
+        } catch (Exception exception) {
+            logger.error("Exception: {}", exception.getMessage());
+        }
+        return new ApiResponse<>(paginatedResponse, HttpStatus.OK);
     }
 
     @Override

@@ -3,6 +3,7 @@ package darius.licenta.backend.controller;
 import darius.licenta.backend.domain.sql.UserRole;
 import darius.licenta.backend.dto.normal.employee.insert.InsertEmployeeDto;
 import darius.licenta.backend.dto.normal.employee.response.EmployeeDto;
+import darius.licenta.backend.dto.normal.story.response.table.TableEmployeeDto;
 import darius.licenta.backend.payload.response.ApiResponse;
 import darius.licenta.backend.payload.response.PaginatedResponse;
 import darius.licenta.backend.service.employee.EmployeeService;
@@ -31,8 +32,8 @@ public class EmployeeController {
 
     @GetMapping("/pageable")
     @Secured({UserRole.Rank.ADMIN})
-    public ApiResponse<PaginatedResponse<EmployeeDto>> getEmployees(@RequestParam int page,
-                                                                @RequestParam int size) {
+    public ApiResponse<PaginatedResponse<TableEmployeeDto>> getEmployees(@RequestParam int page,
+                                                                         @RequestParam int size) {
         return employeeService.getAllEmployees(page, size);
     }
 }
