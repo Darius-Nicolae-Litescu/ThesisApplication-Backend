@@ -1,14 +1,9 @@
 package darius.licenta.backend.domain.sql.kanban;
 
-import darius.licenta.backend.domain.sql.Attachment;
 import darius.licenta.backend.domain.sql.Story;
-import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
-import java.sql.Blob;
-import java.time.LocalDateTime;
-import java.util.Objects;
 
 @Entity
 @Table(name = Card.TABLE_NAME)
@@ -19,7 +14,7 @@ public class Card {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "rank", columnDefinition="Decimal(10,2) default '0.0'")
+    @Column(name = "rank", columnDefinition = "Decimal(10,2) default '0.0'")
     private BigDecimal rank;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = true)

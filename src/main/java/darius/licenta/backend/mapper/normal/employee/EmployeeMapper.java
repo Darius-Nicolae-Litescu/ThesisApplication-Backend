@@ -5,6 +5,7 @@ import darius.licenta.backend.domain.sql.Employee;
 import darius.licenta.backend.domain.sql.StoryTask;
 import darius.licenta.backend.dto.normal.employee.insert.InsertEmployeeDto;
 import darius.licenta.backend.dto.normal.employee.response.EmployeeDto;
+import darius.licenta.backend.dto.normal.employee.update.UpdateEmployeeDto;
 import darius.licenta.backend.dto.normal.story.response.table.TableEmployeeDto;
 import org.mapstruct.*;
 
@@ -52,4 +53,15 @@ public interface EmployeeMapper {
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void updateEmployeeFromTableEmployeeDto(TableEmployeeDto tableEmployeeDto, @MappingTarget Employee employee);
 
+    @Mapping(source = "personId", target = "person.id")
+    @Mapping(source = "positionId", target = "position.id")
+    @Mapping(source = "userId", target = "user.id")
+    Employee updateEmployeeDtoToEmployee(UpdateEmployeeDto updateEmployeeDto);
+
+    @InheritInverseConfiguration(name = "updateEmployeeDtoToEmployee")
+    UpdateEmployeeDto employeeToUpdateEmployeeDto(Employee employee);
+
+    @InheritConfiguration(name = "updateEmployeeDtoToEmployee")
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    void updateEmployeeFromUpdateEmployeeDto(UpdateEmployeeDto updateEmployeeDto, @MappingTarget Employee employee);
 }

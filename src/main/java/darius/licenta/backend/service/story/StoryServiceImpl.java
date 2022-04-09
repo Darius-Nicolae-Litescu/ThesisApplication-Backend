@@ -8,8 +8,6 @@ import darius.licenta.backend.dto.normal.story.request.update.*;
 import darius.licenta.backend.dto.normal.story.response.fulldetails.FullDetailsResponseStoryDto;
 import darius.licenta.backend.dto.normal.story.response.notfulldetails.ResponseStoryDtoWithoutFullDetails;
 import darius.licenta.backend.dto.normal.story.response.table.TableStoryDto;
-import darius.licenta.backend.dto.normal.storytask.ChangeStoryTaskGeneralDetails;
-import darius.licenta.backend.dto.normal.storytask.ChangeStoryTaskTitleAndDescription;
 import darius.licenta.backend.mapper.normal.comment.CommentMapper;
 import darius.licenta.backend.mapper.normal.story.StoryMapper;
 import darius.licenta.backend.payload.response.ApiResponse;
@@ -20,7 +18,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -31,12 +28,12 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
 public class StoryServiceImpl implements StoryService {
+    public static final String STORY_NOT_FOUND = "Story not found";
     Logger logger = LoggerFactory.getLogger(StoryServiceImpl.class);
 
     private final CommentAttachmentOperationsService commentAttachmentOperationsService;
@@ -106,7 +103,7 @@ public class StoryServiceImpl implements StoryService {
         Comment comment = commentMapper.insertStoryCommentDtoToComment(insertStoryCommentDto);
         Optional<Story> story = storyRepository.findById(insertStoryCommentDto.getStoryId());
         if (!story.isPresent()) {
-            return new ApiResponse<>("Story not found", null, HttpStatus.NOT_FOUND);
+            return new ApiResponse<>(STORY_NOT_FOUND, null, HttpStatus.NOT_FOUND);
         }
         user.ifPresent(comment::setPostedBy);
         commentRepository.save(comment);
@@ -179,7 +176,7 @@ public class StoryServiceImpl implements StoryService {
                 return new ApiResponse<>("Category not found", null, HttpStatus.NOT_FOUND);
             }
         } else {
-            return new ApiResponse<>("Story not found", null, HttpStatus.NOT_FOUND);
+            return new ApiResponse<>(STORY_NOT_FOUND, null, HttpStatus.NOT_FOUND);
         }
     }
 
@@ -197,7 +194,7 @@ public class StoryServiceImpl implements StoryService {
                 return new ApiResponse<>("Priority not found", null, HttpStatus.NOT_FOUND);
             }
         } else {
-            return new ApiResponse<>("Story not found", null, HttpStatus.NOT_FOUND);
+            return new ApiResponse<>(STORY_NOT_FOUND, null, HttpStatus.NOT_FOUND);
         }
     }
 
@@ -215,7 +212,7 @@ public class StoryServiceImpl implements StoryService {
                 return new ApiResponse<>("Software application not found", null, HttpStatus.NOT_FOUND);
             }
         } else {
-            return new ApiResponse<>("Story not found", null, HttpStatus.NOT_FOUND);
+            return new ApiResponse<>(STORY_NOT_FOUND, null, HttpStatus.NOT_FOUND);
         }
     }
 
@@ -308,8 +305,7 @@ public class StoryServiceImpl implements StoryService {
         Optional<Story> story = storyRepository.findById(changeStoryGeneralDetails.getId());
         if (story.isPresent()) {
             List<Category> categories = new ArrayList<>();
-            for (Long categoryId: changeStoryGeneralDetails.getCategoryIds())
-            {
+            for (Long categoryId : changeStoryGeneralDetails.getCategoryIds()) {
                 Optional<Category> category = categoryRepository.findById(categoryId);
                 category.ifPresent(categories::add);
             }
@@ -324,7 +320,7 @@ public class StoryServiceImpl implements StoryService {
             ChangeStoryGeneralDetails changeStoryGeneralDetailsDto = storyMapper.storyToChangeStoryGeneralDetails(story.get());
             return new ApiResponse<>(changeStoryGeneralDetailsDto, HttpStatus.OK);
         } else {
-            return new ApiResponse<>("Story not found", null, HttpStatus.NOT_FOUND);
+            return new ApiResponse<>(STORY_NOT_FOUND, null, HttpStatus.NOT_FOUND);
         }
     }
 
@@ -338,7 +334,7 @@ public class StoryServiceImpl implements StoryService {
             ChangeStoryTitleAndDescription changeStoryGeneralDetails = storyMapper.storyToChangeStoryTitleAndDescription(story.get());
             return new ApiResponse<>(changeStoryGeneralDetails, HttpStatus.OK);
         } else {
-            return new ApiResponse<>("Story not found", null, HttpStatus.NOT_FOUND);
+            return new ApiResponse<>(STORY_NOT_FOUND, null, HttpStatus.NOT_FOUND);
         }
     }
 

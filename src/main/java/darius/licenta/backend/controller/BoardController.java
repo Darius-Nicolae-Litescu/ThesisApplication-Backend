@@ -42,4 +42,9 @@ public class BoardController {
     public ApiResponse<FullBoardDetailsDto> createBoard(@RequestBody CreateBoardDto createBoardDto) {
         return boardService.createBoard(createBoardDto);
     }
+
+    @PutMapping("/add/stories/all")
+    public ApiResponse<Boolean> addAllStoriesToBoard(@RequestParam Long boardId) {
+        return boardService.addAllStoriesToBoard(boardId);
+    }
 }

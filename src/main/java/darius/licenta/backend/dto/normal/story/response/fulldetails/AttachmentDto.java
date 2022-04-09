@@ -3,7 +3,6 @@ package darius.licenta.backend.dto.normal.story.response.fulldetails;
 import lombok.Data;
 
 import java.io.Serializable;
-import java.sql.Blob;
 import java.time.LocalDateTime;
 
 @Data

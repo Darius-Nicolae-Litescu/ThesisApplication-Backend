@@ -10,13 +10,14 @@ public interface CategoryService {
 
     ApiResponse<CategoryDto> update(CategoryDto categoryDto);
 
-    ApiResponse<List<CategoryDto>> findByName(String name);
+    ApiResponse<CategoryDto> getCategoryById(Long id);
 
-    ApiResponse<CategoryDto> findById(Long id);
+    ApiResponse<CategoryDto> deleteById(Long id);
 
     ApiResponse<List<CategoryDto>> getAllCategories();
 
+    ApiResponse<List<CategoryDto>> findByName(String name);
+
     ApiResponse<List<CategoryDto>> deleteByName(String name);
 
-    ApiResponse<CategoryDto> deleteById(Long id);
 }

@@ -7,11 +7,11 @@ import darius.licenta.backend.payload.response.PaginatedResponse;
 public interface PersonService {
     ApiResponse<PaginatedResponse<PersonDto>> getAllPersons(int page, int size);
 
-    ApiResponse<PersonDto> getPersonById(Long id);
-
     ApiResponse<PersonDto> insert(PersonDto personDto);
 
-    ApiResponse<PersonDto> update(PersonDto personDto);
+    ApiResponse<PersonDto> updatePerson(PersonDto personDto);
 
-    ApiResponse<PersonDto> delete(Long id);
+    ApiResponse<PersonDto> getPersonById(Long id);
+
+    ApiResponse<PersonDto> deleteById(Long id);
 }

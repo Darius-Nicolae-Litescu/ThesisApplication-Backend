@@ -28,7 +28,7 @@ public class JwtTokenProvider {
     private String secretKey;
 
     @Value("${security.jwt.token.expire-length:36000000}")
-    private long validityInMilliseconds = 3600000 * 1000; // 1000h
+    private static final long VALIDITY_IN_MILLISECONDS = 3600000L * 1000; // 1000h
 
     @Autowired
     private UserJwtDetailsService userJwtDetailsService;
@@ -44,7 +44,7 @@ public class JwtTokenProvider {
         claims.put("auth", userRoles.stream().map(Enum::toString).collect(Collectors.toList()));
 
         Date now = new Date();
-        Date validity = new Date(now.getTime() + validityInMilliseconds);
+        Date validity = new Date(now.getTime() + VALIDITY_IN_MILLISECONDS);
 
 
         return Jwts.builder()

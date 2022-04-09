@@ -25,6 +25,8 @@ import java.util.Optional;
 @Service
 public class AttachmentServiceImpl implements AttachmentService, CommentAttachmentOperationsService {
 
+    public static final String USER_COULD_NOT_BE_FOUND = " user could not be found";
+
     private final AttachmentRepository attachmentRepository;
     private final UserRepository userRepository;
     private final AttachmentMapper attachmentMapper;
@@ -57,7 +59,7 @@ public class AttachmentServiceImpl implements AttachmentService, CommentAttachme
                 attachment = new Attachment(fileName, multipartFile.getContentType(), multipartFile.getBytes(), user.get());
                 attachmentRepository.save(attachment);
             } else {
-                throw new UserNotFoundException(uploadedByUsername + " user could not be found");
+                throw new UserNotFoundException(uploadedByUsername + USER_COULD_NOT_BE_FOUND);
             }
         } catch (Exception exception) {
             return new ApiResponse<>("Exception: " + exception.getMessage() + " file could not be uploaded", null, HttpStatus.BAD_REQUEST);
@@ -131,7 +133,7 @@ public class AttachmentServiceImpl implements AttachmentService, CommentAttachme
                 attachment.setComment(comment);
                 attachment = attachmentRepository.save(attachment);
             } else {
-                throw new UserNotFoundException(uploadedByUsername + " user could not be found");
+                throw new UserNotFoundException(uploadedByUsername + USER_COULD_NOT_BE_FOUND);
             }
         } catch (Exception exception) {
             return null;
@@ -150,7 +152,7 @@ public class AttachmentServiceImpl implements AttachmentService, CommentAttachme
                 attachment.setComment(comment);
                 attachment = attachmentRepository.save(attachment);
             } else {
-                throw new UserNotFoundException(uploadedByUsername + " user could not be found");
+                throw new UserNotFoundException(uploadedByUsername + USER_COULD_NOT_BE_FOUND);
             }
         } catch (Exception exception) {
             return null;

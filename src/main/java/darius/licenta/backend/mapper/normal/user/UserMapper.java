@@ -61,4 +61,11 @@ public interface UserMapper {
     default Set<Long> storySubtasksToStorySubtaskIds(Set<StoryTask> storySubtasks) {
         return storySubtasks.stream().map(StoryTask::getId).collect(Collectors.toSet());
     }
+
+    User userBasicInfoDtoToUser(UserBasicInfoDto userBasicInfoDto);
+
+    UserBasicInfoDto userToUserBasicInfoDto(User user);
+
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    void updateUserFromUserBasicInfoDto(UserBasicInfoDto userBasicInfoDto, @MappingTarget User user);
 }

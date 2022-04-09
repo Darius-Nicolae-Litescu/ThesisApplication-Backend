@@ -3,7 +3,6 @@ package darius.licenta.backend.domain.sql;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
-import java.sql.Blob;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
@@ -78,10 +77,6 @@ public class Attachment {
         return uploadedBy;
     }
 
-    public Comment getStoryComment() {
-        return comment;
-    }
-
     public Long getId() {
         return this.id;
     }
@@ -132,10 +127,6 @@ public class Attachment {
 
     public void setUploadedBy(User uploadedBy) {
         this.uploadedBy = uploadedBy;
-    }
-
-    public void setStoryComment(Comment comment) {
-        this.comment = comment;
     }
 
     public void setName(String name) {

@@ -2,14 +2,13 @@ package darius.licenta.backend.dto.normal.storytask.fullinformation;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import darius.licenta.backend.dto.normal.attachment.AttachmentResponseDto;
-import darius.licenta.backend.dto.normal.story.response.fulldetails.AttachmentDto;
 import lombok.Data;
-import lombok.Setter;
 
 import java.io.Serializable;
-import java.sql.Blob;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.Date;
+import java.util.List;
+import java.util.Set;
 
 @Data
 public class FullInformationStoryTaskDto implements Serializable {

@@ -62,7 +62,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public ApiResponse<CategoryDto> findById(Long id) {
+    public ApiResponse<CategoryDto> getCategoryById(Long id) {
         Optional<Category> category = categoryRepository.findById(id);
         if (category.isPresent()) {
             CategoryDto categoryDto = categoryMapper.categoryToCategoryDto(category.get());

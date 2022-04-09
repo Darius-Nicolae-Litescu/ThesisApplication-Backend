@@ -14,4 +14,5 @@ public interface BoardService {
     ApiResponse<FullBoardDetailsDto> updateBoardDetails(UpdateBoardDto updateBoardDto);
     ApiResponse<List<BoardSearchResponseDto>> getAllBoards();
     ApiResponse<FullBoardDetailsDto> createBoard(CreateBoardDto createBoardDto);
+    ApiResponse<Boolean> addAllStoriesToBoard(Long boardId);
 }

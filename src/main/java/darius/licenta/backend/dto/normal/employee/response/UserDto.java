@@ -7,10 +7,6 @@ public class UserDto implements Serializable {
     private String username;
     private String email;
 
-    public UserDto() {
-    }
-
-
     public String getUsername() {
         return this.username;
     }

@@ -1,10 +1,10 @@
 package darius.licenta.backend.controller;
 
 import darius.licenta.backend.domain.sql.UserRole;
-import darius.licenta.backend.dto.normal.person.PersonDto;
 import darius.licenta.backend.dto.normal.story.response.table.TableUserDto;
 import darius.licenta.backend.dto.normal.user.ResponseUserDto;
 import darius.licenta.backend.dto.normal.user.ResponseUserWithJwtDto;
+import darius.licenta.backend.dto.normal.user.UserBasicInfoDto;
 import darius.licenta.backend.dto.normal.user.UserStoryActivityDto;
 import darius.licenta.backend.payload.response.ApiResponse;
 import darius.licenta.backend.payload.response.PaginatedResponse;
@@ -31,16 +31,28 @@ public class UserController {
         return userService.getUserLatestActivity(userId);
     }
 
-    @GetMapping(value = "/{userId}")
+    @GetMapping(value = "/id/{userId}")
     @Secured(UserRole.Rank.USER)
     public ApiResponse<ResponseUserWithJwtDto> getProfileDetails(@PathVariable Long userId) {
         return userService.getUserProfileDetailsById(userId);
     }
 
+    @DeleteMapping("/{userId}")
+    @Secured({UserRole.Rank.ADMIN})
+    public ApiResponse<ResponseUserDto> deleteUserById(@PathVariable Long userId) {
+        return userService.deleteUserById(userId);
+    }
+
     @GetMapping("/pageable")
     @Secured({UserRole.Rank.ADMIN})
-    public ApiResponse<PaginatedResponse<TableUserDto>> getUsers(@RequestParam int page,
-                                                                 @RequestParam int size) {
+    public ApiResponse<PaginatedResponse<TableUserDto>> getUsers(@RequestParam Integer page,
+                                                                 @RequestParam Integer size) {
         return userService.getAllUsers(page, size);
+    }
+
+    @GetMapping("/all")
+    @Secured({UserRole.Rank.ADMIN})
+    public ApiResponse<List<UserBasicInfoDto>> getUsersBasicInfo() {
+        return userService.getAllUsersBasicInfo();
     }
 }

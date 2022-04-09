@@ -30,9 +30,28 @@ public class SoftwareApplicationController {
         return softwareApplicationService.insert(insertSoftwareApplicationDto);
     }
 
+    @PutMapping("/")
+    @Secured(UserRole.Rank.ADMIN)
+    public ApiResponse<SoftwareApplicationDto> updateSoftwareApplication(@RequestBody SoftwareApplicationDto softwareApplicationDto) {
+        return softwareApplicationService.update(softwareApplicationDto);
+    }
+
+    @GetMapping("/{id}")
+    @Secured({UserRole.Rank.ADMIN})
+    public ApiResponse<SoftwareApplicationDto> getSoftwareApplicationById(@PathVariable Long id) {
+        return softwareApplicationService.findById(id);
+    }
+
+    @DeleteMapping("/{id}")
+    @Secured(UserRole.Rank.ADMIN)
+    public ApiResponse<SoftwareApplicationDto> deleteSoftwareApplicationById(@PathVariable Long id) {
+        return softwareApplicationService.deleteById(id);
+    }
+
     @GetMapping("/")
     @Secured({UserRole.Rank.ADMIN})
-    public ApiResponse<List<SoftwareApplicationDto>> getSoftwareApplication() {
+    public ApiResponse<List<SoftwareApplicationDto>> getAllSoftwareApplications() {
         return softwareApplicationService.findAll();
     }
+
 }

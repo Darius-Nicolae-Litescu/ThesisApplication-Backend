@@ -39,6 +39,28 @@ public class PriorityServiceImpl implements PriorityService {
     }
 
     @Override
+    public ApiResponse<PriorityDto> getPriorityById(Long id) {
+        Priority priority = priorityRepository.getById(id);
+
+        PriorityDto priorityDtoResponse = priorityMapper.priorityToPriorityDto(priority);
+        return new ApiResponse<>(priorityDtoResponse, HttpStatus.OK);
+    }
+
+    @Override
+    public ApiResponse<PriorityDto> update(PriorityDto priorityDto) {
+        Priority priority = priorityRepository.getById(priorityDto.getId());
+
+        priority.setTitle(priorityDto.getTitle());
+        priority.setLevel(priorityDto.getLevel());
+        priority.setDescription(priorityDto.getDescription());
+
+        priorityRepository.save(priority);
+
+        PriorityDto priorityDtoResponse = priorityMapper.priorityToPriorityDto(priority);
+        return new ApiResponse<>(priorityDtoResponse, HttpStatus.OK);
+    }
+
+    @Override
     public ApiResponse<PriorityDto> updateGeneralInformation(PriorityDto priorityDto) {
         Priority priority = priorityRepository.getById(priorityDto.getId());
 

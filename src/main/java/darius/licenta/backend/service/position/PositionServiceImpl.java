@@ -40,6 +40,31 @@ class PositionServiceImpl implements PositionService {
     }
 
     @Override
+    public ApiResponse<PositionDto> getPositionById(Long id) {
+        Optional<Position> position = positionRepository.findById(id);
+
+        if (position.isPresent()) {
+            PositionDto positionDto = positionMapper.positionToPositionDto(position.get());
+            return new ApiResponse<>(positionDto, HttpStatus.OK);
+        }
+        return new ApiResponse<>(null, HttpStatus.NOT_FOUND);
+    }
+
+    @Override
+    public ApiResponse<PositionDto> updatePosition(Long id, UpdatePositionDto updatePositionDto) {
+        Optional<Position> position = positionRepository.findById(id);
+
+        if (position.isPresent()) {
+            position.get().setName(updatePositionDto.getName());
+            position.get().setSeniorityLevel(updatePositionDto.getSeniorityLevel());
+            positionRepository.save(position.get());
+            PositionDto positionDto = positionMapper.positionToPositionDto(position.get());
+            return new ApiResponse<>(positionDto, HttpStatus.OK);
+        }
+        return new ApiResponse<>(null, HttpStatus.NOT_FOUND);
+    }
+
+    @Override
     public ApiResponse<PositionDto> updatePositionSeniorityLevel(UpdatePositionDto updatePositionDto) {
         Optional<Position> position = positionRepository.findByName(updatePositionDto.getName());
 
@@ -48,6 +73,18 @@ class PositionServiceImpl implements PositionService {
             positionRepository.save(position.get());
             PositionDto positionDtoResponse = positionMapper.positionToPositionDto(position.get());
             return new ApiResponse<>(positionDtoResponse, HttpStatus.OK);
+        }
+        return new ApiResponse<>(null, HttpStatus.NOT_FOUND);
+    }
+
+    @Override
+    public ApiResponse<PositionDto> deleteById(Long positionId) {
+        Optional<Position> position = positionRepository.findById(positionId);
+
+        if (position.isPresent()) {
+            positionRepository.delete(position.get());
+            PositionDto positionDto = positionMapper.positionToPositionDto(position.get());
+            return new ApiResponse<>(positionDto, HttpStatus.OK);
         }
         return new ApiResponse<>(null, HttpStatus.NOT_FOUND);
     }
@@ -77,7 +114,7 @@ class PositionServiceImpl implements PositionService {
     }
 
     @Override
-    public ApiResponse<PositionDto> deletePosition(String positionName) {
+    public ApiResponse<PositionDto> deletePositionByName(String positionName) {
         Optional<Position> position = positionRepository.findByName(positionName);
         if (position.isPresent()) {
             positionRepository.delete(position.get());

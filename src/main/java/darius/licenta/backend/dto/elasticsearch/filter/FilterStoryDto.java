@@ -1,11 +1,6 @@
 package darius.licenta.backend.dto.elasticsearch.filter;
 
-import darius.licenta.backend.domain.elasticsearch.ElasticSearchStoryDto;
 import lombok.Data;
-
-import java.sql.Blob;
-import java.util.Date;
-import java.util.Set;
 
 @Data
 public class FilterStoryDto {

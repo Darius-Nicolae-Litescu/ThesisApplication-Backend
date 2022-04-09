@@ -28,9 +28,27 @@ public class CategoryController {
         return categoryService.insert(categoryDto);
     }
 
+    @PutMapping("/")
+    @Secured({UserRole.Rank.ADMIN})
+    public ApiResponse<CategoryDto> updateCategory(@RequestBody CategoryDto categoryDto) {
+        return categoryService.update(categoryDto);
+    }
+
+    @GetMapping("/{id}")
+    @Secured({UserRole.Rank.ADMIN})
+    public ApiResponse<CategoryDto> getCategoryById(@PathVariable Long id) {
+        return categoryService.getCategoryById(id);
+    }
+
     @GetMapping("/")
     @Secured({UserRole.Rank.ADMIN})
     public ApiResponse<List<CategoryDto>> getCategories() {
         return categoryService.getAllCategories();
+    }
+
+    @DeleteMapping("/{id}")
+    @Secured({UserRole.Rank.ADMIN})
+    public ApiResponse<CategoryDto> deleteCategoryById(@PathVariable Long id) {
+        return categoryService.deleteById(id);
     }
 }
