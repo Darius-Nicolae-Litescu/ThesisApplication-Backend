@@ -1,12 +1,14 @@
 package darius.licenta.backend.service.elasticsearch.query;
 
-import org.apache.http.client.methods.HttpPost;
 import org.springframework.boot.configurationprocessor.json.JSONArray;
 
 import java.util.List;
 import java.util.Optional;
 
 public class QueryHelperBuilder {
+
+    private QueryHelperBuilder() {
+    }
 
     public static String buildMultipleFieldSearchQuery(String term, Optional<List<String>> returnFields, Optional<List<String>> fields, String from, String size) {
         return "{\n" +

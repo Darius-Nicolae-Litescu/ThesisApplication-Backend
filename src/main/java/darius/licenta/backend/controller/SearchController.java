@@ -1,12 +1,10 @@
 package darius.licenta.backend.controller;
 
-import darius.licenta.backend.dto.elasticsearch.filter.FilterByMultipleFieldsDto;
 import darius.licenta.backend.dto.elasticsearch.search.CollectionNamesForFieldReturn;
 import darius.licenta.backend.dto.elasticsearch.search.ElasticSearchResultQuery;
 import darius.licenta.backend.dto.elasticsearch.search.ReturnPropertyNamesDto;
 import darius.licenta.backend.dto.elasticsearch.search.SearchByKeywordDto;
 import darius.licenta.backend.payload.response.ApiResponse;
-import darius.licenta.backend.service.elasticsearch.exactquery.ElasticSearchExactQueryService;
 import darius.licenta.backend.service.elasticsearch.query.SearchService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

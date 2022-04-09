@@ -42,7 +42,7 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
-    public ApiResponse<PersonDto> update(PersonDto personDto) {
+    public ApiResponse<PersonDto> updatePerson(PersonDto personDto) {
         Optional<Person> person = personRepository.findById(personDto.getId());
         if (person.isPresent()) {
             person.get().setFirstName(personDto.getFirstName());
@@ -56,7 +56,7 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
-    public ApiResponse<PersonDto> delete(Long id) {
+    public ApiResponse<PersonDto> deleteById(Long id) {
         Optional<Person> person = personRepository.findById(id);
         if (person.isPresent()) {
             personRepository.delete(person.get());

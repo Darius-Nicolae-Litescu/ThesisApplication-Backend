@@ -14,4 +14,6 @@ public class ElasticSearchConstants {
         public static final Integer TO_MS = 1000;
         public static final String ENCODING_UTF8 = "UTF-8";
 
+        private ElasticSearchConstants() {
+        }
 }

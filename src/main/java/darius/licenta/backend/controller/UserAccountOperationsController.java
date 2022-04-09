@@ -1,10 +1,7 @@
 package darius.licenta.backend.controller;
 
 import darius.licenta.backend.domain.sql.UserRole;
-import darius.licenta.backend.dto.normal.user.CreateUserDto;
-import darius.licenta.backend.dto.normal.user.ResponseUserDto;
-import darius.licenta.backend.dto.normal.user.ResponseUserWithJwtDto;
-import darius.licenta.backend.dto.normal.user.UpdateUserBioDto;
+import darius.licenta.backend.dto.normal.user.*;
 import darius.licenta.backend.payload.response.ApiResponse;
 import darius.licenta.backend.service.user.UserAccountOperationsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,9 +24,8 @@ public class UserAccountOperationsController {
     }
 
     @PostMapping("/login")
-    public ApiResponse<ResponseUserWithJwtDto> login(@RequestParam String username,
-                        @RequestParam String password) {
-        return userService.signin(username, password);
+    public ApiResponse<ResponseUserWithJwtDto> login(@RequestBody LoginUserDto loginUserDto) {
+        return userService.signin(loginUserDto.getUsername(), loginUserDto.getPassword());
     }
 
     @PostMapping("/signup")

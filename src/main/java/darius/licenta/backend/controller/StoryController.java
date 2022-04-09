@@ -7,8 +7,6 @@ import darius.licenta.backend.dto.normal.story.request.update.ChangeStoryGeneral
 import darius.licenta.backend.dto.normal.story.request.update.ChangeStoryTitleAndDescription;
 import darius.licenta.backend.dto.normal.story.response.fulldetails.FullDetailsResponseStoryDto;
 import darius.licenta.backend.dto.normal.story.response.table.TableStoryDto;
-import darius.licenta.backend.dto.normal.storytask.ChangeStoryTaskGeneralDetails;
-import darius.licenta.backend.dto.normal.storytask.ChangeStoryTaskTitleAndDescription;
 import darius.licenta.backend.payload.response.ApiResponse;
 import darius.licenta.backend.payload.response.PaginatedResponse;
 import darius.licenta.backend.service.story.StoryService;
@@ -51,11 +49,6 @@ public class StoryController {
         return storyService.findById(id);
     }
 
-    @DeleteMapping("/{id}")
-    @Secured({UserRole.Rank.ADMIN})
-    public ApiResponse<FullDetailsResponseStoryDto> deleteStoryById(@PathVariable Long id) {
-        return storyService.deleteById(id);
-    }
 
     @GetMapping("/pageable")
     @Secured({UserRole.Rank.ADMIN})
@@ -76,6 +69,11 @@ public class StoryController {
         return storyService.updateStoryTitleAndDescription(changeStoryTaskTitleAndDescription);
     }
 
+    @DeleteMapping("/{id}")
+    @Secured({UserRole.Rank.ADMIN})
+    public ApiResponse<FullDetailsResponseStoryDto> deleteStoryById(@PathVariable Long id) {
+        return storyService.deleteById(id);
+    }
     @GetMapping("/count")
     @Secured({UserRole.Rank.ADMIN})
     public ApiResponse<Long> getCount() {

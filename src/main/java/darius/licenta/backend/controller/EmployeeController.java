@@ -3,6 +3,7 @@ package darius.licenta.backend.controller;
 import darius.licenta.backend.domain.sql.UserRole;
 import darius.licenta.backend.dto.normal.employee.insert.InsertEmployeeDto;
 import darius.licenta.backend.dto.normal.employee.response.EmployeeDto;
+import darius.licenta.backend.dto.normal.employee.update.UpdateEmployeeDto;
 import darius.licenta.backend.dto.normal.story.response.table.TableEmployeeDto;
 import darius.licenta.backend.payload.response.ApiResponse;
 import darius.licenta.backend.payload.response.PaginatedResponse;
@@ -28,6 +29,30 @@ public class EmployeeController {
     @Secured(UserRole.Rank.ADMIN)
     public ApiResponse<EmployeeDto> addEmployee(@RequestBody InsertEmployeeDto insertEmployeeDto) {
         return employeeService.insert(insertEmployeeDto);
+    }
+
+    @PutMapping
+    @Secured(UserRole.Rank.ADMIN)
+    public ApiResponse<UpdateEmployeeDto> updateEmployee(@RequestBody UpdateEmployeeDto employeeDto) {
+        return employeeService.updateEmployee(employeeDto);
+    }
+
+    @GetMapping("/basic/{id}")
+    @Secured({UserRole.Rank.ADMIN})
+    public ApiResponse<UpdateEmployeeDto> getEmployeeByIdBasicDetails(@PathVariable Long id) {
+        return employeeService.getEmployeeBasicDetailsById(id);
+    }
+
+    @GetMapping("/{id}")
+    @Secured({UserRole.Rank.ADMIN})
+    public ApiResponse<EmployeeDto> getEmployeeById(@PathVariable Long id) {
+        return employeeService.getEmployeeById(id);
+    }
+
+    @DeleteMapping("/{id}")
+    @Secured(UserRole.Rank.ADMIN)
+    public ApiResponse<EmployeeDto> deleteEmployee(@PathVariable Long id) {
+        return employeeService.deleteById(id);
     }
 
     @GetMapping("/pageable")

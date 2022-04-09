@@ -22,7 +22,7 @@ import java.util.*;
 
 @Service
 public class SearchServiceImpl implements SearchService {
-    private static final Logger logger = LoggerFactory.getLogger(SearchService.class);
+    private static final Logger logger = LoggerFactory.getLogger(SearchServiceImpl.class);
 
     @Value("${api.elasticsearch.uri}")
     private String elasticSearchUri;

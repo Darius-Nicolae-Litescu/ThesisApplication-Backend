@@ -1,12 +1,12 @@
 package darius.licenta.backend.persistence.jpa;
 
-import darius.licenta.backend.domain.sql.kanban.Board;
 import darius.licenta.backend.domain.sql.kanban.Card;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 public interface CardRepository extends JpaRepository<Card, Long> {
     @Modifying

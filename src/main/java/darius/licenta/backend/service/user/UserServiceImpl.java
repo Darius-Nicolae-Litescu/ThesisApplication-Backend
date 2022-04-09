@@ -36,7 +36,7 @@ import java.util.Optional;
 
 @Service
 class UserServiceImpl implements UserService, UserAccountOperationsService {
-    private final String USERNAME = "username";
+    private final static String USERNAME = "username";
 
     private final UserRepository userRepository;
     private final StoryRepository storyRepository;
@@ -98,9 +98,14 @@ class UserServiceImpl implements UserService, UserAccountOperationsService {
     }
 
     @Override
+    public ApiResponse<List<UserBasicInfoDto>> getAllUsersBasicInfo() {
+        return new ApiResponse<>(userRepository.getAllUsersBasicInfo(), HttpStatus.OK);
+    }
+
+    @Override
     public ApiResponse<ResponseUserWithJwtDto> insert(CreateUserDto createUserDto) {
         User user = userMapper.createUserDtoToUser(createUserDto);
-        if (!userRepository.existsByUsername(user.getUsername())) {
+        if (Boolean.FALSE.equals(userRepository.existsByUsername(user.getUsername()))) {
             user.setPassword(passwordEncoder.encode(user.getPassword()));
             userRepository.save(user);
             ResponseUserDto responseUserDtoWithoutJwt = userMapper.userToResponseUserDto(user);

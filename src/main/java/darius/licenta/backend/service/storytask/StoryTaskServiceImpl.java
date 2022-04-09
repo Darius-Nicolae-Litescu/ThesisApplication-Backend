@@ -9,12 +9,14 @@ import darius.licenta.backend.dto.normal.comment.storytask.InsertStoryTaskCommen
 import darius.licenta.backend.dto.normal.storytask.*;
 import darius.licenta.backend.dto.normal.storytask.fullinformation.FullInformationStoryTaskDto;
 import darius.licenta.backend.exception.UserNotFoundException;
-import darius.licenta.backend.mapper.normal.attachment.AttachmentMapper;
 import darius.licenta.backend.mapper.normal.comment.CommentMapper;
 import darius.licenta.backend.mapper.normal.storytask.StoryTaskMapper;
 import darius.licenta.backend.payload.response.ApiResponse;
 import darius.licenta.backend.payload.response.PaginatedResponse;
-import darius.licenta.backend.persistence.jpa.*;
+import darius.licenta.backend.persistence.jpa.CommentRepository;
+import darius.licenta.backend.persistence.jpa.StoryRepository;
+import darius.licenta.backend.persistence.jpa.StoryTaskRepository;
+import darius.licenta.backend.persistence.jpa.UserRepository;
 import darius.licenta.backend.service.attachment.CommentAttachmentOperationsService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,14 +41,16 @@ import java.util.stream.Collectors;
 
 @Service
 public class StoryTaskServiceImpl implements StoryTaskService {
+
+    public static final String STORY_TASK_NOT_FOUND = "Story task not found";
+    public static final String CANNOT_BE_FOUND_IN_DATABASE = " cannot be found in database";
+
     Logger logger = LoggerFactory.getLogger(StoryTaskServiceImpl.class);
 
 
     private final CommentAttachmentOperationsService commentAttachmentOperationsService;
 
     private final StoryTaskRepository storyTaskRepository;
-
-    private final AttachmentRepository attachmentRepository;
 
     private final StoryRepository storyRepository;
 
@@ -58,25 +62,20 @@ public class StoryTaskServiceImpl implements StoryTaskService {
 
     private final CommentMapper commentMapper;
 
-    private final AttachmentMapper attachmentMapper;
-
     @Value("${api.rest.base.uri}")
     private String restApiBaseUri;
 
     @Autowired
     public StoryTaskServiceImpl(CommentAttachmentOperationsService commentAttachmentOperationsService, StoryTaskRepository storyTaskRepository,
-                                AttachmentRepository attachmentRepository, StoryRepository storyRepository, UserRepository userRepository,
-                                CommentRepository commentRepository, StoryTaskMapper storyTaskMapper, CommentMapper commentMapper,
-                                AttachmentMapper attachmentMapper) {
+                                StoryRepository storyRepository, UserRepository userRepository, CommentRepository commentRepository,
+                                StoryTaskMapper storyTaskMapper, CommentMapper commentMapper) {
         this.commentAttachmentOperationsService = commentAttachmentOperationsService;
         this.storyTaskRepository = storyTaskRepository;
-        this.attachmentRepository = attachmentRepository;
         this.storyRepository = storyRepository;
         this.userRepository = userRepository;
         this.commentRepository = commentRepository;
         this.storyTaskMapper = storyTaskMapper;
         this.commentMapper = commentMapper;
-        this.attachmentMapper = attachmentMapper;
     }
 
 
@@ -140,7 +139,7 @@ public class StoryTaskServiceImpl implements StoryTaskService {
         Comment commentToBeInserted = commentMapper.insertStoryTaskCommentDtoToComment(storyTaskCommentDto);
         Optional<StoryTask> storyTask = storyTaskRepository.findById(storyTaskCommentDto.getStoryTaskId());
         if (!storyTask.isPresent()) {
-            return new ApiResponse<>("Story task not found", null, HttpStatus.NOT_FOUND);
+            return new ApiResponse<>(STORY_TASK_NOT_FOUND, null, HttpStatus.NOT_FOUND);
         }
         user.ifPresent(commentToBeInserted::setPostedBy);
         commentRepository.save(commentToBeInserted);
@@ -178,7 +177,7 @@ public class StoryTaskServiceImpl implements StoryTaskService {
             ChangeStoryTaskGeneralDetails changeStoryTaskGeneralDetails1 = storyTaskMapper.storyTaskToChangeStoryTaskGeneralDetails(storyTask.get());
             return new ApiResponse<>(changeStoryTaskGeneralDetails1, HttpStatus.OK);
         } else {
-            return new ApiResponse<>("Story task not found", null, HttpStatus.NOT_FOUND);
+            return new ApiResponse<>(STORY_TASK_NOT_FOUND, null, HttpStatus.NOT_FOUND);
         }
     }
 
@@ -192,7 +191,7 @@ public class StoryTaskServiceImpl implements StoryTaskService {
             ChangeStoryTaskTitleAndDescription changeStoryTaskGeneralDetails = storyTaskMapper.storyTaskToChangeStoryTaskTitleAndDescription(storyTask.get());
             return new ApiResponse<>(changeStoryTaskGeneralDetails, HttpStatus.OK);
         } else {
-            return new ApiResponse<>("Story task not found", null, HttpStatus.NOT_FOUND);
+            return new ApiResponse<>(STORY_TASK_NOT_FOUND, null, HttpStatus.NOT_FOUND);
         }
     }
 
@@ -267,7 +266,7 @@ public class StoryTaskServiceImpl implements StoryTaskService {
             storyTaskList.forEach(storyTask -> fullInformationStoryTaskDtos.add(storyTaskMapper.storyTaskToFullInformationStoryTaskDto(storyTask)));
             return new ApiResponse<>(fullInformationStoryTaskDtos, HttpStatus.OK);
         } else {
-            throw new UserNotFoundException("Username " + username + " cannot be found in database");
+            throw new UserNotFoundException("Username " + username + CANNOT_BE_FOUND_IN_DATABASE);
         }
     }
 
@@ -284,7 +283,7 @@ public class StoryTaskServiceImpl implements StoryTaskService {
             storyTaskList.forEach(storyTask -> fullInformationStoryTaskDtos.add(storyTaskMapper.storyTaskToFullInformationStoryTaskDto(storyTask)));
             return new ApiResponse<>(fullInformationStoryTaskDtos, HttpStatus.OK);
         } else {
-            throw new UserNotFoundException("Username " + username + " cannot be found in database");
+            throw new UserNotFoundException("Username " + username + CANNOT_BE_FOUND_IN_DATABASE);
         }
     }
 
@@ -301,7 +300,7 @@ public class StoryTaskServiceImpl implements StoryTaskService {
             storyTaskList.forEach(storyTask -> fullInformationStoryTaskDtos.add(storyTaskMapper.storyTaskToFullInformationStoryTaskDto(storyTask)));
             return new ApiResponse<>(fullInformationStoryTaskDtos, HttpStatus.OK);
         } else {
-            throw new UserNotFoundException("StoryId " + storyId + " cannot be found in database");
+            throw new UserNotFoundException("StoryId " + storyId + CANNOT_BE_FOUND_IN_DATABASE);
         }
     }
 

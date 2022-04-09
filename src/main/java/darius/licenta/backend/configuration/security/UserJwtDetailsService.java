@@ -9,7 +9,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 @Service
-public class UserJwtDetailsService implements org.springframework.security.core.userdetails.UserDetailsService {
+public class UserJwtDetailsService
+        implements org.springframework.security.core.userdetails.UserDetailsService {
 
     private final UserRepository userRepository;
 
@@ -20,10 +21,12 @@ public class UserJwtDetailsService implements org.springframework.security.core.
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findByUsername(username).orElseThrow(() -> new UserNotFoundException("User with username '" + username + "' not found"));
+        User user = userRepository
+                        .findByUsername(username)
+                        .orElseThrow(
+                                () -> new UserNotFoundException("User with username '" + username + "' not found"));
 
-        return org.springframework.security.core.userdetails.User
-                .withUsername(username)
+        return org.springframework.security.core.userdetails.User.withUsername(username)
                 .password(user.getPassword())
                 .authorities(user.getUserRoles())
                 .accountExpired(false)
@@ -32,5 +35,4 @@ public class UserJwtDetailsService implements org.springframework.security.core.
                 .disabled(false)
                 .build();
     }
-
 }

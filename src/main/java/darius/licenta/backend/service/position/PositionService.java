@@ -9,14 +9,21 @@ import java.util.List;
 
 public interface PositionService {
 
+    ApiResponse<PositionDto> insert(CreatePositionDto createPositionDto);
+
+    ApiResponse<PositionDto> getPositionById(Long id);
+
+    ApiResponse<PositionDto> updatePosition(Long id, UpdatePositionDto updatePositionDto);
+
+    ApiResponse<PositionDto> updatePositionSeniorityLevel(UpdatePositionDto updatePositionDto);
+
     ApiResponse<PositionDto> findPositionByUserId(String username);
 
     ApiResponse<List<PositionDto>> findAllPositions();
 
-    ApiResponse<PositionDto> insert(CreatePositionDto createPositionDto);
 
-    ApiResponse<PositionDto> updatePositionSeniorityLevel(UpdatePositionDto updatePositionDto);
+    ApiResponse<PositionDto> deleteById(Long positionId);
 
-    ApiResponse<PositionDto> deletePosition(String positionName);
+    ApiResponse<PositionDto> deletePositionByName(String positionName);
 
 }

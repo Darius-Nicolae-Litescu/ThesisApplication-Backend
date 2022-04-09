@@ -18,10 +18,9 @@ public class ResponseUserWithJwtDto implements Serializable {
     private final String positionName;
     private final String positionSeniority;
 
-    public ResponseUserWithJwtDto(ResponseUserDto responseUserDto, String jwtToken, List<UserRole> roles, String firstName, String lastName, String positionName, String positionSeniority)
-    {
+    public ResponseUserWithJwtDto(ResponseUserDto responseUserDto, String jwtToken, List<UserRole> roles, String firstName, String lastName, String positionName, String positionSeniority) {
         this.id = responseUserDto.getId();
-        this.username = responseUserDto.getUsername();;
+        this.username = responseUserDto.getUsername();
         this.email = responseUserDto.getEmail();
         this.bioDescription = responseUserDto.getBioDescription();
         this.jwtToken = jwtToken;
@@ -32,10 +31,10 @@ public class ResponseUserWithJwtDto implements Serializable {
         this.positionSeniority = positionSeniority;
     }
 
-    public ResponseUserWithJwtDto(ResponseUserDto responseUserDto, String jwtToken, List<UserRole> roles)
-    {
+    public ResponseUserWithJwtDto(ResponseUserDto responseUserDto, String jwtToken, List<UserRole> roles) {
         this.id = responseUserDto.getId();
-        this.username = responseUserDto.getUsername();;
+        this.username = responseUserDto.getUsername();
+        ;
         this.email = responseUserDto.getEmail();
         this.bioDescription = responseUserDto.getBioDescription();
         this.jwtToken = jwtToken;

@@ -1,10 +1,8 @@
 package darius.licenta.backend.dto.elasticsearch.search;
 
 import com.fasterxml.jackson.annotation.JsonRawValue;
-import com.fasterxml.jackson.annotation.JsonValue;
 
 import java.io.Serializable;
-import java.util.List;
 
 public class ElasticSearchResultQuery implements Serializable {
 

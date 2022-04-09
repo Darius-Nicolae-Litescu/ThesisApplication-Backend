@@ -39,7 +39,7 @@ public class User {
     @UpdateTimestamp
     private Date modificationDate;
 
-    @CollectionTable(name="user_roles")
+    @CollectionTable(name = "user_roles")
     @ElementCollection(fetch = FetchType.EAGER)
     List<UserRole> userRoles;
 
@@ -71,14 +71,7 @@ public class User {
         this.userStoryTasks = userStoryTasks;
     }
 
-    public User(Employee employee, String username, String password, String email, Boolean isActive, Boolean isDeleted) {
-        this.employee = employee;
-        this.username = username;
-        this.password = password;
-        this.email = email;
-    }
-
-    public User(Employee employee, String username, String password, Blob profilePicture, String email, Boolean isActive, Boolean isDeleted) {
+    public User(Employee employee, String username, String password, Blob profilePicture, String email) {
         this.employee = employee;
         this.username = username;
         this.password = password;

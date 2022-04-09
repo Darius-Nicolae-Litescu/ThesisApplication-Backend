@@ -1,6 +1,5 @@
 package darius.licenta.backend.service.user;
 
-import darius.licenta.backend.dto.normal.board.response.StoryDto;
 import darius.licenta.backend.dto.normal.story.response.table.TableUserDto;
 import darius.licenta.backend.dto.normal.user.*;
 import darius.licenta.backend.payload.response.ApiResponse;
@@ -15,13 +14,15 @@ public interface UserService {
 
     ApiResponse<ResponseUserDto> getUserById(Long id);
 
-    ApiResponse<ResponseUserDto> changePassword (UpdateUserPasswordDto updateUserPasswordDto);
+    ApiResponse<ResponseUserDto> changePassword(UpdateUserPasswordDto updateUserPasswordDto);
 
-    ApiResponse<ResponseUserDto> changeEmail (UpdateUserEmailDto updateUserEmailDto);
+    ApiResponse<ResponseUserDto> changeEmail(UpdateUserEmailDto updateUserEmailDto);
 
-    ApiResponse<ResponseUserDto> changeProfilePicture (UpdateUserProfilePictureDto updateUserProfilePictureDto);
+    ApiResponse<ResponseUserDto> changeProfilePicture(UpdateUserProfilePictureDto updateUserProfilePictureDto);
 
     ApiResponse<ResponseUserDto> deleteUserById(Long id);
 
     ApiResponse<PaginatedResponse<TableUserDto>> getAllUsers(int page, int size);
+
+    ApiResponse<List<UserBasicInfoDto>> getAllUsersBasicInfo();
 }

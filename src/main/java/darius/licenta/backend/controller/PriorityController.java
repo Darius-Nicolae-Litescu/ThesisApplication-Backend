@@ -29,6 +29,24 @@ public class PriorityController {
         return priorityService.insert(priorityDto);
     }
 
+    @PutMapping("/")
+    @Secured({UserRole.Rank.ADMIN})
+    public ApiResponse<PriorityDto> updatePriority(@RequestBody PriorityDto priorityDto) {
+        return priorityService.update(priorityDto);
+    }
+
+    @GetMapping("/{id}")
+    @Secured({UserRole.Rank.ADMIN})
+    public ApiResponse<PriorityDto> getPriority(@PathVariable Long id) {
+        return priorityService.getPriorityById(id);
+    }
+
+    @DeleteMapping("/{id}")
+    @Secured(UserRole.Rank.ADMIN)
+    public ApiResponse<PriorityDto> deletePriorityById(@PathVariable Long id) {
+        return priorityService.deleteById(id);
+    }
+
     @GetMapping("/")
     @Secured({UserRole.Rank.ADMIN})
     public ApiResponse<List<PriorityDto>> getPriorities() {

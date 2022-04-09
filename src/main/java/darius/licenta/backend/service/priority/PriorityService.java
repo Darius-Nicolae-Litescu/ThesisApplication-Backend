@@ -10,6 +10,10 @@ import java.util.List;
 public interface PriorityService {
     ApiResponse<PriorityDto> insert(InsertPriorityDto priorityDto);
 
+    ApiResponse<PriorityDto> update(PriorityDto priorityDto);
+
+    ApiResponse<PriorityDto> getPriorityById(Long id);
+
     ApiResponse<PriorityDto> updateGeneralInformation(PriorityDto priorityDto);
 
     ApiResponse<PriorityDto> updatePicture(Long id, Blob pictureBlob);

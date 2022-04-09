@@ -6,6 +6,7 @@ import darius.licenta.backend.domain.sql.Position;
 import darius.licenta.backend.domain.sql.User;
 import darius.licenta.backend.dto.normal.employee.insert.InsertEmployeeDto;
 import darius.licenta.backend.dto.normal.employee.response.EmployeeDto;
+import darius.licenta.backend.dto.normal.employee.update.UpdateEmployeeDto;
 import darius.licenta.backend.dto.normal.story.response.table.TableEmployeeDto;
 import darius.licenta.backend.mapper.normal.employee.EmployeeMapper;
 import darius.licenta.backend.payload.response.ApiResponse;
@@ -67,20 +68,29 @@ public class EmployeeServiceImpl implements EmployeeService {
         Position position = positionRepository.getById(insertEmployeeDto.getPositionId());
         User user = userRepository.getById(insertEmployeeDto.getUserId());
         Employee employee = new Employee(person,position,user);
+
         employeeRepository.save(employee);
         user.setEmployee(employee);
         userRepository.save(user);
         EmployeeDto responseEmployeeDto = employeeMapper.employeeToEmployeeDto(employee);
+
         return new ApiResponse<>(responseEmployeeDto, HttpStatus.OK);
     }
 
     @Override
-    public ApiResponse<EmployeeDto> update(EmployeeDto employeeDto) {
-        return null;
+    public ApiResponse<UpdateEmployeeDto> updateEmployee(UpdateEmployeeDto employeeDto) {
+        Employee employee = employeeRepository.getById(employeeDto.getId());
+
+        employee.setPerson(personRepository.getById(employeeDto.getPersonId()));
+        employee.setPosition(positionRepository.getById(employeeDto.getPositionId()));
+        employee.setUser(userRepository.getById(employeeDto.getUserId()));
+        employeeRepository.save(employee);
+
+        return new ApiResponse<>(employeeMapper.employeeToUpdateEmployeeDto(employee), HttpStatus.OK);
     }
 
     @Override
-    public ApiResponse<EmployeeDto> delete(Long id) {
+    public ApiResponse<EmployeeDto> deleteById(Long id) {
         Optional<Employee> employee = employeeRepository.findById(id);
         if (employee.isPresent()) {
             employeeRepository.delete(employee.get());
@@ -95,6 +105,13 @@ public class EmployeeServiceImpl implements EmployeeService {
     public ApiResponse<EmployeeDto> getEmployeeById(Long id) {
         Employee employee = employeeRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
         EmployeeDto employeeDto = employeeMapper.employeeToEmployeeDto(employee);
+        return new ApiResponse<>(employeeDto, HttpStatus.OK);
+    }
+
+    @Override
+    public ApiResponse<UpdateEmployeeDto> getEmployeeBasicDetailsById(Long id) {
+        Employee employee = employeeRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
+        UpdateEmployeeDto employeeDto = employeeMapper.employeeToUpdateEmployeeDto(employee);
         return new ApiResponse<>(employeeDto, HttpStatus.OK);
     }
 }

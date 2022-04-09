@@ -9,5 +9,6 @@ import java.util.Optional;
 
 public interface SearchService {
     ElasticSearchResultQuery searchFromQuery(Optional<List<String>> collections, Optional<List<String>> returnFields, String term, Optional<List<String>> fields, String from, String size) throws IOException;
+
     ReturnPropertyNamesDto getFieldNamesFromQuery(List<String> CollectionNamesForFieldReturn) throws IOException;
 }
