@@ -33,10 +33,13 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Service
 class UserServiceImpl implements UserService, UserAccountOperationsService {
     private final static String USERNAME = "username";
+    private final static String REGEX_EMAIL_PATTERN = "^[^@]+@[^@]+\\.[^@]{2}[^@]*$";
 
     private final UserRepository userRepository;
     private final StoryRepository storyRepository;
@@ -119,30 +122,6 @@ class UserServiceImpl implements UserService, UserAccountOperationsService {
     }
 
     @Override
-    public ApiResponse<ResponseUserDto> changePassword(UpdateUserPasswordDto updateUserPasswordDto) {
-        Optional<User> user = userRepository.findByUsername(updateUserPasswordDto.getUsername());
-        if (user.isPresent()) {
-            user.get().setPassword(updateUserPasswordDto.getPassword());
-            userRepository.save(user.get());
-            ResponseUserDto responseUserDto = userMapper.userToResponseUserDto(user.get());
-            return new ApiResponse<>(responseUserDto, HttpStatus.OK);
-        }
-        return new ApiResponse<>(null, HttpStatus.NOT_FOUND);
-    }
-
-    @Override
-    public ApiResponse<ResponseUserDto> changeEmail(UpdateUserEmailDto updateUserEmailDto) {
-        Optional<User> user = userRepository.findByUsername(updateUserEmailDto.getUsername());
-        if (user.isPresent()) {
-            user.get().setEmail(updateUserEmailDto.getEmail());
-            userRepository.save(user.get());
-            ResponseUserDto responseUserDto = userMapper.userToResponseUserDto(user.get());
-            return new ApiResponse<>(responseUserDto, HttpStatus.OK);
-        }
-        return new ApiResponse<>(null, HttpStatus.NOT_FOUND);
-    }
-
-    @Override
     public ApiResponse<ResponseUserDto> changeProfilePicture(UpdateUserProfilePictureDto updateUserProfilePictureDto) {
         Optional<User> user = userRepository.findByUsername(updateUserProfilePictureDto.getUsername());
         if (user.isPresent()) {
@@ -222,6 +201,70 @@ class UserServiceImpl implements UserService, UserAccountOperationsService {
     }
 
     @Override
+    public ApiResponse<ResponseUserDto> updateUserEmail(String jwtUsername, UpdateUserEmailDto updateUserEmailDto) {
+        if (!jwtUsername.equals(updateUserEmailDto.getUsername())) {
+            return new ApiResponse<>("Cannot update email on the current user", null, HttpStatus.BAD_REQUEST);
+        }
+        if (!checkIfMailIsValid(updateUserEmailDto.getEmail())) {
+            return new ApiResponse<>("Email is not valid", null, HttpStatus.BAD_REQUEST);
+        }
+
+        Optional<User> user = userRepository.findByUsername(updateUserEmailDto.getUsername());
+        if (user.isPresent()) {
+            user.get().setEmail(updateUserEmailDto.getEmail());
+            userRepository.save(user.get());
+            ResponseUserDto responseUserDto = userMapper.userToResponseUserDto(user.get());
+            return new ApiResponse<>(responseUserDto, HttpStatus.OK);
+        }
+
+        return new ApiResponse<>("Could not find user with username" + updateUserEmailDto.getUsername(), null, HttpStatus.NOT_FOUND);
+    }
+
+    @Override
+    public ApiResponse<ResponseUserDto> updateUserPassword(String jwtUsername, UpdateUserPasswordDto updateUserPasswordDto) {
+        if (!jwtUsername.equals(updateUserPasswordDto.getUsername())) {
+            return new ApiResponse<>("Cannot update password on the current user", null, HttpStatus.BAD_REQUEST);
+        }
+
+        Optional<User> user = userRepository.findByUsername(updateUserPasswordDto.getUsername());
+        if (user.isPresent()) {
+            user.get().setPassword(passwordEncoder.encode(updateUserPasswordDto.getPassword()));
+            userRepository.save(user.get());
+            ResponseUserDto responseUserDto = userMapper.userToResponseUserDto(user.get());
+            return new ApiResponse<>(responseUserDto, HttpStatus.OK);
+        }
+        String reason = "Password could not be changed";
+        if (updateUserPasswordDto.getPassword().length() < 8) {
+            reason = "Password must be at least 8 characters long";
+        }
+        return new ApiResponse<>(reason, null, HttpStatus.BAD_REQUEST);
+    }
+
+    @Override
+    public ApiResponse<ResponseUserDto> changePassword(UpdateUserPasswordDto updateUserPasswordDto) {
+        Optional<User> user = userRepository.findByUsername(updateUserPasswordDto.getUsername());
+        if (user.isPresent()) {
+            user.get().setPassword(updateUserPasswordDto.getPassword());
+            userRepository.save(user.get());
+            ResponseUserDto responseUserDto = userMapper.userToResponseUserDto(user.get());
+            return new ApiResponse<>(responseUserDto, HttpStatus.OK);
+        }
+        return new ApiResponse<>(null, HttpStatus.NOT_FOUND);
+    }
+
+    @Override
+    public ApiResponse<ResponseUserDto> changeEmail(UpdateUserEmailDto updateUserEmailDto) {
+        Optional<User> user = userRepository.findByUsername(updateUserEmailDto.getUsername());
+        if (user.isPresent()) {
+            user.get().setEmail(updateUserEmailDto.getEmail());
+            userRepository.save(user.get());
+            ResponseUserDto responseUserDto = userMapper.userToResponseUserDto(user.get());
+            return new ApiResponse<>(responseUserDto, HttpStatus.OK);
+        }
+        return new ApiResponse<>(null, HttpStatus.NOT_FOUND);
+    }
+
+    @Override
     public ApiResponse<ResponseUserDto> search(String username) {
         Optional<User> user = userRepository.findByUsername(username);
         if (user.isPresent()) {
@@ -288,6 +331,13 @@ class UserServiceImpl implements UserService, UserAccountOperationsService {
     public String refreshJwtToken(String username) {
         User user = userRepository.findByUsername(username).orElseThrow(ResourceNotFoundException::new);
         return jwtTokenProvider.createToken(username, user.getUserRoles());
+    }
+
+
+    private boolean checkIfMailIsValid(String email) {
+        Pattern pattern = Pattern.compile(REGEX_EMAIL_PATTERN);
+        Matcher matcher = pattern.matcher(email);
+        return matcher.matches();
     }
 
 }

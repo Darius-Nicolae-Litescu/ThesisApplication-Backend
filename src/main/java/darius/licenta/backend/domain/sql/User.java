@@ -25,9 +25,9 @@ public class User {
     @Column(name = "password", nullable = false, length = 256)
     private String password;
 
-    @Column(name = "profile_picture", nullable = true)
-    @Lob
-    private Blob profilePicture;
+    @OneToOne(cascade = CascadeType.MERGE)
+    @JoinColumn(name = "picture_id")
+    private Picture profilePicture;
 
     @Column(name = "bio_description", nullable = true, length = 3000)
     private String bioDescription;
@@ -55,7 +55,7 @@ public class User {
     @OneToMany(mappedBy = "createdBy", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<StoryTask> userStoryTasks;
 
-    public User(Long id, Employee employee, String username, String password, Blob profilePicture, String bioDescription, String email, Date modificationDate, List<UserRole> userRoles, Set<Attachment> userAttachments, Set<Comment> userComments, Set<Story> userStories, Set<StoryTask> userStoryTasks) {
+    public User(Long id, Employee employee, String username, String password, Picture profilePicture, String bioDescription, String email, Date modificationDate, List<UserRole> userRoles, Set<Attachment> userAttachments, Set<Comment> userComments, Set<Story> userStories, Set<StoryTask> userStoryTasks) {
         this.id = id;
         this.employee = employee;
         this.username = username;
@@ -69,14 +69,6 @@ public class User {
         this.userComments = userComments;
         this.userStories = userStories;
         this.userStoryTasks = userStoryTasks;
-    }
-
-    public User(Employee employee, String username, String password, Blob profilePicture, String email) {
-        this.employee = employee;
-        this.username = username;
-        this.password = password;
-        this.profilePicture = profilePicture;
-        this.email = email;
     }
 
     public User(Employee employee, String username, String password, String email) {
@@ -126,7 +118,7 @@ public class User {
         return userAttachments;
     }
 
-    public Blob getProfilePicture() {
+    public Picture getProfilePicture() {
         return profilePicture;
     }
 
@@ -186,10 +178,9 @@ public class User {
         this.userStoryTasks = userStoryTasks;
     }
 
-    public void setProfilePicture(Blob profilePicture) {
+    public void setProfilePicture(Picture profilePicture) {
         this.profilePicture = profilePicture;
     }
-
     public void setUserAttachments(Set<Attachment> userAttachments) {
         this.userAttachments = userAttachments;
     }

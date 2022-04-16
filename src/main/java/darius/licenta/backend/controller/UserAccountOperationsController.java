@@ -3,12 +3,14 @@ package darius.licenta.backend.controller;
 import darius.licenta.backend.domain.sql.UserRole;
 import darius.licenta.backend.dto.normal.user.*;
 import darius.licenta.backend.payload.response.ApiResponse;
+import darius.licenta.backend.service.picture.PictureService;
 import darius.licenta.backend.service.user.UserAccountOperationsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.security.Principal;
 
 @RestController
@@ -17,10 +19,12 @@ import java.security.Principal;
 public class UserAccountOperationsController {
 
     private final UserAccountOperationsService userService;
+    private final PictureService pictureService;
 
     @Autowired
-    public UserAccountOperationsController(UserAccountOperationsService userService) {
+    public UserAccountOperationsController(UserAccountOperationsService userService, PictureService pictureService) {
         this.userService = userService;
+        this.pictureService = pictureService;
     }
 
     @PostMapping("/login")
@@ -37,6 +41,34 @@ public class UserAccountOperationsController {
     public ApiResponse<ResponseUserDto> updateProfilePicture(Principal principal, @RequestBody UpdateUserBioDto updateUserBioDto) {
         String username = principal.getName();
         return userService.updateUserBio(updateUserBioDto, username);
+    }
+
+    @PutMapping("/update/email")
+    @Secured({UserRole.Rank.ADMIN,UserRole.Rank.USER})
+    public ApiResponse<ResponseUserDto> updateEmail(Principal principal, @RequestBody UpdateUserEmailDto updateUserEmailDto) {
+        String jwtUsername = principal.getName();
+        return userService.updateUserEmail(jwtUsername, updateUserEmailDto);
+    }
+
+    @PutMapping("/update/password")
+    @Secured({UserRole.Rank.ADMIN,UserRole.Rank.USER})
+    public ApiResponse<ResponseUserDto> updatePassword(Principal principal, @RequestBody UpdateUserPasswordDto updateUserPasswordDto) {
+        String jwtUsername = principal.getName();
+        return userService.updateUserPassword(jwtUsername, updateUserPasswordDto);
+    }
+
+    @PostMapping(value = "/upload-profile-picture", consumes = "multipart/form-data")
+    @Secured({UserRole.Rank.ADMIN, UserRole.Rank.USER})
+    public ApiResponse<Boolean> uploadProfilePicture(Principal principal, @ModelAttribute AddUserProfilePicture addUserProfilePicture) throws IOException {
+        String username = principal.getName();
+        return pictureService.uploadProfilePicture(addUserProfilePicture.getProfilePicture(), username);
+    }
+
+    @DeleteMapping("/delete-profile-picture")
+    @Secured({UserRole.Rank.ADMIN, UserRole.Rank.USER})
+    public ApiResponse<Boolean> deleteProfilePicture(Principal principal) {
+        String username = principal.getName();
+        return pictureService.deleteProfilePicture(username);
     }
 
     @DeleteMapping(value = "/username/{username}")
