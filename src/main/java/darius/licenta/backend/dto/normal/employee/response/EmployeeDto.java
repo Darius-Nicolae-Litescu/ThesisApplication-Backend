@@ -28,28 +28,28 @@ public class EmployeeDto implements Serializable {
         return this.id;
     }
 
-    public PersonDto getPerson() {
-        return this.person;
-    }
-
-    public PositionDto getPosition() {
-        return this.position;
-    }
-
-    public UserDto getUser() {
-        return this.user;
-    }
-
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public PersonDto getPerson() {
+        return this.person;
     }
 
     public void setPerson(PersonDto person) {
         this.person = person;
     }
 
+    public PositionDto getPosition() {
+        return this.position;
+    }
+
     public void setPosition(PositionDto position) {
         this.position = position;
+    }
+
+    public UserDto getUser() {
+        return this.user;
     }
 
     public void setUser(UserDto user) {

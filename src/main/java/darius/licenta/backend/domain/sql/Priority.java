@@ -26,8 +26,8 @@ public class Priority {
     @Lob
     private Blob priorityIcon;
 
-    @OneToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
-    @JoinColumn(name="story_id", nullable=true, insertable=false, updatable=false)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "story_id", nullable = true, insertable = false, updatable = false)
     private Story story;
 
     public Priority() {

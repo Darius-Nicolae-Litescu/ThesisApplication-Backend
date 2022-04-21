@@ -22,20 +22,20 @@ public class StoryCommentDto implements Serializable {
         return this.id;
     }
 
-    public String getContent() {
-        return this.content;
-    }
-
-    public LocalDateTime getPostedAt() {
-        return this.postedAt;
-    }
-
     public void setId(Long id) {
         this.id = id;
     }
 
+    public String getContent() {
+        return this.content;
+    }
+
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public LocalDateTime getPostedAt() {
+        return this.postedAt;
     }
 
     public void setPostedAt(LocalDateTime postedAt) {

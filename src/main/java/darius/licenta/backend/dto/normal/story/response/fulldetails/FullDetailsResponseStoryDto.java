@@ -17,11 +17,11 @@ public class FullDetailsResponseStoryDto implements Serializable {
     private final Set<CategoryDto> categories;
     private final Set<StoryTaskDto> storySubtasks;
     private final PriorityDto priority;
-    private List<CommentDto> comments;
     private final Set<AttachmentDto> storyAttachments;
     private final SoftwareApplicationDto softwareApplication;
     private final Boolean isFinished;
     private final Long totalStoryPoints;
+    private List<CommentDto> comments;
 
     public FullDetailsResponseStoryDto(Long id, String title, String description, LocalDateTime createdAt, CreatedByUserDto createdBy, Date modificationDate, Set<CategoryDto> categories, Set<StoryTaskDto> storySubtasks, PriorityDto priority, Set<AttachmentDto> storyAttachments, SoftwareApplicationDto softwareApplication, Boolean isFinished, Long totalStoryPoints) {
         this.id = id;
@@ -79,6 +79,10 @@ public class FullDetailsResponseStoryDto implements Serializable {
         return this.comments;
     }
 
+    public void setComments(List<CommentDto> comments) {
+        this.comments = comments;
+    }
+
     public Set<AttachmentDto> getStoryAttachments() {
         return this.storyAttachments;
     }
@@ -93,10 +97,6 @@ public class FullDetailsResponseStoryDto implements Serializable {
 
     public Long getTotalStoryPoints() {
         return this.totalStoryPoints;
-    }
-
-    public void setComments(List<CommentDto> comments) {
-        this.comments = comments;
     }
 
     @Override

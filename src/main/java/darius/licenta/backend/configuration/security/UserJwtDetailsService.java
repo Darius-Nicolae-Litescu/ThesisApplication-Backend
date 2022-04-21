@@ -22,9 +22,9 @@ public class UserJwtDetailsService
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository
-                        .findByUsername(username)
-                        .orElseThrow(
-                                () -> new UserNotFoundException("User with username '" + username + "' not found"));
+                .findByUsername(username)
+                .orElseThrow(
+                        () -> new UserNotFoundException("User with username '" + username + "' not found"));
 
         return org.springframework.security.core.userdetails.User.withUsername(username)
                 .password(user.getPassword())

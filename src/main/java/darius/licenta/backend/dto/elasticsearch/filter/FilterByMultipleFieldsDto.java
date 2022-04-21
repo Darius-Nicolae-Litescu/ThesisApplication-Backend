@@ -19,52 +19,52 @@ public class FilterByMultipleFieldsDto {
         return this.filterStoryDto;
     }
 
-    public FilterStoryTaskDto getFilterStoryTaskDto() {
-        return this.filterStoryTaskDto;
-    }
-
-    public FilterSoftwareApplicationDto getFilterSoftwareApplicationDto() {
-        return this.filterSoftwareApplicationDto;
-    }
-
-    public FilterCommentDto getFilterCommentDto() {
-        return this.filterCommentDto;
-    }
-
-    public FilterUserDto getFilterUserDto() {
-        return this.filterUserDto;
-    }
-
-    public int getStartFromResult() {
-        return this.startFromResult;
-    }
-
-    public int getPageSize() {
-        return this.pageSize;
-    }
-
     public void setFilterStoryDto(FilterStoryDto filterStoryDto) {
         this.filterStoryDto = filterStoryDto;
+    }
+
+    public FilterStoryTaskDto getFilterStoryTaskDto() {
+        return this.filterStoryTaskDto;
     }
 
     public void setFilterStoryTaskDto(FilterStoryTaskDto filterStoryTaskDto) {
         this.filterStoryTaskDto = filterStoryTaskDto;
     }
 
+    public FilterSoftwareApplicationDto getFilterSoftwareApplicationDto() {
+        return this.filterSoftwareApplicationDto;
+    }
+
     public void setFilterSoftwareApplicationDto(FilterSoftwareApplicationDto filterSoftwareApplicationDto) {
         this.filterSoftwareApplicationDto = filterSoftwareApplicationDto;
+    }
+
+    public FilterCommentDto getFilterCommentDto() {
+        return this.filterCommentDto;
     }
 
     public void setFilterCommentDto(FilterCommentDto filterCommentDto) {
         this.filterCommentDto = filterCommentDto;
     }
 
+    public FilterUserDto getFilterUserDto() {
+        return this.filterUserDto;
+    }
+
     public void setFilterUserDto(FilterUserDto filterUserDto) {
         this.filterUserDto = filterUserDto;
     }
 
+    public int getStartFromResult() {
+        return this.startFromResult;
+    }
+
     public void setStartFromResult(int startFromResult) {
         this.startFromResult = startFromResult;
+    }
+
+    public int getPageSize() {
+        return this.pageSize;
     }
 
     public void setPageSize(int pageSize) {

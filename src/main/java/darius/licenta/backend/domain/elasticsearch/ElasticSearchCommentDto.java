@@ -47,7 +47,7 @@ public class ElasticSearchCommentDto implements Serializable {
         if (o == this) return true;
         if (!(o instanceof ElasticSearchCommentDto)) return false;
         final ElasticSearchCommentDto other = (ElasticSearchCommentDto) o;
-        if (!other.canEqual((Object) this)) return false;
+        if (!other.canEqual(this)) return false;
         final Object this$id = this.getId();
         final Object other$id = other.getId();
         if (!Objects.equals(this$id, other$id)) return false;
@@ -64,8 +64,7 @@ public class ElasticSearchCommentDto implements Serializable {
             return false;
         final Object this$postedAt = this.getPostedAt();
         final Object other$postedAt = other.getPostedAt();
-        if (!Objects.equals(this$postedAt, other$postedAt)) return false;
-        return true;
+        return Objects.equals(this$postedAt, other$postedAt);
     }
 
     protected boolean canEqual(final Object other) {

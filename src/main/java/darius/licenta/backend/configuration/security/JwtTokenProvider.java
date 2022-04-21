@@ -24,12 +24,10 @@ import java.util.stream.Collectors;
 public class JwtTokenProvider {
 
 
-    @Value("${security.jwt.token.secret-key:secret-key}")
-    private String secretKey;
-
     @Value("${security.jwt.token.expire-length:36000000}")
     private static final long VALIDITY_IN_MILLISECONDS = 3600000L * 1000; // 1000h
-
+    @Value("${security.jwt.token.secret-key:secret-key}")
+    private String secretKey;
     @Autowired
     private UserJwtDetailsService userJwtDetailsService;
 

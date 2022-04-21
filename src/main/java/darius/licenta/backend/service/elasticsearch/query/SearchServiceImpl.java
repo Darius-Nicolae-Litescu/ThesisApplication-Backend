@@ -33,6 +33,10 @@ public class SearchServiceImpl implements SearchService {
     @Value("${api.elasticsearch.mapping}")
     private String elasticSearchMappingPrefix;
 
+    public static String concatUrl(String s1, String s2, String s3) {
+        return s1 + s2 + s3;
+    }
+
     @Override
     public ElasticSearchResultQuery searchFromQuery(Optional<List<String>> collections, Optional<List<String>> returnFields, String term, Optional<List<String>> fields, String from, String size) throws IOException {
         String body = QueryHelperBuilder.buildMultipleFieldSearchQuery(term, returnFields, fields, from, size);
@@ -106,9 +110,5 @@ public class SearchServiceImpl implements SearchService {
 
             return elasticSearchResultQuery;
         }
-    }
-
-    public static String concatUrl(String s1, String s2, String s3) {
-        return s1 + s2 + s3;
     }
 }

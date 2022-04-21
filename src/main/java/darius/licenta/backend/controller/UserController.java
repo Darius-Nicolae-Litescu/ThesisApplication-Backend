@@ -9,15 +9,12 @@ import darius.licenta.backend.payload.response.PaginatedResponse;
 import darius.licenta.backend.service.picture.PictureService;
 import darius.licenta.backend.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
-import java.security.Principal;
 import java.util.Base64;
 import java.util.List;
 
@@ -27,6 +24,7 @@ import java.util.List;
 public class UserController {
     private final UserService userService;
     private final PictureService pictureService;
+
     @Autowired
     public UserController(UserService userService, PictureService pictureService) {
         this.userService = userService;
@@ -52,7 +50,7 @@ public class UserController {
 
     @PutMapping("/{userId}/change-email")
     @Secured({UserRole.Rank.ADMIN})
-    public ApiResponse<ResponseUserDto> changeEmail(@RequestBody UpdateUserEmailDto updateUserEmailDto){
+    public ApiResponse<ResponseUserDto> changeEmail(@RequestBody UpdateUserEmailDto updateUserEmailDto) {
         return userService.changeEmail(updateUserEmailDto);
     }
 

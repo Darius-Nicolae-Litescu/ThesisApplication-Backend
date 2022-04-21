@@ -19,12 +19,12 @@ public class UpdatePositionDto implements Serializable {
         return this.name;
     }
 
-    public String getSeniorityLevel() {
-        return this.seniorityLevel;
-    }
-
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getSeniorityLevel() {
+        return this.seniorityLevel;
     }
 
     public void setSeniorityLevel(String seniorityLevel) {

@@ -28,6 +28,10 @@ public class SearchByKeywordDto {
         return returnFields;
     }
 
+    public void setReturnFields(List<String> returnFields) {
+        this.returnFields = Optional.of(returnFields);
+    }
+
     public Optional<List<String>> getCollections() {
         return collections;
     }
@@ -66,9 +70,5 @@ public class SearchByKeywordDto {
 
     public void setSize(String size) {
         this.size = size;
-    }
-
-    public void setReturnFields(List<String> returnFields) {
-        this.returnFields = Optional.of(returnFields);
     }
 }

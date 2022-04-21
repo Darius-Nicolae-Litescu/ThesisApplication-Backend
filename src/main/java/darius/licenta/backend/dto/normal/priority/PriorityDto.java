@@ -23,28 +23,28 @@ public class PriorityDto implements Serializable {
         return this.id;
     }
 
-    public String getTitle() {
-        return this.title;
-    }
-
-    public String getDescription() {
-        return this.description;
-    }
-
-    public int getLevel() {
-        return this.level;
-    }
-
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getTitle() {
+        return this.title;
     }
 
     public void setTitle(String title) {
         this.title = title;
     }
 
+    public String getDescription() {
+        return this.description;
+    }
+
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public int getLevel() {
+        return this.level;
     }
 
     public void setLevel(int level) {

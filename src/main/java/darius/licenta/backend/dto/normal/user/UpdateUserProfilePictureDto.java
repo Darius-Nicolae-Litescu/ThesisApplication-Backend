@@ -3,7 +3,6 @@ package darius.licenta.backend.dto.normal.user;
 import darius.licenta.backend.domain.sql.Picture;
 
 import java.io.Serializable;
-import java.sql.Blob;
 import java.util.Objects;
 
 public class UpdateUserProfilePictureDto implements Serializable {

@@ -1,7 +1,6 @@
 package darius.licenta.backend.dto.normal.storytask.fullinformation;
 
 import java.io.Serializable;
-import java.sql.Blob;
 import java.util.Objects;
 
 public class PostedByUserDto implements Serializable {

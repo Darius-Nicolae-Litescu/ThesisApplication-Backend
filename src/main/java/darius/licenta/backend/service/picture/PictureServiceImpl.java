@@ -6,7 +6,6 @@ import darius.licenta.backend.mapper.normal.user.UserMapper;
 import darius.licenta.backend.payload.response.ApiResponse;
 import darius.licenta.backend.persistence.jpa.PictureRepository;
 import darius.licenta.backend.persistence.jpa.UserRepository;
-import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -68,6 +67,7 @@ public class PictureServiceImpl implements PictureService {
     public Picture getProfilePicture(String username) {
         return pictureRepository.findByUploadedBy_Username(username);
     }
+
     public Picture getProfilePicture(Long id) {
         return pictureRepository.findByUploadedBy_Id(id);
     }

@@ -26,20 +26,20 @@ public class PositionDto implements Serializable {
         return this.id;
     }
 
-    public String getName() {
-        return this.name;
-    }
-
-    public String getSeniorityLevel() {
-        return this.seniorityLevel;
-    }
-
     public void setId(Long id) {
         this.id = id;
     }
 
+    public String getName() {
+        return this.name;
+    }
+
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getSeniorityLevel() {
+        return this.seniorityLevel;
     }
 
     public void setSeniorityLevel(String seniorityLevel) {

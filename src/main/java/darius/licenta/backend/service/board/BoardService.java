@@ -11,8 +11,12 @@ import java.util.List;
 public interface BoardService {
 
     ApiResponse<FullBoardDetailsDto> getFullDetailsByBoardId(Long id);
+
     ApiResponse<FullBoardDetailsDto> updateBoardDetails(UpdateBoardDto updateBoardDto);
+
     ApiResponse<List<BoardSearchResponseDto>> getAllBoards();
+
     ApiResponse<FullBoardDetailsDto> createBoard(CreateBoardDto createBoardDto);
+
     ApiResponse<Boolean> addAllStoriesToBoard(Long boardId);
 }

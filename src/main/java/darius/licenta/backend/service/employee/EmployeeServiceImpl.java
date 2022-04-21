@@ -67,7 +67,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         Person person = personRepository.getById(insertEmployeeDto.getPersonId());
         Position position = positionRepository.getById(insertEmployeeDto.getPositionId());
         User user = userRepository.getById(insertEmployeeDto.getUserId());
-        Employee employee = new Employee(person,position,user);
+        Employee employee = new Employee(person, position, user);
 
         employeeRepository.save(employee);
         user.setEmployee(employee);

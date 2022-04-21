@@ -77,7 +77,7 @@ public class ElasticSearchStoryTaskDto implements Serializable {
         if (o == this) return true;
         if (!(o instanceof ElasticSearchStoryTaskDto)) return false;
         final ElasticSearchStoryTaskDto other = (ElasticSearchStoryTaskDto) o;
-        if (!other.canEqual((Object) this)) return false;
+        if (!other.canEqual(this)) return false;
         final Object this$id = this.getId();
         final Object other$id = other.getId();
         if (!Objects.equals(this$id, other$id)) return false;
@@ -109,9 +109,7 @@ public class ElasticSearchStoryTaskDto implements Serializable {
             return false;
         final Object this$modificationDate = this.getModificationDate();
         final Object other$modificationDate = other.getModificationDate();
-        if (!Objects.equals(this$modificationDate, other$modificationDate))
-            return false;
-        return true;
+        return Objects.equals(this$modificationDate, other$modificationDate);
     }
 
     protected boolean canEqual(final Object other) {

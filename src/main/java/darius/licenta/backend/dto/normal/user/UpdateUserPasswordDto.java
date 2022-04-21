@@ -19,12 +19,12 @@ public class UpdateUserPasswordDto implements Serializable {
         return this.username;
     }
 
-    public String getPassword() {
-        return this.password;
-    }
-
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public String getPassword() {
+        return this.password;
     }
 
     public void setPassword(String password) {

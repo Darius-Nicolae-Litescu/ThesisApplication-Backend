@@ -34,7 +34,7 @@ public class ElasticSearchSoftwareApplicationDto implements Serializable {
         if (!(o instanceof ElasticSearchSoftwareApplicationDto))
             return false;
         final ElasticSearchSoftwareApplicationDto other = (ElasticSearchSoftwareApplicationDto) o;
-        if (!other.canEqual((Object) this)) return false;
+        if (!other.canEqual(this)) return false;
         final Object this$id = this.getId();
         final Object other$id = other.getId();
         if (!Objects.equals(this$id, other$id)) return false;
@@ -43,9 +43,7 @@ public class ElasticSearchSoftwareApplicationDto implements Serializable {
         if (!Objects.equals(this$name, other$name)) return false;
         final Object this$description = this.getDescription();
         final Object other$description = other.getDescription();
-        if (!Objects.equals(this$description, other$description))
-            return false;
-        return true;
+        return Objects.equals(this$description, other$description);
     }
 
     protected boolean canEqual(final Object other) {

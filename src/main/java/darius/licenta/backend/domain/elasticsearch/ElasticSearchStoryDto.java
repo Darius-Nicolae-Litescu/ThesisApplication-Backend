@@ -102,7 +102,7 @@ public class ElasticSearchStoryDto implements Serializable {
         if (o == this) return true;
         if (!(o instanceof ElasticSearchStoryDto)) return false;
         final ElasticSearchStoryDto other = (ElasticSearchStoryDto) o;
-        if (!other.canEqual((Object) this)) return false;
+        if (!other.canEqual(this)) return false;
         final Object this$id = this.getId();
         final Object other$id = other.getId();
         if (!Objects.equals(this$id, other$id)) return false;
@@ -152,9 +152,7 @@ public class ElasticSearchStoryDto implements Serializable {
             return false;
         final Object this$softwareApplicationModificationDate = this.getSoftwareApplicationModificationDate();
         final Object other$softwareApplicationModificationDate = other.getSoftwareApplicationModificationDate();
-        if (!Objects.equals(this$softwareApplicationModificationDate, other$softwareApplicationModificationDate))
-            return false;
-        return true;
+        return Objects.equals(this$softwareApplicationModificationDate, other$softwareApplicationModificationDate);
     }
 
     protected boolean canEqual(final Object other) {
@@ -225,7 +223,7 @@ public class ElasticSearchStoryDto implements Serializable {
             if (o == this) return true;
             if (!(o instanceof CategoryDto)) return false;
             final CategoryDto other = (CategoryDto) o;
-            if (!other.canEqual((Object) this)) return false;
+            if (!other.canEqual(this)) return false;
             final Object this$id = this.getId();
             final Object other$id = other.getId();
             if (!Objects.equals(this$id, other$id)) return false;
@@ -235,9 +233,7 @@ public class ElasticSearchStoryDto implements Serializable {
                 return false;
             final Object this$categoryPicture = this.getCategoryPicture();
             final Object other$categoryPicture = other.getCategoryPicture();
-            if (!Objects.equals(this$categoryPicture, other$categoryPicture))
-                return false;
-            return true;
+            return Objects.equals(this$categoryPicture, other$categoryPicture);
         }
 
         protected boolean canEqual(final Object other) {

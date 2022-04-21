@@ -38,7 +38,7 @@ public class Comment {
     @ManyToOne(fetch = FetchType.LAZY, optional = true)
     private StoryTask storyTask;
 
-    @OneToMany(mappedBy= "comment", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "comment", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<Attachment> commentAttachments;
 
     public Comment(Long id, String content, User postedBy, LocalDateTime postedAt, Date modificationDate, Story story, StoryTask storyTask, Set<Attachment> commentAttachment) {
@@ -75,6 +75,10 @@ public class Comment {
         return postedBy;
     }
 
+    public void setPostedBy(User postedBy) {
+        this.postedBy = postedBy;
+    }
+
     public Date getModificationDate() {
         return modificationDate;
     }
@@ -87,52 +91,48 @@ public class Comment {
         return story;
     }
 
-    public Set<Attachment> getCommentAttachments() {
-        return commentAttachments;
-    }
-
-    public Long getId() {
-        return this.id;
-    }
-
-    public String getContent() {
-        return this.content;
-    }
-
-    public LocalDateTime getPostedAt() {
-        return this.postedAt;
-    }
-
-    public StoryTask getStoryTask() {
-        return this.storyTask;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
-
-    public void setPostedAt(LocalDateTime postedAt) {
-        this.postedAt = postedAt;
-    }
-
-    public void setStoryTask(StoryTask storyTask) {
-        this.storyTask = storyTask;
-    }
-
     public void setStory(Story story) {
         this.story = story;
+    }
+
+    public Set<Attachment> getCommentAttachments() {
+        return commentAttachments;
     }
 
     public void setCommentAttachments(Set<Attachment> commentAttachments) {
         this.commentAttachments = commentAttachments;
     }
 
-    public void setPostedBy(User postedBy) {
-        this.postedBy = postedBy;
+    public Long getId() {
+        return this.id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getContent() {
+        return this.content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public LocalDateTime getPostedAt() {
+        return this.postedAt;
+    }
+
+    public void setPostedAt(LocalDateTime postedAt) {
+        this.postedAt = postedAt;
+    }
+
+    public StoryTask getStoryTask() {
+        return this.storyTask;
+    }
+
+    public void setStoryTask(StoryTask storyTask) {
+        this.storyTask = storyTask;
     }
 
     @Override

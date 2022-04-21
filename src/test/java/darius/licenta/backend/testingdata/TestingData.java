@@ -9,8 +9,6 @@ import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
 
-import java.util.Date;
-
 @Component
 public class TestingData implements ApplicationRunner {
 
@@ -38,8 +36,7 @@ public class TestingData implements ApplicationRunner {
 
     }
 
-    void insertPersonData()
-    {
+    void insertPersonData() {
 
     }
 }

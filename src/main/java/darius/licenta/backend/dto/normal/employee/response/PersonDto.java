@@ -19,12 +19,12 @@ public class PersonDto implements Serializable {
         return this.firstName;
     }
 
-    public String getLastName() {
-        return this.lastName;
-    }
-
     public void setFirstName(String firstName) {
         this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return this.lastName;
     }
 
     public void setLastName(String lastName) {

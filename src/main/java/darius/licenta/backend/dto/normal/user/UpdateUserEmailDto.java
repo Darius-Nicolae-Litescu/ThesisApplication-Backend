@@ -19,12 +19,12 @@ public class UpdateUserEmailDto implements Serializable {
         return this.username;
     }
 
-    public String getEmail() {
-        return this.email;
-    }
-
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public String getEmail() {
+        return this.email;
     }
 
     public void setEmail(String email) {

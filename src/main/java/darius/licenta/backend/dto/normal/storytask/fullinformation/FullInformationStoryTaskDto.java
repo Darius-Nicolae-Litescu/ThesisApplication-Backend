@@ -24,10 +24,10 @@ public class FullInformationStoryTaskDto implements Serializable {
     private final String assignedToEmail;
     private final String status;
     private final LocalDateTime finishedAt;
-    private List<StoryCommentDto> storyComments;
     private final Set<AttachmentDto> commentAttachments;
     private final long storyId;
     private final String storyDescription;
+    private List<StoryCommentDto> storyComments;
 
     public FullInformationStoryTaskDto(long id, String title, String description, int storyPoints, long createdById, String createdByUsername, String createdByEmail, LocalDateTime createdAt, long assignedToId, String assignedToUsername, String assignedToEmail, String status, LocalDateTime finishedAt, Set<AttachmentDto> commentAttachments, long storyId, String storyDescription) {
         this.id = id;
@@ -104,6 +104,10 @@ public class FullInformationStoryTaskDto implements Serializable {
         return this.storyComments;
     }
 
+    public void setStoryComments(List<StoryCommentDto> storyComments) {
+        this.storyComments = storyComments;
+    }
+
     public Set<AttachmentDto> getCommentAttachments() {
         return this.commentAttachments;
     }
@@ -114,10 +118,6 @@ public class FullInformationStoryTaskDto implements Serializable {
 
     public String getStoryDescription() {
         return this.storyDescription;
-    }
-
-    public void setStoryComments(List<StoryCommentDto> storyComments) {
-        this.storyComments = storyComments;
     }
 
     @Override

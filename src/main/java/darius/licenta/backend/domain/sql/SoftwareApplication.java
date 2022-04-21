@@ -26,7 +26,7 @@ public class SoftwareApplication {
     @UpdateTimestamp
     private Date modificationDate;
 
-    @OneToMany(mappedBy="softwareApplication", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "softwareApplication", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<Story> stories;
 
     public SoftwareApplication(Long id, String name, String description, Set<Story> stories) {
@@ -51,28 +51,28 @@ public class SoftwareApplication {
         return this.id;
     }
 
-    public String getName() {
-        return this.name;
-    }
-
-    public String getDescription() {
-        return this.description;
-    }
-
-    public Set<Story> getStories() {
-        return this.stories;
-    }
-
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getName() {
+        return this.name;
     }
 
     public void setName(String name) {
         this.name = name;
     }
 
+    public String getDescription() {
+        return this.description;
+    }
+
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public Set<Story> getStories() {
+        return this.stories;
     }
 
     public void setStories(Set<Story> stories) {

@@ -19,12 +19,12 @@ public class CategoryDto implements Serializable {
         return this.id;
     }
 
-    public String getCategoryName() {
-        return this.categoryName;
-    }
-
     public void setId(long id) {
         this.id = id;
+    }
+
+    public String getCategoryName() {
+        return this.categoryName;
     }
 
     public void setCategoryName(String categoryName) {

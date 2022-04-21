@@ -44,14 +44,14 @@ public class UserAccountOperationsController {
     }
 
     @PutMapping("/update/email")
-    @Secured({UserRole.Rank.ADMIN,UserRole.Rank.USER})
+    @Secured({UserRole.Rank.ADMIN, UserRole.Rank.USER})
     public ApiResponse<ResponseUserDto> updateEmail(Principal principal, @RequestBody UpdateUserEmailDto updateUserEmailDto) {
         String jwtUsername = principal.getName();
         return userService.updateUserEmail(jwtUsername, updateUserEmailDto);
     }
 
     @PutMapping("/update/password")
-    @Secured({UserRole.Rank.ADMIN,UserRole.Rank.USER})
+    @Secured({UserRole.Rank.ADMIN, UserRole.Rank.USER})
     public ApiResponse<ResponseUserDto> updatePassword(Principal principal, @RequestBody UpdateUserPasswordDto updateUserPasswordDto) {
         String jwtUsername = principal.getName();
         return userService.updateUserPassword(jwtUsername, updateUserPasswordDto);
@@ -84,13 +84,13 @@ public class UserAccountOperationsController {
     }
 
     @GetMapping(value = "/whoami")
-    @Secured({UserRole.Rank.ADMIN,UserRole.Rank.USER})
+    @Secured({UserRole.Rank.ADMIN, UserRole.Rank.USER})
     public ApiResponse<ResponseUserWithJwtDto> whoami(HttpServletRequest req) {
         return userService.whoami(req);
     }
 
     @GetMapping("/refresh")
-    @Secured({UserRole.Rank.ADMIN,UserRole.Rank.USER})
+    @Secured({UserRole.Rank.ADMIN, UserRole.Rank.USER})
     public String refresh(HttpServletRequest req) {
         return userService.refreshJwtToken(req.getRemoteUser());
     }

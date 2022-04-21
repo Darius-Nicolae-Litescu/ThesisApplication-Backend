@@ -48,28 +48,28 @@ public class Employee {
         return this.id;
     }
 
-    public Person getPerson() {
-        return this.person;
-    }
-
-    public Position getPosition() {
-        return this.position;
-    }
-
-    public User getUser() {
-        return this.user;
-    }
-
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Person getPerson() {
+        return this.person;
     }
 
     public void setPerson(Person person) {
         this.person = person;
     }
 
+    public Position getPosition() {
+        return this.position;
+    }
+
     public void setPosition(Position position) {
         this.position = position;
+    }
+
+    public User getUser() {
+        return this.user;
     }
 
     public void setUser(User user) {

@@ -34,26 +34,16 @@ import java.util.stream.Collectors;
 @Service
 public class StoryServiceImpl implements StoryService {
     public static final String STORY_NOT_FOUND = "Story not found";
-    Logger logger = LoggerFactory.getLogger(StoryServiceImpl.class);
-
     private final CommentAttachmentOperationsService commentAttachmentOperationsService;
-
     private final UserRepository userRepository;
-
     private final StoryRepository storyRepository;
-
     private final CategoryRepository categoryRepository;
-
     private final PriorityRepository priorityRepository;
-
     private final CommentRepository commentRepository;
-
     private final SoftwareApplicationRepository softwareApplicationRepository;
-
     private final StoryMapper storyMapper;
-
     private final CommentMapper commentMapper;
-
+    Logger logger = LoggerFactory.getLogger(StoryServiceImpl.class);
     @Value("${api.rest.base.uri}")
     private String restApiBaseUri;
 

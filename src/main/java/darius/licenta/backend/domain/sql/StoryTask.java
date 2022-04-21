@@ -5,7 +5,10 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.Date;
+import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name = StoryTask.TABLE_NAME)
@@ -47,10 +50,10 @@ public class StoryTask {
     private Date modificationDate;
 
     @OrderBy("id ASC")
-    @OneToMany(mappedBy="storyTask", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "storyTask", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Comment> comments;
 
-    @OneToMany(mappedBy="storyTask", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "storyTask", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<Attachment> commentAttachments;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
@@ -74,8 +77,7 @@ public class StoryTask {
     public StoryTask() {
     }
 
-    public void addStoryTaskComment(Comment comment)
-    {
+    public void addStoryTaskComment(Comment comment) {
         this.comments.add(comment);
     }
 
@@ -91,92 +93,92 @@ public class StoryTask {
         return this.id;
     }
 
-    public String getTitle() {
-        return this.title;
-    }
-
-    public String getDescription() {
-        return this.description;
-    }
-
-    public int getStoryPoints() {
-        return this.storyPoints;
-    }
-
-    public User getCreatedBy() {
-        return this.createdBy;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return this.createdAt;
-    }
-
-    public User getAssignedTo() {
-        return this.assignedTo;
-    }
-
-    public String getStatus() {
-        return this.status;
-    }
-
-    public LocalDateTime getFinishedAt() {
-        return this.finishedAt;
-    }
-
-    public List<Comment> getStoryComments() {
-        return this.comments;
-    }
-
-    public Set<Attachment> getCommentAttachments() {
-        return this.commentAttachments;
-    }
-
-    public Story getStory() {
-        return this.story;
-    }
-
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getTitle() {
+        return this.title;
     }
 
     public void setTitle(String title) {
         this.title = title;
     }
 
+    public String getDescription() {
+        return this.description;
+    }
+
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public int getStoryPoints() {
+        return this.storyPoints;
     }
 
     public void setStoryPoints(int storyPoints) {
         this.storyPoints = storyPoints;
     }
 
+    public User getCreatedBy() {
+        return this.createdBy;
+    }
+
     public void setCreatedBy(User createdBy) {
         this.createdBy = createdBy;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return this.createdAt;
     }
 
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
 
+    public User getAssignedTo() {
+        return this.assignedTo;
+    }
+
     public void setAssignedTo(User assignedTo) {
         this.assignedTo = assignedTo;
+    }
+
+    public String getStatus() {
+        return this.status;
     }
 
     public void setStatus(String status) {
         this.status = status;
     }
 
+    public LocalDateTime getFinishedAt() {
+        return this.finishedAt;
+    }
+
     public void setFinishedAt(LocalDateTime finishedAt) {
         this.finishedAt = finishedAt;
+    }
+
+    public List<Comment> getStoryComments() {
+        return this.comments;
     }
 
     public void setStoryComments(List<Comment> comments) {
         this.comments = comments;
     }
 
+    public Set<Attachment> getCommentAttachments() {
+        return this.commentAttachments;
+    }
+
     public void setCommentAttachments(Set<Attachment> commentAttachments) {
         this.commentAttachments = commentAttachments;
+    }
+
+    public Story getStory() {
+        return this.story;
     }
 
     public void setStory(Story story) {
