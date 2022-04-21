@@ -1,6 +1,7 @@
 package darius.licenta.backend.dto.normal.user;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 public class CreateUserDto implements Serializable {
     private String username;
@@ -40,40 +41,32 @@ public class CreateUserDto implements Serializable {
         this.email = email;
     }
 
-    public boolean equals(final Object o) {
-        if (o == this) return true;
-        if (!(o instanceof CreateUserDto)) return false;
-        final CreateUserDto other = (CreateUserDto) o;
-        if (!other.canEqual((Object) this)) return false;
-        final Object this$username = this.getUsername();
-        final Object other$username = other.getUsername();
-        if (this$username == null ? other$username != null : !this$username.equals(other$username)) return false;
-        final Object this$password = this.getPassword();
-        final Object other$password = other.getPassword();
-        if (this$password == null ? other$password != null : !this$password.equals(other$password)) return false;
-        final Object this$email = this.getEmail();
-        final Object other$email = other.getEmail();
-        if (this$email == null ? other$email != null : !this$email.equals(other$email)) return false;
-        return true;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        CreateUserDto that = (CreateUserDto) o;
+
+        if (!Objects.equals(username, that.username)) return false;
+        if (!Objects.equals(password, that.password)) return false;
+        return Objects.equals(email, that.email);
     }
 
-    protected boolean canEqual(final Object other) {
-        return other instanceof CreateUserDto;
-    }
-
+    @Override
     public int hashCode() {
-        final int PRIME = 59;
-        int result = 1;
-        final Object $username = this.getUsername();
-        result = result * PRIME + ($username == null ? 43 : $username.hashCode());
-        final Object $password = this.getPassword();
-        result = result * PRIME + ($password == null ? 43 : $password.hashCode());
-        final Object $email = this.getEmail();
-        result = result * PRIME + ($email == null ? 43 : $email.hashCode());
+        int result = username != null ? username.hashCode() : 0;
+        result = 31 * result + (password != null ? password.hashCode() : 0);
+        result = 31 * result + (email != null ? email.hashCode() : 0);
         return result;
     }
 
+    @Override
     public String toString() {
-        return "CreateUserDto(username=" + this.getUsername() + ", password=" + this.getPassword() + ", email=" + this.getEmail() + ")";
+        return "CreateUserDto{" +
+                "username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", email='" + email + '\'' +
+                '}';
     }
 }

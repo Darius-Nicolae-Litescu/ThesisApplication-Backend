@@ -51,4 +51,12 @@ public class UpdateUserProfilePictureDto implements Serializable {
         result = 31 * result + (profilePicture != null ? profilePicture.hashCode() : 0);
         return result;
     }
+
+    @Override
+    public String toString() {
+        return "UpdateUserProfilePictureDto{" +
+                "username='" + username + '\'' +
+                ", profilePicture=" + profilePicture +
+                '}';
+    }
 }

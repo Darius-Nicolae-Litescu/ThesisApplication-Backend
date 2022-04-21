@@ -1,6 +1,7 @@
 package darius.licenta.backend.dto.normal.softwareapplication;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 public class SoftwareApplicationDto implements Serializable {
     private long id;
@@ -40,39 +41,32 @@ public class SoftwareApplicationDto implements Serializable {
         this.description = description;
     }
 
-    public boolean equals(final Object o) {
-        if (o == this) return true;
-        if (!(o instanceof SoftwareApplicationDto)) return false;
-        final SoftwareApplicationDto other = (SoftwareApplicationDto) o;
-        if (!other.canEqual((Object) this)) return false;
-        if (this.getId() != other.getId()) return false;
-        final Object this$name = this.getName();
-        final Object other$name = other.getName();
-        if (this$name == null ? other$name != null : !this$name.equals(other$name)) return false;
-        final Object this$description = this.getDescription();
-        final Object other$description = other.getDescription();
-        if (this$description == null ? other$description != null : !this$description.equals(other$description))
-            return false;
-        return true;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        SoftwareApplicationDto that = (SoftwareApplicationDto) o;
+
+        if (id != that.id) return false;
+        if (!Objects.equals(name, that.name)) return false;
+        return Objects.equals(description, that.description);
     }
 
-    protected boolean canEqual(final Object other) {
-        return other instanceof SoftwareApplicationDto;
-    }
-
+    @Override
     public int hashCode() {
-        final int PRIME = 59;
-        int result = 1;
-        final long $id = this.getId();
-        result = result * PRIME + (int) ($id >>> 32 ^ $id);
-        final Object $name = this.getName();
-        result = result * PRIME + ($name == null ? 43 : $name.hashCode());
-        final Object $description = this.getDescription();
-        result = result * PRIME + ($description == null ? 43 : $description.hashCode());
+        int result = (int) (id ^ (id >>> 32));
+        result = 31 * result + (name != null ? name.hashCode() : 0);
+        result = 31 * result + (description != null ? description.hashCode() : 0);
         return result;
     }
 
+    @Override
     public String toString() {
-        return "SoftwareApplicationDto(id=" + this.getId() + ", name=" + this.getName() + ", description=" + this.getDescription() + ")";
+        return "SoftwareApplicationDto{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                '}';
     }
 }

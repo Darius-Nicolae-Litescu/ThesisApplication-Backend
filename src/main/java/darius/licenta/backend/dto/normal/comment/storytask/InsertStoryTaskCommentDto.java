@@ -29,42 +29,32 @@ public class InsertStoryTaskCommentDto implements Serializable {
         return this.commentAttachments;
     }
 
-    public boolean equals(final Object o) {
-        if (o == this) return true;
-        if (!(o instanceof InsertStoryTaskCommentDto)) return false;
-        final InsertStoryTaskCommentDto other = (InsertStoryTaskCommentDto) o;
-        if (!other.canEqual((Object) this)) return false;
-        final Object this$content = this.getContent();
-        final Object other$content = other.getContent();
-        if (!Objects.equals(this$content, other$content)) return false;
-        final Object this$storyTaskId = this.getStoryTaskId();
-        final Object other$storyTaskId = other.getStoryTaskId();
-        if (!Objects.equals(this$storyTaskId, other$storyTaskId))
-            return false;
-        final Object this$commentAttachments = this.getCommentAttachments();
-        final Object other$commentAttachments = other.getCommentAttachments();
-        if (!Objects.equals(this$commentAttachments, other$commentAttachments))
-            return false;
-        return true;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        InsertStoryTaskCommentDto that = (InsertStoryTaskCommentDto) o;
+
+        if (!Objects.equals(content, that.content)) return false;
+        if (!Objects.equals(storyTaskId, that.storyTaskId)) return false;
+        return Objects.equals(commentAttachments, that.commentAttachments);
     }
 
-    protected boolean canEqual(final Object other) {
-        return other instanceof InsertStoryTaskCommentDto;
-    }
-
+    @Override
     public int hashCode() {
-        final int PRIME = 59;
-        int result = 1;
-        final Object $content = this.getContent();
-        result = result * PRIME + ($content == null ? 43 : $content.hashCode());
-        final Object $storyTaskId = this.getStoryTaskId();
-        result = result * PRIME + ($storyTaskId == null ? 43 : $storyTaskId.hashCode());
-        final Object $commentAttachments = this.getCommentAttachments();
-        result = result * PRIME + ($commentAttachments == null ? 43 : $commentAttachments.hashCode());
+        int result = content != null ? content.hashCode() : 0;
+        result = 31 * result + (storyTaskId != null ? storyTaskId.hashCode() : 0);
+        result = 31 * result + (commentAttachments != null ? commentAttachments.hashCode() : 0);
         return result;
     }
 
+    @Override
     public String toString() {
-        return "InsertStoryTaskCommentDto(content=" + this.getContent() + ", storyTaskId=" + this.getStoryTaskId() + ", commentAttachments=" + this.getCommentAttachments() + ")";
+        return "InsertStoryTaskCommentDto{" +
+                "content='" + content + '\'' +
+                ", storyTaskId=" + storyTaskId +
+                ", commentAttachments=" + commentAttachments +
+                '}';
     }
 }

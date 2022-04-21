@@ -1,6 +1,7 @@
 package darius.licenta.backend.dto.normal.storytask;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 public class ResponseStoryTaskDto implements Serializable {
     private final Long id;
@@ -37,46 +38,38 @@ public class ResponseStoryTaskDto implements Serializable {
         return this.status;
     }
 
-    public boolean equals(final Object o) {
-        if (o == this) return true;
-        if (!(o instanceof ResponseStoryTaskDto)) return false;
-        final ResponseStoryTaskDto other = (ResponseStoryTaskDto) o;
-        if (!other.canEqual((Object) this)) return false;
-        if (this.getId() != other.getId()) return false;
-        final Object this$title = this.getTitle();
-        final Object other$title = other.getTitle();
-        if (this$title == null ? other$title != null : !this$title.equals(other$title)) return false;
-        final Object this$description = this.getDescription();
-        final Object other$description = other.getDescription();
-        if (this$description == null ? other$description != null : !this$description.equals(other$description))
-            return false;
-        if (this.getStoryPoints() != other.getStoryPoints()) return false;
-        final Object this$status = this.getStatus();
-        final Object other$status = other.getStatus();
-        if (this$status == null ? other$status != null : !this$status.equals(other$status)) return false;
-        return true;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        ResponseStoryTaskDto that = (ResponseStoryTaskDto) o;
+
+        if (storyPoints != that.storyPoints) return false;
+        if (!Objects.equals(id, that.id)) return false;
+        if (!Objects.equals(title, that.title)) return false;
+        if (!Objects.equals(description, that.description)) return false;
+        return Objects.equals(status, that.status);
     }
 
-    protected boolean canEqual(final Object other) {
-        return other instanceof ResponseStoryTaskDto;
-    }
-
+    @Override
     public int hashCode() {
-        final int PRIME = 59;
-        int result = 1;
-        final long $id = this.getId();
-        result = result * PRIME + (int) ($id >>> 32 ^ $id);
-        final Object $title = this.getTitle();
-        result = result * PRIME + ($title == null ? 43 : $title.hashCode());
-        final Object $description = this.getDescription();
-        result = result * PRIME + ($description == null ? 43 : $description.hashCode());
-        result = result * PRIME + this.getStoryPoints();
-        final Object $status = this.getStatus();
-        result = result * PRIME + ($status == null ? 43 : $status.hashCode());
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (title != null ? title.hashCode() : 0);
+        result = 31 * result + (description != null ? description.hashCode() : 0);
+        result = 31 * result + storyPoints;
+        result = 31 * result + (status != null ? status.hashCode() : 0);
         return result;
     }
 
+    @Override
     public String toString() {
-        return "ResponseStoryTaskDto(id=" + this.getId() + ", title=" + this.getTitle() + ", description=" + this.getDescription() + ", storyPoints=" + this.getStoryPoints() + ", status=" + this.getStatus() + ")";
+        return "ResponseStoryTaskDto{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", description='" + description + '\'' +
+                ", storyPoints=" + storyPoints +
+                ", status='" + status + '\'' +
+                '}';
     }
 }

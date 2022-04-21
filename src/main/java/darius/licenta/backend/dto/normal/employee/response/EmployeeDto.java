@@ -1,6 +1,7 @@
 package darius.licenta.backend.dto.normal.employee.response;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 public class EmployeeDto implements Serializable {
     private Long id;
@@ -55,43 +56,35 @@ public class EmployeeDto implements Serializable {
         this.user = user;
     }
 
-    public boolean equals(final Object o) {
-        if (o == this) return true;
-        if (!(o instanceof EmployeeDto)) return false;
-        final EmployeeDto other = (EmployeeDto) o;
-        if (!other.canEqual((Object) this)) return false;
-        if (this.getId() != other.getId()) return false;
-        final Object this$person = this.getPerson();
-        final Object other$person = other.getPerson();
-        if (this$person == null ? other$person != null : !this$person.equals(other$person)) return false;
-        final Object this$position = this.getPosition();
-        final Object other$position = other.getPosition();
-        if (this$position == null ? other$position != null : !this$position.equals(other$position)) return false;
-        final Object this$user = this.getUser();
-        final Object other$user = other.getUser();
-        if (this$user == null ? other$user != null : !this$user.equals(other$user)) return false;
-        return true;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        EmployeeDto that = (EmployeeDto) o;
+
+        if (!Objects.equals(id, that.id)) return false;
+        if (!Objects.equals(person, that.person)) return false;
+        if (!Objects.equals(position, that.position)) return false;
+        return Objects.equals(user, that.user);
     }
 
-    protected boolean canEqual(final Object other) {
-        return other instanceof EmployeeDto;
-    }
-
+    @Override
     public int hashCode() {
-        final int PRIME = 59;
-        int result = 1;
-        final long $id = this.getId();
-        result = result * PRIME + (int) ($id >>> 32 ^ $id);
-        final Object $person = this.getPerson();
-        result = result * PRIME + ($person == null ? 43 : $person.hashCode());
-        final Object $position = this.getPosition();
-        result = result * PRIME + ($position == null ? 43 : $position.hashCode());
-        final Object $user = this.getUser();
-        result = result * PRIME + ($user == null ? 43 : $user.hashCode());
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (person != null ? person.hashCode() : 0);
+        result = 31 * result + (position != null ? position.hashCode() : 0);
+        result = 31 * result + (user != null ? user.hashCode() : 0);
         return result;
     }
 
+    @Override
     public String toString() {
-        return "EmployeeDto(id=" + this.getId() + ", person=" + this.getPerson() + ", position=" + this.getPosition() + ", user=" + this.getUser() + ")";
+        return "EmployeeDto{" +
+                "id=" + id +
+                ", person=" + person +
+                ", position=" + position +
+                ", user=" + user +
+                '}';
     }
 }

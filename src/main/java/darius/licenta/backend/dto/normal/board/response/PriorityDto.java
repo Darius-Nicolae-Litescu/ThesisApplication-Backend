@@ -39,49 +39,38 @@ public class PriorityDto implements Serializable {
         return this.priorityIcon;
     }
 
-    public boolean equals(final Object o) {
-        if (o == this) return true;
-        if (!(o instanceof PriorityDto)) return false;
-        final PriorityDto other = (PriorityDto) o;
-        if (!other.canEqual((Object) this)) return false;
-        final Object this$id = this.getId();
-        final Object other$id = other.getId();
-        if (!Objects.equals(this$id, other$id)) return false;
-        final Object this$title = this.getTitle();
-        final Object other$title = other.getTitle();
-        if (!Objects.equals(this$title, other$title)) return false;
-        final Object this$description = this.getDescription();
-        final Object other$description = other.getDescription();
-        if (!Objects.equals(this$description, other$description))
-            return false;
-        if (this.getLevel() != other.getLevel()) return false;
-        final Object this$priorityIcon = this.getPriorityIcon();
-        final Object other$priorityIcon = other.getPriorityIcon();
-        if (!Objects.equals(this$priorityIcon, other$priorityIcon))
-            return false;
-        return true;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        PriorityDto that = (PriorityDto) o;
+
+        if (level != that.level) return false;
+        if (!Objects.equals(id, that.id)) return false;
+        if (!Objects.equals(title, that.title)) return false;
+        if (!Objects.equals(description, that.description)) return false;
+        return Objects.equals(priorityIcon, that.priorityIcon);
     }
 
-    protected boolean canEqual(final Object other) {
-        return other instanceof PriorityDto;
-    }
-
+    @Override
     public int hashCode() {
-        final int PRIME = 59;
-        int result = 1;
-        final Object $id = this.getId();
-        result = result * PRIME + ($id == null ? 43 : $id.hashCode());
-        final Object $title = this.getTitle();
-        result = result * PRIME + ($title == null ? 43 : $title.hashCode());
-        final Object $description = this.getDescription();
-        result = result * PRIME + ($description == null ? 43 : $description.hashCode());
-        result = result * PRIME + this.getLevel();
-        final Object $priorityIcon = this.getPriorityIcon();
-        result = result * PRIME + ($priorityIcon == null ? 43 : $priorityIcon.hashCode());
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (title != null ? title.hashCode() : 0);
+        result = 31 * result + (description != null ? description.hashCode() : 0);
+        result = 31 * result + level;
+        result = 31 * result + (priorityIcon != null ? priorityIcon.hashCode() : 0);
         return result;
     }
 
+    @Override
     public String toString() {
-        return "PriorityDto(id=" + this.getId() + ", title=" + this.getTitle() + ", description=" + this.getDescription() + ", level=" + this.getLevel() + ", priorityIcon=" + this.getPriorityIcon() + ")";
+        return "PriorityDto{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", description='" + description + '\'' +
+                ", level=" + level +
+                ", priorityIcon=" + priorityIcon +
+                '}';
     }
 }

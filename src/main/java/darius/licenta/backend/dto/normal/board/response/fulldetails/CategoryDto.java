@@ -1,4 +1,4 @@
-package darius.licenta.backend.dto.normal.story.response.fulldetails;
+package darius.licenta.backend.dto.normal.board.response.fulldetails;
 
 import java.io.Serializable;
 import java.sql.Blob;

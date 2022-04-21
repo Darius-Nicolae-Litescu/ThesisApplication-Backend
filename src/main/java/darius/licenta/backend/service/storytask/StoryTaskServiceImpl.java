@@ -169,7 +169,7 @@ public class StoryTaskServiceImpl implements StoryTaskService {
             storyTask.get().setStoryPoints(changeStoryTaskGeneralDetails.getStoryPoints());
             storyTask.get().setStatus(changeStoryTaskGeneralDetails.getStatus());
             if (changeStoryTaskGeneralDetails.getFinishedAt() != null) {
-                storyTask.get().setFinishedAt(LocalDateTime.now());
+                storyTask.get().setFinishedAt(changeStoryTaskGeneralDetails.getFinishedAt().plusHours(6));
             } else {
                 storyTask.get().setFinishedAt(null);
             }

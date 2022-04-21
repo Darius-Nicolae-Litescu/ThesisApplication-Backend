@@ -23,35 +23,29 @@ public class UserDto implements Serializable {
         this.email = email;
     }
 
-    public boolean equals(final Object o) {
-        if (o == this) return true;
-        if (!(o instanceof UserDto)) return false;
-        final UserDto other = (UserDto) o;
-        if (!other.canEqual((Object) this)) return false;
-        final Object this$username = this.getUsername();
-        final Object other$username = other.getUsername();
-        if (!Objects.equals(this$username, other$username)) return false;
-        final Object this$email = this.getEmail();
-        final Object other$email = other.getEmail();
-        if (!Objects.equals(this$email, other$email)) return false;
-        return true;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        UserDto userDto = (UserDto) o;
+
+        if (!Objects.equals(username, userDto.username)) return false;
+        return Objects.equals(email, userDto.email);
     }
 
-    protected boolean canEqual(final Object other) {
-        return other instanceof UserDto;
-    }
-
+    @Override
     public int hashCode() {
-        final int PRIME = 59;
-        int result = 1;
-        final Object $username = this.getUsername();
-        result = result * PRIME + ($username == null ? 43 : $username.hashCode());
-        final Object $email = this.getEmail();
-        result = result * PRIME + ($email == null ? 43 : $email.hashCode());
+        int result = username != null ? username.hashCode() : 0;
+        result = 31 * result + (email != null ? email.hashCode() : 0);
         return result;
     }
 
+    @Override
     public String toString() {
-        return "UserDto(username=" + this.getUsername() + ", email=" + this.getEmail() + ")";
+        return "UserDto{" +
+                "username='" + username + '\'' +
+                ", email='" + email + '\'' +
+                '}';
     }
 }

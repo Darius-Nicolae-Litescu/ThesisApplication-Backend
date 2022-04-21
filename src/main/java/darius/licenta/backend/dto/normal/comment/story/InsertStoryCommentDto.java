@@ -29,41 +29,32 @@ public class InsertStoryCommentDto implements Serializable {
         return this.commentAttachments;
     }
 
-    public boolean equals(final Object o) {
-        if (o == this) return true;
-        if (!(o instanceof InsertStoryCommentDto)) return false;
-        final InsertStoryCommentDto other = (InsertStoryCommentDto) o;
-        if (!other.canEqual((Object) this)) return false;
-        final Object this$content = this.getContent();
-        final Object other$content = other.getContent();
-        if (!Objects.equals(this$content, other$content)) return false;
-        final Object this$storyId = this.getStoryId();
-        final Object other$storyId = other.getStoryId();
-        if (!Objects.equals(this$storyId, other$storyId)) return false;
-        final Object this$commentAttachments = this.getCommentAttachments();
-        final Object other$commentAttachments = other.getCommentAttachments();
-        if (!Objects.equals(this$commentAttachments, other$commentAttachments))
-            return false;
-        return true;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        InsertStoryCommentDto that = (InsertStoryCommentDto) o;
+
+        if (!Objects.equals(content, that.content)) return false;
+        if (!Objects.equals(storyId, that.storyId)) return false;
+        return Objects.equals(commentAttachments, that.commentAttachments);
     }
 
-    protected boolean canEqual(final Object other) {
-        return other instanceof InsertStoryCommentDto;
-    }
-
+    @Override
     public int hashCode() {
-        final int PRIME = 59;
-        int result = 1;
-        final Object $content = this.getContent();
-        result = result * PRIME + ($content == null ? 43 : $content.hashCode());
-        final Object $storyId = this.getStoryId();
-        result = result * PRIME + ($storyId == null ? 43 : $storyId.hashCode());
-        final Object $commentAttachments = this.getCommentAttachments();
-        result = result * PRIME + ($commentAttachments == null ? 43 : $commentAttachments.hashCode());
+        int result = content != null ? content.hashCode() : 0;
+        result = 31 * result + (storyId != null ? storyId.hashCode() : 0);
+        result = 31 * result + (commentAttachments != null ? commentAttachments.hashCode() : 0);
         return result;
     }
 
+    @Override
     public String toString() {
-        return "InsertStoryCommentDto(content=" + this.getContent() + ", storyId=" + this.getStoryId() + ", commentAttachments=" + this.getCommentAttachments() + ")";
+        return "InsertStoryCommentDto{" +
+                "content='" + content + '\'' +
+                ", storyId=" + storyId +
+                ", commentAttachments=" + commentAttachments +
+                '}';
     }
 }
