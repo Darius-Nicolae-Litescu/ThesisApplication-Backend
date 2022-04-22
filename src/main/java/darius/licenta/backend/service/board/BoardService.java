@@ -12,7 +12,7 @@ public interface BoardService {
 
     ApiResponse<FullBoardDetailsDto> getFullDetailsByBoardId(Long id);
 
-    ApiResponse<FullBoardDetailsDto> updateBoardDetails(UpdateBoardDto updateBoardDto);
+    ApiResponse<FullBoardDetailsDto> updateBoardDetails(String username, UpdateBoardDto updateBoardDto);
 
     ApiResponse<List<BoardSearchResponseDto>> getAllBoards();
 

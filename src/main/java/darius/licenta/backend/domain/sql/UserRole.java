@@ -4,9 +4,9 @@ import org.springframework.security.core.GrantedAuthority;
 
 public enum UserRole implements GrantedAuthority {
 
-    MODERATOR(Rank.MODERATOR),
     ADMIN(Rank.ADMIN),
-    USER(Rank.USER);
+    USER(Rank.USER),
+    BOARD_ADMIN(Rank.BOARD_ADMIN);
 
     private final String authority;
 
@@ -20,9 +20,9 @@ public enum UserRole implements GrantedAuthority {
     }
 
     public static class Rank {
-        public static final String MODERATOR = "ROLE_MODERATOR";
         public static final String ADMIN = "ROLE_ADMIN";
         public static final String USER = "ROLE_USER";
+        public static final String BOARD_ADMIN = "ROLE_BOARD_ADMIN";
 
         private Rank() {
         }

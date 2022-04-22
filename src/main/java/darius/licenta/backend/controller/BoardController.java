@@ -9,6 +9,7 @@ import darius.licenta.backend.service.board.BoardService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -34,8 +35,9 @@ public class BoardController {
     }
 
     @PutMapping("/")
-    public ApiResponse<FullBoardDetailsDto> updateBoard(@RequestBody UpdateBoardDto updateBoardDto) {
-        return boardService.updateBoardDetails(updateBoardDto);
+    public ApiResponse<FullBoardDetailsDto> updateBoard(Principal principal, @RequestBody UpdateBoardDto updateBoardDto) {
+        String username = principal.getName();
+        return boardService.updateBoardDetails(username, updateBoardDto);
     }
 
     @PostMapping

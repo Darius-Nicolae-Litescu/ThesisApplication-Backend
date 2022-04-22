@@ -8,30 +8,42 @@ import java.util.*;
 @Entity
 @Table(name = User.TABLE_NAME)
 public class User {
+
     public static final String TABLE_NAME = "user";
+
     @CollectionTable(name = "user_roles")
     @ElementCollection(fetch = FetchType.EAGER)
     List<UserRole> userRoles;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @OneToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "employee_id")
+
     private Employee employee;
+
     @Column(name = "username", nullable = false, length = 256)
     private String username;
+
     @Column(name = "password", nullable = false, length = 256)
     private String password;
+
     @OneToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "picture_id")
     private Picture profilePicture;
+
     @Column(name = "bio_description", nullable = true, length = 3000)
     private String bioDescription;
+
     @Column(name = "email", nullable = false, length = 256)
     private String email;
+
     @Temporal(TemporalType.TIMESTAMP)
     @UpdateTimestamp
     private Date modificationDate;
+
     @OneToMany(mappedBy = "uploadedBy", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<Attachment> userAttachments;
 
@@ -70,12 +82,12 @@ public class User {
     public User() {
         UserRole defaultUserRole = UserRole.USER;
         UserRole adminUserRole = UserRole.ADMIN;
-        UserRole moderatorUserRole = UserRole.MODERATOR;
+        UserRole boardAdminUserRole = UserRole.BOARD_ADMIN;
 
         userRoles = new ArrayList<>();
         userRoles.add(defaultUserRole);
         userRoles.add(adminUserRole);
-        userRoles.add(moderatorUserRole);
+        userRoles.add(boardAdminUserRole);
 
     }
 
