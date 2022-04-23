@@ -6,7 +6,6 @@ import darius.licenta.backend.mapper.normal.user.UserMapper;
 import darius.licenta.backend.persistence.jpa.EmployeeRepository;
 import darius.licenta.backend.persistence.jpa.StoryRepository;
 import darius.licenta.backend.persistence.jpa.UserRepository;
-import darius.licenta.backend.service.person.PersonService;
 import org.junit.Test;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -38,9 +37,8 @@ class UserServiceImplTest {
     AuthenticationManager authenticationManager;
 
     @BeforeEach
-    void setUp()
-    {
-        this.userService= new UserServiceImpl(userRepository, storyRepository,
+    void setUp() {
+        this.userService = new UserServiceImpl(userRepository, storyRepository,
                 employeeRepository, userMapper, storyMapper, passwordEncoder,
                 jwtTokenProvider, authenticationManager);
     }

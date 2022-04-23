@@ -27,8 +27,6 @@ import java.util.List;
 
 @Service
 public class ElasticSearchSynchronizer {
-    Logger logger = LoggerFactory.getLogger(ElasticSearchSynchronizer.class);
-
     private final CommentRepository commentRepository;
     private final CommentElasticSearchRepository commentElasticSearchRepository;
     private final SoftwareApplicationRepository softwareApplicationRepository;
@@ -44,6 +42,7 @@ public class ElasticSearchSynchronizer {
     private final ElasticSearchStoryTaskMapper elasticSearchStoryTaskMapper;
     private final ElasticSearchCommentMapper elasticSearchCommentMapper;
     private final ElasticSearchSoftwareApplicationMapper elasticSearchSoftwareApplicationMapper;
+    Logger logger = LoggerFactory.getLogger(ElasticSearchSynchronizer.class);
 
     @Autowired
     public ElasticSearchSynchronizer(CommentRepository commentRepository, CommentElasticSearchRepository commentElasticSearchRepository, SoftwareApplicationRepository softwareApplicationRepository, SoftwareApplicationElasticSearchRepository softwareApplicationElasticSearchRepository, StoryRepository storyRepository, StoryElasticSearchRepository storyElasticSearchRepository, StoryTaskElasticSearchRepository storyTaskElasticSearchRepository, StoryTaskRepository storyTaskRepository, UserElasticSearchRepository userElasticSearchRepository, UserRepository userRepository, ElasticSearchUserMapper elasticSearchUserMapper, ElasticSearchStoryMapper elasticSearchStoryMapper, ElasticSearchStoryTaskMapper elasticSearchStoryTaskMapper, ElasticSearchCommentMapper elasticSearchCommentMapper, ElasticSearchSoftwareApplicationMapper elasticSearchSoftwareApplicationMapper) {
@@ -64,6 +63,17 @@ public class ElasticSearchSynchronizer {
         this.elasticSearchSoftwareApplicationMapper = elasticSearchSoftwareApplicationMapper;
     }
 
+    private static Predicate getModificationDatePredicate(CriteriaBuilder cb, Root<?> root) {
+        Expression<Timestamp> currentTime;
+        currentTime = cb.currentTimestamp();
+        Expression<Timestamp> currentTimeMinus = cb.literal(
+                new Timestamp(System.currentTimeMillis() -
+                        (ElasticSearchConstants.MILLISECONDS_INTERVAL)));
+        return cb.between(root.<Date>get(ElasticSearchConstants.MODIFICATION_DATE),
+                currentTimeMinus,
+                currentTime
+        );
+    }
 
     @Scheduled(cron = "0 */1 * * * *")
 
@@ -156,18 +166,6 @@ public class ElasticSearchSynchronizer {
             logger.info("Syncing User: {}", user.getId());
             userElasticSearchRepository.save(elasticSearchUserMapper.userToElasticSearchUserDto(user));
         }
-    }
-
-    private static Predicate getModificationDatePredicate(CriteriaBuilder cb, Root<?> root) {
-        Expression<Timestamp> currentTime;
-        currentTime = cb.currentTimestamp();
-        Expression<Timestamp> currentTimeMinus = cb.literal(
-                new Timestamp(System.currentTimeMillis() -
-                        (ElasticSearchConstants.MILLISECONDS_INTERVAL)));
-        return cb.between(root.<Date>get(ElasticSearchConstants.MODIFICATION_DATE),
-                currentTimeMinus,
-                currentTime
-        );
     }
 
 }

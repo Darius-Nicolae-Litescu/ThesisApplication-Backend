@@ -19,7 +19,7 @@ public class ColumnList {
     private String title;
 
     @OrderBy("rank ASC")
-    @OneToMany(mappedBy= "columnList", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "columnList", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Card> cards;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = true)

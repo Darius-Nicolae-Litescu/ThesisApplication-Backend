@@ -44,24 +44,14 @@ public class StoryTaskServiceImpl implements StoryTaskService {
 
     public static final String STORY_TASK_NOT_FOUND = "Story task not found";
     public static final String CANNOT_BE_FOUND_IN_DATABASE = " cannot be found in database";
-
-    Logger logger = LoggerFactory.getLogger(StoryTaskServiceImpl.class);
-
-
     private final CommentAttachmentOperationsService commentAttachmentOperationsService;
-
     private final StoryTaskRepository storyTaskRepository;
-
     private final StoryRepository storyRepository;
-
     private final UserRepository userRepository;
-
     private final CommentRepository commentRepository;
-
     private final StoryTaskMapper storyTaskMapper;
-
     private final CommentMapper commentMapper;
-
+    Logger logger = LoggerFactory.getLogger(StoryTaskServiceImpl.class);
     @Value("${api.rest.base.uri}")
     private String restApiBaseUri;
 
@@ -169,7 +159,7 @@ public class StoryTaskServiceImpl implements StoryTaskService {
             storyTask.get().setStoryPoints(changeStoryTaskGeneralDetails.getStoryPoints());
             storyTask.get().setStatus(changeStoryTaskGeneralDetails.getStatus());
             if (changeStoryTaskGeneralDetails.getFinishedAt() != null) {
-                storyTask.get().setFinishedAt(LocalDateTime.now());
+                storyTask.get().setFinishedAt(changeStoryTaskGeneralDetails.getFinishedAt().plusHours(6));
             } else {
                 storyTask.get().setFinishedAt(null);
             }

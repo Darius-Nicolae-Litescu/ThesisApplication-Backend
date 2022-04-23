@@ -69,72 +69,72 @@ public class Attachment {
         return name;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public Comment getComment() {
         return comment;
+    }
+
+    public void setComment(Comment comment) {
+        this.comment = comment;
     }
 
     public User getUploadedBy() {
         return uploadedBy;
     }
 
+    public void setUploadedBy(User uploadedBy) {
+        this.uploadedBy = uploadedBy;
+    }
+
     public Long getId() {
         return this.id;
-    }
-
-    public String getContentType() {
-        return this.contentType;
-    }
-
-    public byte[] getContent() {
-        return content;
-    }
-
-    public LocalDateTime getPostedAt() {
-        return this.postedAt;
-    }
-
-    public StoryTask getStoryTask() {
-        return this.storyTask;
-    }
-
-    public Story getStory() {
-        return this.story;
     }
 
     public void setId(Long id) {
         this.id = id;
     }
 
+    public String getContentType() {
+        return this.contentType;
+    }
+
     public void setContentType(String contentType) {
         this.contentType = contentType;
+    }
+
+    public byte[] getContent() {
+        return content;
     }
 
     public void setContent(byte[] content) {
         this.content = content;
     }
 
+    public LocalDateTime getPostedAt() {
+        return this.postedAt;
+    }
+
     public void setPostedAt(LocalDateTime postedAt) {
         this.postedAt = postedAt;
+    }
+
+    public StoryTask getStoryTask() {
+        return this.storyTask;
     }
 
     public void setStoryTask(StoryTask storyTask) {
         this.storyTask = storyTask;
     }
 
+    public Story getStory() {
+        return this.story;
+    }
+
     public void setStory(Story story) {
         this.story = story;
-    }
-
-    public void setUploadedBy(User uploadedBy) {
-        this.uploadedBy = uploadedBy;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setComment(Comment comment) {
-        this.comment = comment;
     }
 
     @Override

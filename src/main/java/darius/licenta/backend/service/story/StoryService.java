@@ -4,7 +4,7 @@ import darius.licenta.backend.dto.normal.comment.story.InsertStoryCommentDto;
 import darius.licenta.backend.dto.normal.story.request.insert.InsertStoryDto;
 import darius.licenta.backend.dto.normal.story.request.update.*;
 import darius.licenta.backend.dto.normal.story.response.fulldetails.FullDetailsResponseStoryDto;
-import darius.licenta.backend.dto.normal.story.response.notfulldetails.ResponseStoryDtoWithoutFullDetails;
+import darius.licenta.backend.dto.normal.story.response.partialdetails.ResponseStoryDtoWithoutFullDetails;
 import darius.licenta.backend.dto.normal.story.response.table.TableStoryDto;
 import darius.licenta.backend.payload.response.ApiResponse;
 import darius.licenta.backend.payload.response.PaginatedResponse;

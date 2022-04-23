@@ -34,7 +34,6 @@ public class ResponseUserWithJwtDto implements Serializable {
     public ResponseUserWithJwtDto(ResponseUserDto responseUserDto, String jwtToken, List<UserRole> roles) {
         this.id = responseUserDto.getId();
         this.username = responseUserDto.getUsername();
-        ;
         this.email = responseUserDto.getEmail();
         this.bioDescription = responseUserDto.getBioDescription();
         this.jwtToken = jwtToken;

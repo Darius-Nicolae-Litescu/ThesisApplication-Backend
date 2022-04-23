@@ -25,7 +25,7 @@ import java.util.concurrent.TimeUnit;
 
 @Service
 public class ElasticSearchExactQueryServiceImpl implements ElasticSearchExactQueryService {
-    private RestHighLevelClient restHighLevelClient;
+    private final RestHighLevelClient restHighLevelClient;
 
     @Autowired
     public ElasticSearchExactQueryServiceImpl(RestHighLevelClient restHighLevelClient) {

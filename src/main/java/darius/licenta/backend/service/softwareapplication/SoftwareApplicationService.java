@@ -8,10 +8,16 @@ import java.util.List;
 
 public interface SoftwareApplicationService {
     ApiResponse<SoftwareApplicationDto> insert(InsertSoftwareApplicationDto insertSoftwareApplicationDto);
-    ApiResponse<SoftwareApplicationDto> update (SoftwareApplicationDto softwareApplicationDto);
+
+    ApiResponse<SoftwareApplicationDto> update(SoftwareApplicationDto softwareApplicationDto);
+
     ApiResponse<List<SoftwareApplicationDto>> findByName(String name);
+
     ApiResponse<List<SoftwareApplicationDto>> findByDescription(String description);
+
     ApiResponse<SoftwareApplicationDto> findById(Long id);
+
     ApiResponse<List<SoftwareApplicationDto>> findAll();
+
     ApiResponse<SoftwareApplicationDto> deleteById(Long id);
 }

@@ -6,7 +6,7 @@ import darius.licenta.backend.dto.normal.comment.story.InsertStoryCommentDto;
 import darius.licenta.backend.dto.normal.story.request.insert.InsertStoryDto;
 import darius.licenta.backend.dto.normal.story.request.update.*;
 import darius.licenta.backend.dto.normal.story.response.fulldetails.FullDetailsResponseStoryDto;
-import darius.licenta.backend.dto.normal.story.response.notfulldetails.ResponseStoryDtoWithoutFullDetails;
+import darius.licenta.backend.dto.normal.story.response.partialdetails.ResponseStoryDtoWithoutFullDetails;
 import darius.licenta.backend.dto.normal.story.response.table.TableStoryDto;
 import darius.licenta.backend.mapper.normal.comment.CommentMapper;
 import darius.licenta.backend.mapper.normal.story.StoryMapper;
@@ -34,26 +34,16 @@ import java.util.stream.Collectors;
 @Service
 public class StoryServiceImpl implements StoryService {
     public static final String STORY_NOT_FOUND = "Story not found";
-    Logger logger = LoggerFactory.getLogger(StoryServiceImpl.class);
-
     private final CommentAttachmentOperationsService commentAttachmentOperationsService;
-
     private final UserRepository userRepository;
-
     private final StoryRepository storyRepository;
-
     private final CategoryRepository categoryRepository;
-
     private final PriorityRepository priorityRepository;
-
     private final CommentRepository commentRepository;
-
     private final SoftwareApplicationRepository softwareApplicationRepository;
-
     private final StoryMapper storyMapper;
-
     private final CommentMapper commentMapper;
-
+    Logger logger = LoggerFactory.getLogger(StoryServiceImpl.class);
     @Value("${api.rest.base.uri}")
     private String restApiBaseUri;
 

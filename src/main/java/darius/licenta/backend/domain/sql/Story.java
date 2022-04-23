@@ -7,7 +7,10 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.Date;
+import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name = Story.TABLE_NAME)
@@ -47,13 +50,13 @@ public class Story {
     private Priority priority;
 
     @OrderBy("id ASC")
-    @OneToMany(mappedBy="story", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "story", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Comment> comments;
 
     @OneToMany(mappedBy = "story", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<Attachment> storyAttachments;
 
-    @OneToMany(mappedBy= "story", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "story", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<Card> cards;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = true)
@@ -89,8 +92,7 @@ public class Story {
     public Story() {
     }
 
-    public void addStoryComment(Comment comment)
-    {
+    public void addStoryComment(Comment comment) {
         this.comments.add(comment);
     }
 
@@ -98,28 +100,32 @@ public class Story {
         return totalStoryPoints;
     }
 
-    public void setCards(Set<Card> cards) {
-        this.cards = cards;
-    }
-
     public void setTotalStoryPoints(Long totalStoryPoints) {
         this.totalStoryPoints = totalStoryPoints;
-    }
-
-    public void setIsFinished(Boolean finished) {
-        isFinished = finished;
     }
 
     public Boolean getIsFinished() {
         return isFinished;
     }
 
+    public void setIsFinished(Boolean finished) {
+        isFinished = finished;
+    }
+
     public User getCreatedBy() {
         return createdBy;
     }
 
+    public void setCreatedBy(User createdBy) {
+        this.createdBy = createdBy;
+    }
+
     public LocalDateTime getCreatedAt() {
         return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
     }
 
     public Date getModificationDate() {
@@ -134,84 +140,80 @@ public class Story {
         return title;
     }
 
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
     public List<Comment> getComments() {
         return comments;
-    }
-
-    public Set<Category> getCategories() {
-        return categories;
-    }
-
-    public Long getId() {
-        return this.id;
-    }
-
-    public String getDescription() {
-        return this.description;
-    }
-
-    public Set<StoryTask> getStorySubtasks() {
-        return this.storySubtasks;
-    }
-
-    public Priority getPriority() {
-        return priority;
-    }
-
-    public Set<Attachment> getStoryAttachments() {
-        return this.storyAttachments;
-    }
-
-    public Set<Card> getCards() {
-        return cards;
-    }
-
-    public SoftwareApplication getSoftwareApplication() {
-        return this.softwareApplication;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public void setStorySubtasks(Set<StoryTask> storySubtasks) {
-        this.storySubtasks = storySubtasks;
-    }
-
-    public void setPriority(Priority priority) {
-        this.priority = priority;
-    }
-
-    public void setStoryAttachments(Set<Attachment> storyAttachments) {
-        this.storyAttachments = storyAttachments;
-    }
-
-    public void setSoftwareApplication(SoftwareApplication softwareApplication) {
-        this.softwareApplication = softwareApplication;
-    }
-
-    public void setCategories(Set<Category> categories) {
-        this.categories = categories;
     }
 
     public void setComments(List<Comment> comments) {
         this.comments = comments;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public Set<Category> getCategories() {
+        return categories;
     }
 
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
+    public void setCategories(Set<Category> categories) {
+        this.categories = categories;
     }
 
-    public void setCreatedBy(User createdBy) {
-        this.createdBy = createdBy;
+    public Long getId() {
+        return this.id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getDescription() {
+        return this.description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public Set<StoryTask> getStorySubtasks() {
+        return this.storySubtasks;
+    }
+
+    public void setStorySubtasks(Set<StoryTask> storySubtasks) {
+        this.storySubtasks = storySubtasks;
+    }
+
+    public Priority getPriority() {
+        return priority;
+    }
+
+    public void setPriority(Priority priority) {
+        this.priority = priority;
+    }
+
+    public Set<Attachment> getStoryAttachments() {
+        return this.storyAttachments;
+    }
+
+    public void setStoryAttachments(Set<Attachment> storyAttachments) {
+        this.storyAttachments = storyAttachments;
+    }
+
+    public Set<Card> getCards() {
+        return cards;
+    }
+
+    public void setCards(Set<Card> cards) {
+        this.cards = cards;
+    }
+
+    public SoftwareApplication getSoftwareApplication() {
+        return this.softwareApplication;
+    }
+
+    public void setSoftwareApplication(SoftwareApplication softwareApplication) {
+        this.softwareApplication = softwareApplication;
     }
 
     @Override

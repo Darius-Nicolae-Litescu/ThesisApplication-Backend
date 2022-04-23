@@ -1,18 +1,17 @@
 package darius.licenta.backend.service.board;
 
+import darius.licenta.backend.domain.sql.User;
+import darius.licenta.backend.domain.sql.UserRole;
 import darius.licenta.backend.domain.sql.kanban.Board;
 import darius.licenta.backend.domain.sql.kanban.Card;
 import darius.licenta.backend.domain.sql.kanban.ColumnList;
 import darius.licenta.backend.dto.normal.board.request.CreateBoardDto;
 import darius.licenta.backend.dto.normal.board.request.UpdateBoardDto;
 import darius.licenta.backend.dto.normal.board.response.BoardSearchResponseDto;
-import darius.licenta.backend.dto.normal.board.response.FullBoardDetailsDto;
+import darius.licenta.backend.dto.normal.board.response.fulldetails.FullBoardDetailsDto;
 import darius.licenta.backend.mapper.normal.board.BoardMapper;
 import darius.licenta.backend.payload.response.ApiResponse;
-import darius.licenta.backend.persistence.jpa.BoardRepository;
-import darius.licenta.backend.persistence.jpa.CardRepository;
-import darius.licenta.backend.persistence.jpa.ColumnListRepository;
-import darius.licenta.backend.persistence.jpa.StoryRepository;
+import darius.licenta.backend.persistence.jpa.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
@@ -33,14 +32,16 @@ public class BoardServiceImpl implements BoardService {
     private final ColumnListRepository columnListRepository;
     private final CardRepository cardRepository;
     private final StoryRepository storyRepository;
+    private final UserRepository userRepository;
 
     @Autowired
-    public BoardServiceImpl(BoardMapper boardMapper, BoardRepository boardRepository, ColumnListRepository columnListRepository, CardRepository cardRepository, StoryRepository storyRepository) {
+    public BoardServiceImpl(BoardMapper boardMapper, BoardRepository boardRepository, ColumnListRepository columnListRepository, CardRepository cardRepository, StoryRepository storyRepository, UserRepository userRepository) {
         this.boardMapper = boardMapper;
         this.boardRepository = boardRepository;
         this.columnListRepository = columnListRepository;
         this.cardRepository = cardRepository;
         this.storyRepository = storyRepository;
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -52,8 +53,13 @@ public class BoardServiceImpl implements BoardService {
 
     @Transactional
     @Override
-    public ApiResponse<FullBoardDetailsDto> updateBoardDetails(UpdateBoardDto updateBoardDto) {
+    public ApiResponse<FullBoardDetailsDto> updateBoardDetails(String username, UpdateBoardDto updateBoardDto) {
 
+        User user = userRepository.findByUsername(username).orElseThrow(ResourceNotFoundException::new);
+
+        if (!user.getUserRoles().contains(UserRole.BOARD_ADMIN)) {
+            return new ApiResponse<>("Username '" + username + "' is not authorized to move cards", null, HttpStatus.UNAUTHORIZED);
+        }
         updateBoardDto.getColumnList().forEach(columnListDto -> {
             columnListRepository.updateColumnList(columnListDto.getTitle(), columnListDto.getColumnOrder(), columnListDto.getId());
             columnListDto.getCards().forEach(cardDto -> {

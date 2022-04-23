@@ -61,64 +61,47 @@ public class CommentDto implements Serializable {
         this.attachmentResponseDto = attachmentResponseDto;
     }
 
-    public boolean equals(final Object o) {
-        if (o == this) return true;
-        if (!(o instanceof CommentDto)) return false;
-        final CommentDto other = (CommentDto) o;
-        if (!other.canEqual((Object) this)) return false;
-        final Object this$id = this.getId();
-        final Object other$id = other.getId();
-        if (!Objects.equals(this$id, other$id)) return false;
-        final Object this$content = this.getContent();
-        final Object other$content = other.getContent();
-        if (!Objects.equals(this$content, other$content)) return false;
-        final Object this$postedBy = this.getPostedBy();
-        final Object other$postedBy = other.getPostedBy();
-        if (!Objects.equals(this$postedBy, other$postedBy)) return false;
-        final Object this$postedAt = this.getPostedAt();
-        final Object other$postedAt = other.getPostedAt();
-        if (!Objects.equals(this$postedAt, other$postedAt)) return false;
-        final Object this$modificationDate = this.getModificationDate();
-        final Object other$modificationDate = other.getModificationDate();
-        if (!Objects.equals(this$modificationDate, other$modificationDate))
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        CommentDto that = (CommentDto) o;
+
+        if (!Objects.equals(id, that.id)) return false;
+        if (!Objects.equals(content, that.content)) return false;
+        if (!Objects.equals(postedBy, that.postedBy)) return false;
+        if (!Objects.equals(postedAt, that.postedAt)) return false;
+        if (!Objects.equals(modificationDate, that.modificationDate))
             return false;
-        final Object this$commentAttachments = this.getCommentAttachments();
-        final Object other$commentAttachments = other.getCommentAttachments();
-        if (!Objects.equals(this$commentAttachments, other$commentAttachments))
+        if (!Objects.equals(commentAttachments, that.commentAttachments))
             return false;
-        final Object this$attachmentResponseDto = this.getAttachmentResponseDto();
-        final Object other$attachmentResponseDto = other.getAttachmentResponseDto();
-        if (this$attachmentResponseDto == null ? other$attachmentResponseDto != null : !this$attachmentResponseDto.equals(other$attachmentResponseDto))
-            return false;
-        return true;
+        return Objects.equals(attachmentResponseDto, that.attachmentResponseDto);
     }
 
-    protected boolean canEqual(final Object other) {
-        return other instanceof CommentDto;
-    }
-
+    @Override
     public int hashCode() {
-        final int PRIME = 59;
-        int result = 1;
-        final Object $id = this.getId();
-        result = result * PRIME + ($id == null ? 43 : $id.hashCode());
-        final Object $content = this.getContent();
-        result = result * PRIME + ($content == null ? 43 : $content.hashCode());
-        final Object $postedBy = this.getPostedBy();
-        result = result * PRIME + ($postedBy == null ? 43 : $postedBy.hashCode());
-        final Object $postedAt = this.getPostedAt();
-        result = result * PRIME + ($postedAt == null ? 43 : $postedAt.hashCode());
-        final Object $modificationDate = this.getModificationDate();
-        result = result * PRIME + ($modificationDate == null ? 43 : $modificationDate.hashCode());
-        final Object $commentAttachments = this.getCommentAttachments();
-        result = result * PRIME + ($commentAttachments == null ? 43 : $commentAttachments.hashCode());
-        final Object $attachmentResponseDto = this.getAttachmentResponseDto();
-        result = result * PRIME + ($attachmentResponseDto == null ? 43 : $attachmentResponseDto.hashCode());
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (content != null ? content.hashCode() : 0);
+        result = 31 * result + (postedBy != null ? postedBy.hashCode() : 0);
+        result = 31 * result + (postedAt != null ? postedAt.hashCode() : 0);
+        result = 31 * result + (modificationDate != null ? modificationDate.hashCode() : 0);
+        result = 31 * result + (commentAttachments != null ? commentAttachments.hashCode() : 0);
+        result = 31 * result + (attachmentResponseDto != null ? attachmentResponseDto.hashCode() : 0);
         return result;
     }
 
+    @Override
     public String toString() {
-        return "CommentDto(id=" + this.getId() + ", content=" + this.getContent() + ", postedBy=" + this.getPostedBy() + ", postedAt=" + this.getPostedAt() + ", modificationDate=" + this.getModificationDate() + ", commentAttachments=" + this.getCommentAttachments() + ", attachmentResponseDto=" + this.getAttachmentResponseDto() + ")";
+        return "CommentDto{" +
+                "id=" + id +
+                ", content='" + content + '\'' +
+                ", postedBy=" + postedBy +
+                ", postedAt=" + postedAt +
+                ", modificationDate=" + modificationDate +
+                ", commentAttachments=" + commentAttachments +
+                ", attachmentResponseDto=" + attachmentResponseDto +
+                '}';
     }
 
     public static class AttachmentDto implements Serializable {
@@ -138,37 +121,30 @@ public class CommentDto implements Serializable {
             return this.postedAt;
         }
 
-        public boolean equals(final Object o) {
-            if (o == this) return true;
-            if (!(o instanceof AttachmentDto))
-                return false;
-            final AttachmentDto other = (AttachmentDto) o;
-            if (!other.canEqual((Object) this)) return false;
-            final Object this$id = this.getId();
-            final Object other$id = other.getId();
-            if (!Objects.equals(this$id, other$id)) return false;
-            final Object this$postedAt = this.getPostedAt();
-            final Object other$postedAt = other.getPostedAt();
-            if (!Objects.equals(this$postedAt, other$postedAt)) return false;
-            return true;
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+
+            AttachmentDto that = (AttachmentDto) o;
+
+            if (!Objects.equals(id, that.id)) return false;
+            return Objects.equals(postedAt, that.postedAt);
         }
 
-        protected boolean canEqual(final Object other) {
-            return other instanceof AttachmentDto;
-        }
-
+        @Override
         public int hashCode() {
-            final int PRIME = 59;
-            int result = 1;
-            final Object $id = this.getId();
-            result = result * PRIME + ($id == null ? 43 : $id.hashCode());
-            final Object $postedAt = this.getPostedAt();
-            result = result * PRIME + ($postedAt == null ? 43 : $postedAt.hashCode());
+            int result = id != null ? id.hashCode() : 0;
+            result = 31 * result + (postedAt != null ? postedAt.hashCode() : 0);
             return result;
         }
 
+        @Override
         public String toString() {
-            return "CommentDto.AttachmentDto(id=" + this.getId() + ", postedAt=" + this.getPostedAt() + ")";
+            return "AttachmentDto{" +
+                    "id=" + id +
+                    ", postedAt=" + postedAt +
+                    '}';
         }
     }
 }

@@ -38,6 +38,7 @@ public class ApiResponse<T> implements Serializable {
         this.result = result;
         this.status = status;
     }
+
     public ApiResponse() {
     }
 
@@ -45,22 +46,22 @@ public class ApiResponse<T> implements Serializable {
         return this.message;
     }
 
-    public Object getResult() {
-        return this.result;
-    }
-
-    public HttpStatus getStatus() {
-        return this.status;
-    }
-
     @JsonProperty("message")
     public void setMessage(String message) {
         this.message = message;
     }
 
+    public Object getResult() {
+        return this.result;
+    }
+
     @JsonProperty("success")
     public void setResult(T result) {
         this.result = result;
+    }
+
+    public HttpStatus getStatus() {
+        return this.status;
     }
 
     @JsonIgnore

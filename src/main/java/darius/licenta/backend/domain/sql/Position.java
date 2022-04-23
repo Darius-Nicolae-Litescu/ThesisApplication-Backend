@@ -40,28 +40,28 @@ public class Position {
         return this.id;
     }
 
-    public String getName() {
-        return this.name;
-    }
-
-    public String getSeniorityLevel() {
-        return this.seniorityLevel;
-    }
-
-    public Employee getEmployee() {
-        return this.employee;
-    }
-
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getName() {
+        return this.name;
     }
 
     public void setName(String name) {
         this.name = name;
     }
 
+    public String getSeniorityLevel() {
+        return this.seniorityLevel;
+    }
+
     public void setSeniorityLevel(String seniorityLevel) {
         this.seniorityLevel = seniorityLevel;
+    }
+
+    public Employee getEmployee() {
+        return this.employee;
     }
 
     public void setEmployee(Employee employee) {

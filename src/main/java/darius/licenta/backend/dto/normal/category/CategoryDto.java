@@ -1,6 +1,7 @@
 package darius.licenta.backend.dto.normal.category;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 public class CategoryDto implements Serializable {
     private Long id;
@@ -18,46 +19,41 @@ public class CategoryDto implements Serializable {
         return this.id;
     }
 
-    public String getCategoryName() {
-        return this.categoryName;
-    }
-
     public void setId(long id) {
         this.id = id;
+    }
+
+    public String getCategoryName() {
+        return this.categoryName;
     }
 
     public void setCategoryName(String categoryName) {
         this.categoryName = categoryName;
     }
 
-    public boolean equals(final Object o) {
-        if (o == this) return true;
-        if (!(o instanceof CategoryDto)) return false;
-        final CategoryDto other = (CategoryDto) o;
-        if (!other.canEqual((Object) this)) return false;
-        if (this.getId() != other.getId()) return false;
-        final Object this$categoryName = this.getCategoryName();
-        final Object other$categoryName = other.getCategoryName();
-        if (this$categoryName == null ? other$categoryName != null : !this$categoryName.equals(other$categoryName))
-            return false;
-        return true;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        CategoryDto that = (CategoryDto) o;
+
+        if (!Objects.equals(id, that.id)) return false;
+        return Objects.equals(categoryName, that.categoryName);
     }
 
-    protected boolean canEqual(final Object other) {
-        return other instanceof CategoryDto;
-    }
-
+    @Override
     public int hashCode() {
-        final int PRIME = 59;
-        int result = 1;
-        final long $id = this.getId();
-        result = result * PRIME + (int) ($id >>> 32 ^ $id);
-        final Object $categoryName = this.getCategoryName();
-        result = result * PRIME + ($categoryName == null ? 43 : $categoryName.hashCode());
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (categoryName != null ? categoryName.hashCode() : 0);
         return result;
     }
 
+    @Override
     public String toString() {
-        return "CategoryDto(id=" + this.getId() + ", categoryName=" + this.getCategoryName() + ")";
+        return "CategoryDto{" +
+                "id=" + id +
+                ", categoryName='" + categoryName + '\'' +
+                '}';
     }
 }

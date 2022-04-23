@@ -1,7 +1,7 @@
 package darius.licenta.backend.mapper.elasticsearch.user;
 
-import darius.licenta.backend.domain.sql.User;
 import darius.licenta.backend.domain.elasticsearch.ElasticSearchUserDto;
+import darius.licenta.backend.domain.sql.User;
 import org.mapstruct.*;
 
 @Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, componentModel = "spring")

@@ -5,20 +5,20 @@ import java.util.Map;
 import java.util.Objects;
 
 public class ReturnPropertyNamesDto {
-    Map<String,List<String>> propertyNamesForCollections;
+    Map<String, List<String>> propertyNamesForCollections;
 
     public ReturnPropertyNamesDto() {
     }
 
-    public ReturnPropertyNamesDto( Map<String,List<String>> propertyNamesForCollections) {
+    public ReturnPropertyNamesDto(Map<String, List<String>> propertyNamesForCollections) {
         this.propertyNamesForCollections = propertyNamesForCollections;
     }
 
-    public  Map<String,List<String>> getPropertyNamesForCollections() {
+    public Map<String, List<String>> getPropertyNamesForCollections() {
         return propertyNamesForCollections;
     }
 
-    public void setPropertyNamesForCollections(Map<String,List<String>> propertyNamesForCollections) {
+    public void setPropertyNamesForCollections(Map<String, List<String>> propertyNamesForCollections) {
         this.propertyNamesForCollections = propertyNamesForCollections;
     }
 

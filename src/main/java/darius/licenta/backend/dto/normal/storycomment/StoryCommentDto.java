@@ -2,6 +2,7 @@ package darius.licenta.backend.dto.normal.storycomment;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 public class StoryCommentDto implements Serializable {
     private Long id;
@@ -21,58 +22,52 @@ public class StoryCommentDto implements Serializable {
         return this.id;
     }
 
-    public String getContent() {
-        return this.content;
-    }
-
-    public LocalDateTime getPostedAt() {
-        return this.postedAt;
-    }
-
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getContent() {
+        return this.content;
     }
 
     public void setContent(String content) {
         this.content = content;
     }
 
+    public LocalDateTime getPostedAt() {
+        return this.postedAt;
+    }
+
     public void setPostedAt(LocalDateTime postedAt) {
         this.postedAt = postedAt;
     }
 
-    public boolean equals(final Object o) {
-        if (o == this) return true;
-        if (!(o instanceof StoryCommentDto)) return false;
-        final StoryCommentDto other = (StoryCommentDto) o;
-        if (!other.canEqual((Object) this)) return false;
-        if (this.getId() != other.getId()) return false;
-        final Object this$content = this.getContent();
-        final Object other$content = other.getContent();
-        if (this$content == null ? other$content != null : !this$content.equals(other$content)) return false;
-        final Object this$postedAt = this.getPostedAt();
-        final Object other$postedAt = other.getPostedAt();
-        if (this$postedAt == null ? other$postedAt != null : !this$postedAt.equals(other$postedAt)) return false;
-        return true;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        StoryCommentDto that = (StoryCommentDto) o;
+
+        if (!Objects.equals(id, that.id)) return false;
+        if (!Objects.equals(content, that.content)) return false;
+        return Objects.equals(postedAt, that.postedAt);
     }
 
-    protected boolean canEqual(final Object other) {
-        return other instanceof StoryCommentDto;
-    }
-
+    @Override
     public int hashCode() {
-        final int PRIME = 59;
-        int result = 1;
-        final long $id = this.getId();
-        result = result * PRIME + (int) ($id >>> 32 ^ $id);
-        final Object $content = this.getContent();
-        result = result * PRIME + ($content == null ? 43 : $content.hashCode());
-        final Object $postedAt = this.getPostedAt();
-        result = result * PRIME + ($postedAt == null ? 43 : $postedAt.hashCode());
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (content != null ? content.hashCode() : 0);
+        result = 31 * result + (postedAt != null ? postedAt.hashCode() : 0);
         return result;
     }
 
+    @Override
     public String toString() {
-        return "StoryCommentDto(id=" + this.getId() + ", content=" + this.getContent() + ", postedAt=" + this.getPostedAt() + ")";
+        return "StoryCommentDto{" +
+                "id=" + id +
+                ", content='" + content + '\'' +
+                ", postedAt=" + postedAt +
+                '}';
     }
 }

@@ -14,12 +14,12 @@ public class CollectionNamesForFieldReturn {
         this.collectionNames = collectionNames;
     }
 
-    public void setCollectionNames(List<String> collectionNames) {
-        this.collectionNames = collectionNames;
-    }
-
     public List<String> getCollectionNames() {
         return collectionNames;
+    }
+
+    public void setCollectionNames(List<String> collectionNames) {
+        this.collectionNames = collectionNames;
     }
 
     @Override

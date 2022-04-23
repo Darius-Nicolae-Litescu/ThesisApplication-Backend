@@ -1,6 +1,7 @@
 package darius.licenta.backend.dto.normal.priority;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 public class PriorityDto implements Serializable {
     private long id;
@@ -22,69 +23,63 @@ public class PriorityDto implements Serializable {
         return this.id;
     }
 
-    public String getTitle() {
-        return this.title;
-    }
-
-    public String getDescription() {
-        return this.description;
-    }
-
-    public int getLevel() {
-        return this.level;
-    }
-
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getTitle() {
+        return this.title;
     }
 
     public void setTitle(String title) {
         this.title = title;
     }
 
+    public String getDescription() {
+        return this.description;
+    }
+
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public int getLevel() {
+        return this.level;
     }
 
     public void setLevel(int level) {
         this.level = level;
     }
 
-    public boolean equals(final Object o) {
-        if (o == this) return true;
-        if (!(o instanceof PriorityDto)) return false;
-        final PriorityDto other = (PriorityDto) o;
-        if (!other.canEqual((Object) this)) return false;
-        if (this.getId() != other.getId()) return false;
-        final Object this$title = this.getTitle();
-        final Object other$title = other.getTitle();
-        if (this$title == null ? other$title != null : !this$title.equals(other$title)) return false;
-        final Object this$description = this.getDescription();
-        final Object other$description = other.getDescription();
-        if (this$description == null ? other$description != null : !this$description.equals(other$description))
-            return false;
-        if (this.getLevel() != other.getLevel()) return false;
-        return true;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        PriorityDto that = (PriorityDto) o;
+
+        if (id != that.id) return false;
+        if (level != that.level) return false;
+        if (!Objects.equals(title, that.title)) return false;
+        return Objects.equals(description, that.description);
     }
 
-    protected boolean canEqual(final Object other) {
-        return other instanceof PriorityDto;
-    }
-
+    @Override
     public int hashCode() {
-        final int PRIME = 59;
-        int result = 1;
-        final long $id = this.getId();
-        result = result * PRIME + (int) ($id >>> 32 ^ $id);
-        final Object $title = this.getTitle();
-        result = result * PRIME + ($title == null ? 43 : $title.hashCode());
-        final Object $description = this.getDescription();
-        result = result * PRIME + ($description == null ? 43 : $description.hashCode());
-        result = result * PRIME + this.getLevel();
+        int result = (int) (id ^ (id >>> 32));
+        result = 31 * result + (title != null ? title.hashCode() : 0);
+        result = 31 * result + (description != null ? description.hashCode() : 0);
+        result = 31 * result + level;
         return result;
     }
 
+    @Override
     public String toString() {
-        return "PriorityDto(id=" + this.getId() + ", title=" + this.getTitle() + ", description=" + this.getDescription() + ", level=" + this.getLevel() + ")";
+        return "PriorityDto{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", description='" + description + '\'' +
+                ", level=" + level +
+                '}';
     }
 }

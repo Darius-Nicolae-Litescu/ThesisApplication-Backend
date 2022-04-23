@@ -33,7 +33,7 @@ public class ElasticSearchUserDto implements Serializable {
         if (o == this) return true;
         if (!(o instanceof ElasticSearchUserDto)) return false;
         final ElasticSearchUserDto other = (ElasticSearchUserDto) o;
-        if (!other.canEqual((Object) this)) return false;
+        if (!other.canEqual(this)) return false;
         final Object this$id = this.getId();
         final Object other$id = other.getId();
         if (!Objects.equals(this$id, other$id)) return false;
@@ -42,8 +42,7 @@ public class ElasticSearchUserDto implements Serializable {
         if (!Objects.equals(this$username, other$username)) return false;
         final Object this$email = this.getEmail();
         final Object other$email = other.getEmail();
-        if (!Objects.equals(this$email, other$email)) return false;
-        return true;
+        return Objects.equals(this$email, other$email);
     }
 
     protected boolean canEqual(final Object other) {

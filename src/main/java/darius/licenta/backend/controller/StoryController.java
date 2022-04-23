@@ -74,6 +74,7 @@ public class StoryController {
     public ApiResponse<FullDetailsResponseStoryDto> deleteStoryById(@PathVariable Long id) {
         return storyService.deleteById(id);
     }
+
     @GetMapping("/count")
     @Secured({UserRole.Rank.ADMIN})
     public ApiResponse<Long> getCount() {

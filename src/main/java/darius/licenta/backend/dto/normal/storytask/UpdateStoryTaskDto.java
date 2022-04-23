@@ -2,6 +2,7 @@ package darius.licenta.backend.dto.normal.storytask;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 public class UpdateStoryTaskDto implements Serializable {
     private final Long id;
@@ -74,75 +75,58 @@ public class UpdateStoryTaskDto implements Serializable {
         return this.finishedAt;
     }
 
-    public boolean equals(final Object o) {
-        if (o == this) return true;
-        if (!(o instanceof UpdateStoryTaskDto)) return false;
-        final UpdateStoryTaskDto other = (UpdateStoryTaskDto) o;
-        if (!other.canEqual((Object) this)) return false;
-        if (this.getId() != other.getId()) return false;
-        final Object this$title = this.getTitle();
-        final Object other$title = other.getTitle();
-        if (this$title == null ? other$title != null : !this$title.equals(other$title)) return false;
-        final Object this$description = this.getDescription();
-        final Object other$description = other.getDescription();
-        if (this$description == null ? other$description != null : !this$description.equals(other$description))
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        UpdateStoryTaskDto that = (UpdateStoryTaskDto) o;
+
+        if (storyPoints != that.storyPoints) return false;
+        if (createdById != that.createdById) return false;
+        if (assignedToId != that.assignedToId) return false;
+        if (!Objects.equals(id, that.id)) return false;
+        if (!Objects.equals(title, that.title)) return false;
+        if (!Objects.equals(description, that.description)) return false;
+        if (!Objects.equals(createdByUsername, that.createdByUsername))
             return false;
-        if (this.getStoryPoints() != other.getStoryPoints()) return false;
-        if (this.getCreatedById() != other.getCreatedById()) return false;
-        final Object this$createdByUsername = this.getCreatedByUsername();
-        final Object other$createdByUsername = other.getCreatedByUsername();
-        if (this$createdByUsername == null ? other$createdByUsername != null : !this$createdByUsername.equals(other$createdByUsername))
+        if (!Objects.equals(createdAt, that.createdAt)) return false;
+        if (!Objects.equals(assignedToUsername, that.assignedToUsername))
             return false;
-        final Object this$createdAt = this.getCreatedAt();
-        final Object other$createdAt = other.getCreatedAt();
-        if (this$createdAt == null ? other$createdAt != null : !this$createdAt.equals(other$createdAt)) return false;
-        if (this.getAssignedToId() != other.getAssignedToId()) return false;
-        final Object this$assignedToUsername = this.getAssignedToUsername();
-        final Object other$assignedToUsername = other.getAssignedToUsername();
-        if (this$assignedToUsername == null ? other$assignedToUsername != null : !this$assignedToUsername.equals(other$assignedToUsername))
-            return false;
-        final Object this$status = this.getStatus();
-        final Object other$status = other.getStatus();
-        if (this$status == null ? other$status != null : !this$status.equals(other$status)) return false;
-        final Object this$finishedAt = this.getFinishedAt();
-        final Object other$finishedAt = other.getFinishedAt();
-        if (this$finishedAt == null ? other$finishedAt != null : !this$finishedAt.equals(other$finishedAt))
-            return false;
-        return true;
+        if (!Objects.equals(status, that.status)) return false;
+        return Objects.equals(finishedAt, that.finishedAt);
     }
 
-    protected boolean canEqual(final Object other) {
-        return other instanceof UpdateStoryTaskDto;
-    }
-
+    @Override
     public int hashCode() {
-        final int PRIME = 59;
-        int result = 1;
-        final long $id = this.getId();
-        result = result * PRIME + (int) ($id >>> 32 ^ $id);
-        final Object $title = this.getTitle();
-        result = result * PRIME + ($title == null ? 43 : $title.hashCode());
-        final Object $description = this.getDescription();
-        result = result * PRIME + ($description == null ? 43 : $description.hashCode());
-        result = result * PRIME + this.getStoryPoints();
-        final long $createdById = this.getCreatedById();
-        result = result * PRIME + (int) ($createdById >>> 32 ^ $createdById);
-        final Object $createdByUsername = this.getCreatedByUsername();
-        result = result * PRIME + ($createdByUsername == null ? 43 : $createdByUsername.hashCode());
-        final Object $createdAt = this.getCreatedAt();
-        result = result * PRIME + ($createdAt == null ? 43 : $createdAt.hashCode());
-        final long $assignedToId = this.getAssignedToId();
-        result = result * PRIME + (int) ($assignedToId >>> 32 ^ $assignedToId);
-        final Object $assignedToUsername = this.getAssignedToUsername();
-        result = result * PRIME + ($assignedToUsername == null ? 43 : $assignedToUsername.hashCode());
-        final Object $status = this.getStatus();
-        result = result * PRIME + ($status == null ? 43 : $status.hashCode());
-        final Object $finishedAt = this.getFinishedAt();
-        result = result * PRIME + ($finishedAt == null ? 43 : $finishedAt.hashCode());
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (title != null ? title.hashCode() : 0);
+        result = 31 * result + (description != null ? description.hashCode() : 0);
+        result = 31 * result + storyPoints;
+        result = 31 * result + (int) (createdById ^ (createdById >>> 32));
+        result = 31 * result + (createdByUsername != null ? createdByUsername.hashCode() : 0);
+        result = 31 * result + (createdAt != null ? createdAt.hashCode() : 0);
+        result = 31 * result + (int) (assignedToId ^ (assignedToId >>> 32));
+        result = 31 * result + (assignedToUsername != null ? assignedToUsername.hashCode() : 0);
+        result = 31 * result + (status != null ? status.hashCode() : 0);
+        result = 31 * result + (finishedAt != null ? finishedAt.hashCode() : 0);
         return result;
     }
 
+    @Override
     public String toString() {
-        return "UpdateStoryTaskDto(id=" + this.getId() + ", title=" + this.getTitle() + ", description=" + this.getDescription() + ", storyPoints=" + this.getStoryPoints() + ", createdById=" + this.getCreatedById() + ", createdByUsername=" + this.getCreatedByUsername() + ", createdAt=" + this.getCreatedAt() + ", assignedToId=" + this.getAssignedToId() + ", assignedToUsername=" + this.getAssignedToUsername() + ", status=" + this.getStatus() + ", finishedAt=" + this.getFinishedAt() + ")";
+        return "UpdateStoryTaskDto{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", description='" + description + '\'' +
+                ", storyPoints=" + storyPoints +
+                ", createdById=" + createdById +
+                ", createdByUsername='" + createdByUsername + '\'' +
+                ", createdAt=" + createdAt +
+                ", assignedToId=" + assignedToId +
+                ", assignedToUsername='" + assignedToUsername + '\'' +
+                ", status='" + status + '\'' +
+                ", finishedAt=" + finishedAt +
+                '}';
     }
 }

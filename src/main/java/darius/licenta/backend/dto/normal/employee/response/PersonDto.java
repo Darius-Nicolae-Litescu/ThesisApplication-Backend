@@ -1,6 +1,7 @@
 package darius.licenta.backend.dto.normal.employee.response;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 public class PersonDto implements Serializable {
     private String firstName;
@@ -18,47 +19,41 @@ public class PersonDto implements Serializable {
         return this.firstName;
     }
 
-    public String getLastName() {
-        return this.lastName;
-    }
-
     public void setFirstName(String firstName) {
         this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return this.lastName;
     }
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
 
-    public boolean equals(final Object o) {
-        if (o == this) return true;
-        if (!(o instanceof PersonDto)) return false;
-        final PersonDto other = (PersonDto) o;
-        if (!other.canEqual((Object) this)) return false;
-        final Object this$firstName = this.getFirstName();
-        final Object other$firstName = other.getFirstName();
-        if (this$firstName == null ? other$firstName != null : !this$firstName.equals(other$firstName)) return false;
-        final Object this$lastName = this.getLastName();
-        final Object other$lastName = other.getLastName();
-        if (this$lastName == null ? other$lastName != null : !this$lastName.equals(other$lastName)) return false;
-        return true;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        PersonDto personDto = (PersonDto) o;
+
+        if (!Objects.equals(firstName, personDto.firstName)) return false;
+        return Objects.equals(lastName, personDto.lastName);
     }
 
-    protected boolean canEqual(final Object other) {
-        return other instanceof PersonDto;
-    }
-
+    @Override
     public int hashCode() {
-        final int PRIME = 59;
-        int result = 1;
-        final Object $firstName = this.getFirstName();
-        result = result * PRIME + ($firstName == null ? 43 : $firstName.hashCode());
-        final Object $lastName = this.getLastName();
-        result = result * PRIME + ($lastName == null ? 43 : $lastName.hashCode());
+        int result = firstName != null ? firstName.hashCode() : 0;
+        result = 31 * result + (lastName != null ? lastName.hashCode() : 0);
         return result;
     }
 
+    @Override
     public String toString() {
-        return "PersonDto(firstName=" + this.getFirstName() + ", lastName=" + this.getLastName() + ")";
+        return "PersonDto{" +
+                "firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                '}';
     }
 }

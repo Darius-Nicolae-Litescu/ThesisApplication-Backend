@@ -46,7 +46,12 @@ public class InsertEmployeeDto implements Serializable {
         return result;
     }
 
+    @Override
     public String toString() {
-        return "InsertEmployeeDto(personId=" + this.getPersonId() + ", positionId=" + this.getPositionId() + ", userId=" + this.getUserId() + ")";
+        return "InsertEmployeeDto{" +
+                "personId=" + personId +
+                ", positionId=" + positionId +
+                ", userId=" + userId +
+                '}';
     }
 }

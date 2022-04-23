@@ -54,7 +54,13 @@ public class UpdateEmployeeDto implements Serializable {
         return result;
     }
 
+    @Override
     public String toString() {
-        return "UpdateEmployeeDto(id=" + this.getId() + ", personId=" + this.getPersonId() + ", positionId=" + this.getPositionId() + ", userId=" + this.getUserId() + ")";
+        return "UpdateEmployeeDto{" +
+                "id=" + id +
+                ", personId=" + personId +
+                ", positionId=" + positionId +
+                ", userId=" + userId +
+                '}';
     }
 }

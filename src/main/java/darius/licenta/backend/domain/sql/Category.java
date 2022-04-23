@@ -42,6 +42,10 @@ public class Category {
         return categoryPicture;
     }
 
+    public void setCategoryPicture(Blob categoryPicture) {
+        this.categoryPicture = categoryPicture;
+    }
+
     public Long getId() {
         return id;
     }
@@ -64,10 +68,6 @@ public class Category {
 
     public void setStory(Story story) {
         this.story = story;
-    }
-
-    public void setCategoryPicture(Blob categoryPicture) {
-        this.categoryPicture = categoryPicture;
     }
 
     @Override

@@ -3,12 +3,13 @@ package darius.licenta.backend.controller;
 import darius.licenta.backend.dto.normal.board.request.CreateBoardDto;
 import darius.licenta.backend.dto.normal.board.request.UpdateBoardDto;
 import darius.licenta.backend.dto.normal.board.response.BoardSearchResponseDto;
-import darius.licenta.backend.dto.normal.board.response.FullBoardDetailsDto;
+import darius.licenta.backend.dto.normal.board.response.fulldetails.FullBoardDetailsDto;
 import darius.licenta.backend.payload.response.ApiResponse;
 import darius.licenta.backend.service.board.BoardService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -34,8 +35,9 @@ public class BoardController {
     }
 
     @PutMapping("/")
-    public ApiResponse<FullBoardDetailsDto> updateBoard(@RequestBody UpdateBoardDto updateBoardDto) {
-        return boardService.updateBoardDetails(updateBoardDto);
+    public ApiResponse<FullBoardDetailsDto> updateBoard(Principal principal, @RequestBody UpdateBoardDto updateBoardDto) {
+        String username = principal.getName();
+        return boardService.updateBoardDetails(username, updateBoardDto);
     }
 
     @PostMapping

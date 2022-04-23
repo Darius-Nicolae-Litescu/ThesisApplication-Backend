@@ -18,7 +18,7 @@ public interface StoryTaskService {
 
     ApiResponse<ChangeStoryTaskTitleAndDescription> updateStoryTaskTitleAndDescription(ChangeStoryTaskTitleAndDescription changeStoryTaskTitleAndDescription);
 
-    ApiResponse<ResponseStoryTaskDto> update (UpdateStoryTaskDto updateStoryTaskDto);
+    ApiResponse<ResponseStoryTaskDto> update(UpdateStoryTaskDto updateStoryTaskDto);
 
     ApiResponse<List<FullInformationStoryTaskDto>> findStoryTasksByCreatedBy(String username);
 

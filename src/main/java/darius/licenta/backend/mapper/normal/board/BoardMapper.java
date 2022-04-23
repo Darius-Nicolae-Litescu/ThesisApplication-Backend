@@ -2,9 +2,9 @@ package darius.licenta.backend.mapper.normal.board;
 
 import darius.licenta.backend.domain.sql.kanban.Board;
 import darius.licenta.backend.dto.normal.board.request.CreateBoardDto;
-import darius.licenta.backend.dto.normal.board.response.BoardSearchResponseDto;
-import darius.licenta.backend.dto.normal.board.response.FullBoardDetailsDto;
 import darius.licenta.backend.dto.normal.board.request.UpdateBoardDto;
+import darius.licenta.backend.dto.normal.board.response.BoardSearchResponseDto;
+import darius.licenta.backend.dto.normal.board.response.fulldetails.FullBoardDetailsDto;
 import org.mapstruct.*;
 
 @Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, componentModel = "spring")

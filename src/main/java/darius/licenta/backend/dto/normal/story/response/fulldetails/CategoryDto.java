@@ -27,42 +27,32 @@ public class CategoryDto implements Serializable {
         return this.categoryPicture;
     }
 
-    public boolean equals(final Object o) {
-        if (o == this) return true;
-        if (!(o instanceof CategoryDto)) return false;
-        final CategoryDto other = (CategoryDto) o;
-        if (!other.canEqual((Object) this)) return false;
-        final Object this$id = this.getId();
-        final Object other$id = other.getId();
-        if (!Objects.equals(this$id, other$id)) return false;
-        final Object this$categoryName = this.getCategoryName();
-        final Object other$categoryName = other.getCategoryName();
-        if (!Objects.equals(this$categoryName, other$categoryName))
-            return false;
-        final Object this$categoryPicture = this.getCategoryPicture();
-        final Object other$categoryPicture = other.getCategoryPicture();
-        if (!Objects.equals(this$categoryPicture, other$categoryPicture))
-            return false;
-        return true;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        CategoryDto that = (CategoryDto) o;
+
+        if (!Objects.equals(id, that.id)) return false;
+        if (!Objects.equals(categoryName, that.categoryName)) return false;
+        return Objects.equals(categoryPicture, that.categoryPicture);
     }
 
-    protected boolean canEqual(final Object other) {
-        return other instanceof CategoryDto;
-    }
-
+    @Override
     public int hashCode() {
-        final int PRIME = 59;
-        int result = 1;
-        final Object $id = this.getId();
-        result = result * PRIME + ($id == null ? 43 : $id.hashCode());
-        final Object $categoryName = this.getCategoryName();
-        result = result * PRIME + ($categoryName == null ? 43 : $categoryName.hashCode());
-        final Object $categoryPicture = this.getCategoryPicture();
-        result = result * PRIME + ($categoryPicture == null ? 43 : $categoryPicture.hashCode());
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (categoryName != null ? categoryName.hashCode() : 0);
+        result = 31 * result + (categoryPicture != null ? categoryPicture.hashCode() : 0);
         return result;
     }
 
+    @Override
     public String toString() {
-        return "CategoryDto(id=" + this.getId() + ", categoryName=" + this.getCategoryName() + ", categoryPicture=" + this.getCategoryPicture() + ")";
+        return "CategoryDto{" +
+                "id=" + id +
+                ", categoryName='" + categoryName + '\'' +
+                ", categoryPicture=" + categoryPicture +
+                '}';
     }
 }

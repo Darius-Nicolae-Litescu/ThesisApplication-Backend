@@ -46,36 +46,36 @@ public class Person {
         return this.id;
     }
 
-    public String getFirstName() {
-        return this.firstName;
-    }
-
-    public String getLastName() {
-        return this.lastName;
-    }
-
-    public Date getBirthDate() {
-        return this.birthDate;
-    }
-
-    public Employee getEmployee() {
-        return this.employee;
-    }
-
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getFirstName() {
+        return this.firstName;
     }
 
     public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
 
+    public String getLastName() {
+        return this.lastName;
+    }
+
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
 
+    public Date getBirthDate() {
+        return this.birthDate;
+    }
+
     public void setBirthDate(Date birthDate) {
         this.birthDate = birthDate;
+    }
+
+    public Employee getEmployee() {
+        return this.employee;
     }
 
     public void setEmployee(Employee employee) {

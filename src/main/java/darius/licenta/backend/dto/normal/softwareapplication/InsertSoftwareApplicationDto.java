@@ -1,6 +1,7 @@
 package darius.licenta.backend.dto.normal.softwareapplication;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 public class InsertSoftwareApplicationDto implements Serializable {
     private String name;
@@ -18,48 +19,41 @@ public class InsertSoftwareApplicationDto implements Serializable {
         return this.name;
     }
 
-    public String getDescription() {
-        return this.description;
-    }
-
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getDescription() {
+        return this.description;
     }
 
     public void setDescription(String description) {
         this.description = description;
     }
 
-    public boolean equals(final Object o) {
-        if (o == this) return true;
-        if (!(o instanceof InsertSoftwareApplicationDto)) return false;
-        final InsertSoftwareApplicationDto other = (InsertSoftwareApplicationDto) o;
-        if (!other.canEqual((Object) this)) return false;
-        final Object this$name = this.getName();
-        final Object other$name = other.getName();
-        if (this$name == null ? other$name != null : !this$name.equals(other$name)) return false;
-        final Object this$description = this.getDescription();
-        final Object other$description = other.getDescription();
-        if (this$description == null ? other$description != null : !this$description.equals(other$description))
-            return false;
-        return true;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        InsertSoftwareApplicationDto that = (InsertSoftwareApplicationDto) o;
+
+        if (!Objects.equals(name, that.name)) return false;
+        return Objects.equals(description, that.description);
     }
 
-    protected boolean canEqual(final Object other) {
-        return other instanceof InsertSoftwareApplicationDto;
-    }
-
+    @Override
     public int hashCode() {
-        final int PRIME = 59;
-        int result = 1;
-        final Object $name = this.getName();
-        result = result * PRIME + ($name == null ? 43 : $name.hashCode());
-        final Object $description = this.getDescription();
-        result = result * PRIME + ($description == null ? 43 : $description.hashCode());
+        int result = name != null ? name.hashCode() : 0;
+        result = 31 * result + (description != null ? description.hashCode() : 0);
         return result;
     }
 
+    @Override
     public String toString() {
-        return "InsertSoftwareApplicationDto(name=" + this.getName() + ", description=" + this.getDescription() + ")";
+        return "InsertSoftwareApplicationDto{" +
+                "name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                '}';
     }
 }

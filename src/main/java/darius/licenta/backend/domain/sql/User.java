@@ -3,13 +3,17 @@ package darius.licenta.backend.domain.sql;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
-import java.sql.Blob;
 import java.util.*;
 
 @Entity
 @Table(name = User.TABLE_NAME)
 public class User {
+
     public static final String TABLE_NAME = "user";
+
+    @CollectionTable(name = "user_roles")
+    @ElementCollection(fetch = FetchType.EAGER)
+    List<UserRole> userRoles;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,6 +21,7 @@ public class User {
 
     @OneToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "employee_id")
+
     private Employee employee;
 
     @Column(name = "username", nullable = false, length = 256)
@@ -25,9 +30,9 @@ public class User {
     @Column(name = "password", nullable = false, length = 256)
     private String password;
 
-    @Column(name = "profile_picture", nullable = true)
-    @Lob
-    private Blob profilePicture;
+    @OneToOne(cascade = CascadeType.MERGE)
+    @JoinColumn(name = "picture_id")
+    private Picture profilePicture;
 
     @Column(name = "bio_description", nullable = true, length = 3000)
     private String bioDescription;
@@ -38,10 +43,6 @@ public class User {
     @Temporal(TemporalType.TIMESTAMP)
     @UpdateTimestamp
     private Date modificationDate;
-
-    @CollectionTable(name = "user_roles")
-    @ElementCollection(fetch = FetchType.EAGER)
-    List<UserRole> userRoles;
 
     @OneToMany(mappedBy = "uploadedBy", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<Attachment> userAttachments;
@@ -55,7 +56,7 @@ public class User {
     @OneToMany(mappedBy = "createdBy", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<StoryTask> userStoryTasks;
 
-    public User(Long id, Employee employee, String username, String password, Blob profilePicture, String bioDescription, String email, Date modificationDate, List<UserRole> userRoles, Set<Attachment> userAttachments, Set<Comment> userComments, Set<Story> userStories, Set<StoryTask> userStoryTasks) {
+    public User(Long id, Employee employee, String username, String password, Picture profilePicture, String bioDescription, String email, Date modificationDate, List<UserRole> userRoles, Set<Attachment> userAttachments, Set<Comment> userComments, Set<Story> userStories, Set<StoryTask> userStoryTasks) {
         this.id = id;
         this.employee = employee;
         this.username = username;
@@ -71,14 +72,6 @@ public class User {
         this.userStoryTasks = userStoryTasks;
     }
 
-    public User(Employee employee, String username, String password, Blob profilePicture, String email) {
-        this.employee = employee;
-        this.username = username;
-        this.password = password;
-        this.profilePicture = profilePicture;
-        this.email = email;
-    }
-
     public User(Employee employee, String username, String password, String email) {
         this.employee = employee;
         this.username = username;
@@ -89,12 +82,12 @@ public class User {
     public User() {
         UserRole defaultUserRole = UserRole.USER;
         UserRole adminUserRole = UserRole.ADMIN;
-        UserRole moderatorUserRole = UserRole.MODERATOR;
+        UserRole boardAdminUserRole = UserRole.BOARD_ADMIN;
 
         userRoles = new ArrayList<>();
         userRoles.add(defaultUserRole);
         userRoles.add(adminUserRole);
-        userRoles.add(moderatorUserRole);
+        userRoles.add(boardAdminUserRole);
 
     }
 
@@ -102,16 +95,32 @@ public class User {
         return userComments;
     }
 
+    public void setUserComments(Set<Comment> userComments) {
+        this.userComments = userComments;
+    }
+
     public Set<Story> getUserStories() {
         return userStories;
+    }
+
+    public void setUserStories(Set<Story> userStories) {
+        this.userStories = userStories;
     }
 
     public Set<StoryTask> getUserStoryTasks() {
         return userStoryTasks;
     }
 
+    public void setUserStoryTasks(Set<StoryTask> userStoryTasks) {
+        this.userStoryTasks = userStoryTasks;
+    }
+
     public String getBioDescription() {
         return bioDescription;
+    }
+
+    public void setBioDescription(String bioDescription) {
+        this.bioDescription = bioDescription;
     }
 
     public Date getModificationDate() {
@@ -126,72 +135,60 @@ public class User {
         return userAttachments;
     }
 
-    public Blob getProfilePicture() {
+    public void setUserAttachments(Set<Attachment> userAttachments) {
+        this.userAttachments = userAttachments;
+    }
+
+    public Picture getProfilePicture() {
         return profilePicture;
+    }
+
+    public void setProfilePicture(Picture profilePicture) {
+        this.profilePicture = profilePicture;
     }
 
     public Long getId() {
         return this.id;
     }
 
-    public Employee getEmployee() {
-        return this.employee;
-    }
-
-    public String getUsername() {
-        return this.username;
-    }
-
-    public String getPassword() {
-        return this.password;
-    }
-
-    public String getEmail() {
-        return this.email;
-    }
-
-    public List<UserRole> getUserRoles() {
-        return userRoles;
-    }
-
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Employee getEmployee() {
+        return this.employee;
     }
 
     public void setEmployee(Employee employee) {
         this.employee = employee;
     }
 
+    public String getUsername() {
+        return this.username;
+    }
+
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public String getPassword() {
+        return this.password;
     }
 
     public void setPassword(String password) {
         this.password = password;
     }
 
+    public String getEmail() {
+        return this.email;
+    }
+
     public void setEmail(String email) {
         this.email = email;
     }
 
-    public void setUserComments(Set<Comment> userComments) {
-        this.userComments = userComments;
-    }
-
-    public void setUserStories(Set<Story> userStories) {
-        this.userStories = userStories;
-    }
-
-    public void setUserStoryTasks(Set<StoryTask> userStoryTasks) {
-        this.userStoryTasks = userStoryTasks;
-    }
-
-    public void setProfilePicture(Blob profilePicture) {
-        this.profilePicture = profilePicture;
-    }
-
-    public void setUserAttachments(Set<Attachment> userAttachments) {
-        this.userAttachments = userAttachments;
+    public List<UserRole> getUserRoles() {
+        return userRoles;
     }
 
     public void setUserRoles(List<UserRole> userRoles) {
@@ -200,10 +197,6 @@ public class User {
 
     public void removeUserRole(UserRole userRole) {
         this.userRoles.remove(userRole);
-    }
-
-    public void setBioDescription(String bioDescription) {
-        this.bioDescription = bioDescription;
     }
 
     public void addUserComment(Comment comment) {
