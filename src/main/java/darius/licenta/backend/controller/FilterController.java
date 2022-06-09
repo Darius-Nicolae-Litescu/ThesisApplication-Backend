@@ -23,9 +23,10 @@ public class FilterController {
     }
 
     @PostMapping(value = "/filter/exact")
-    public ApiResponse<ElasticSearchResultQuery> queryForExactHits(@RequestBody FilterByMultipleFieldsDto filterByMultipleFieldsDto) throws IOException {
+    public ApiResponse<ElasticSearchResultQuery> queryForExactHits(@RequestBody FilterByMultipleFieldsDto filterByMultipleFieldsDto) {
         return new ApiResponse<>(elasticSearchExactQueryService.getExactSearchFromFilters(filterByMultipleFieldsDto),
                 HttpStatus.OK);
     }
 
 }
+

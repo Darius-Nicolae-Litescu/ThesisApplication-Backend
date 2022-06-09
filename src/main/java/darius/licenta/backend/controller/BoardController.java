@@ -40,13 +40,14 @@ public class BoardController {
         return boardService.updateBoardDetails(username, updateBoardDto);
     }
 
+    @PutMapping("/add/stories/all")
+    public ApiResponse<Boolean> addAllStoriesToBoard(@RequestParam Long boardId) {
+        return boardService.addAllStoriesToBoard(boardId);
+    }
+
     @PostMapping
     public ApiResponse<FullBoardDetailsDto> createBoard(@RequestBody CreateBoardDto createBoardDto) {
         return boardService.createBoard(createBoardDto);
     }
 
-    @PutMapping("/add/stories/all")
-    public ApiResponse<Boolean> addAllStoriesToBoard(@RequestParam Long boardId) {
-        return boardService.addAllStoriesToBoard(boardId);
-    }
 }
